@@ -19,7 +19,7 @@ ActivityBikeOdoModifier.prototype = {
         // Get odo from map
         var activityBikeOdo = 'No bike declared';
         try {
-            activityBikeOdo = this.bikeOdoArray_[btoa(bikeDisplayedOnActivityPage)];
+            activityBikeOdo = this.bikeOdoArray_[btoa(unescape(encodeURIComponent(bikeDisplayedOnActivityPage)))];
         } catch (err) {
             console.warn('Unable to find bike odo for this Activity');
         }

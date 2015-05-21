@@ -1,9 +1,9 @@
 {
     "manifest_version": 2,
-    "name": "StraTistiX with aRPEe Score for Strava",
+    "name": "StraTistiX with aRPEe Score for Strava - develop",
     "short_name": "StraTistiX",
-    "description": "Add the lots of features to Strava website (forked from StravistiX plugin and enhanced with some additional goodies and tweaks)",
-    "version": "0.6.0.3",
+    "description": "Add lots of features to Strava website (forked from StravistiX plugin and enhanced with additional goodies and tweaks)",
+    "version": "0.6.0.4",
     "background": {
         "scripts": [
             "js/UserSettings.js",

@@ -131,6 +131,8 @@ RemoteLinksModifier.prototype = {
         htmlRemoteViewForActivity += "</li>";
 
         htmlRemoteViewForActivity = $(htmlRemoteViewForActivity);
+
+
         $("#pagenav").append(htmlRemoteViewForActivity);
 
 

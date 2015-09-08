@@ -134,7 +134,7 @@ StravistiX.prototype = {
         var message = '';
         message += "<h4>- This is StraTistiX - Dejan Kamensek's fork of StravistiX</h4>";
         message += '<h4>- Original StravistiX (formerly named StravaPlus) is being developed by Thomas Champagne</h4>';
-        message += '<h4><a target="_blank" href="' + this.appResources_.settingsLink + '#/donate">Donate to get more features</a></h4>';
+        message += '<h4><a target="_blank" href="' + this.appResources_.settingsLink + '#/donate">Donate Thomas Champagne to get more features</a></h4>';
         message += '<h4><a target="_blank" href="https://twitter.com/champagnethomas">Follow upcoming updates here</a></h4>';
 
         $.fancybox('<h2>' + title + '</h2>' + message);

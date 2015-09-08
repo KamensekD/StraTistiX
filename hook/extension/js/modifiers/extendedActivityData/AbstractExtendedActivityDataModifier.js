@@ -64,7 +64,7 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 			html += ' TRIMP: <strong>'+this.analysisData_.heartRateData.TRIMP.toFixed(0)+'</strong></span>';
 
 			html += '<span style="color: #800; font-size: 18px;" title="TRIMP/hour\nEstimation of Hourly AVERAGE Training Load of the Workout'+HRnote+'\n** Given the right HR settings, TRIMP/hr max for Men is 262 and for Women 204">';
-			html += ' | <strong>'+this.analysisData_.heartRateData.TRIMP_hr.toFixed(0)+'</strong>/hour';
+			html += ' | <strong>'+this.analysisData_.heartRateData.TRIMPPerHour.toFixed(0)+'</strong>/hour';
 			html += '&nbsp</span>';
 
 			if (this.analysisData_.toughnessScore != null) {
@@ -92,7 +92,8 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 			// Add aRPEe to page
 			var aRPEe=this.analysisData_.heartRateData.aRPEe;
 
-			html+= '<div style="border-bottom: 1px solid #ccc; padding-bottom: 5px;">';
+//			html+= '<div style="border-bottom: 1px solid #ccc; padding-bottom: 5px;">';
+			html+= '<div style="padding-bottom: 5px;">';
 			html+='<table style="margin:0px;" title="'+RPEnote+RPEnote1+HRnote+RPEnote2+RPEnote3+'"><tr><td width=50px style="padding:0px;">';
 			html+='<img src="' + this.appResources_.aRPEeIcon + '" style="padding-top:4px"></td>';
 			html+='<td style="padding:0px;"><font style="font-size: 14px; vertical-align: middle;">';
@@ -183,7 +184,23 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 		}
 		html += '</table></a></div>';
 
-		$('.details').first().after(html).each(function() {
+
+		// if there are no other athletes on this activity, remove Strava's flybys link,
+		// as it is already present in remote views and only "eats-up" a lot of page space in this case
+		if ($('.other-athletes').length==0) {
+			$('.flybys').remove();
+	 		$('.others-section').css({'padding-top': '0px'});
+		} else {	// if there are other athletes, make a line between them and statistics table
+		 	$('.others-section').css({'border-bottom': '1px solid', color:'#eee','padding-top': '0px'});
+		}
+
+
+		// insert statistics table
+		$('.others-section').first().after(html).each(function() {
+// 		$('.others-section').css({'padding-top': '0px'});
+//		$('.others-section').append(html).each(function() {
+//		$('.details').first().after(html).each(function() {
+
 
 		$('#extendedStatsButton').click(function() {
 

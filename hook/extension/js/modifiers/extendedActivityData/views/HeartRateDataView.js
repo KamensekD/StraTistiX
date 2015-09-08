@@ -35,18 +35,18 @@ var HeartRateDataView = AbstractDataView.extend(function(base) {
             table += '<table>';
 
             table += '<tr>'; // Zone
-            table += '<td><strong>Zone</strong></td>'; // Zone
-            table += '<td><strong>%HRR</strong></td>'; // bpm
+            table += '<td></td>'; // Zone
+            table += '<td><strong>HRR%</strong></td>'; // bpm
             table += '<td><strong>BPM</strong></td>'; // bpm
-            table += '<td><strong>Time<br/>(hh:mm:ss)</strong></td>'; // Time
-            table += '<td><strong>% in zone</strong></td>'; // % in zone
+            table += '<td><strong>Time</strong><br/>(hh:mm:ss)</td>'; // Time
+            table += '<td><strong>%</strong></td>'; // % in zone
             table += '</tr>';
 
             var zoneId = 1;
             for (var zone in this.heartRateData.hrrZones) {
                 table += '<tr>'; // Zone
                 table += '<td>Z' + zoneId + '</td>'; // Zone
-                table += '<td>' + this.heartRateData.hrrZones[zone].fromHrr + "% - " + this.heartRateData.hrrZones[zone].toHrr + "%" + '</th>'; // %HRR
+                table += '<td>' + this.heartRateData.hrrZones[zone].fromHrr + "-" + this.heartRateData.hrrZones[zone].toHrr + "%" + '</th>'; // %HRR
                 table += '<td>' + this.heartRateData.hrrZones[zone].fromHr + " - " + this.heartRateData.hrrZones[zone].toHr + '</td>'; // bpm%
                 table += '<td>' + Helper.secondsToHHMMSS(this.heartRateData.hrrZones[zone].s) + '</td>'; // Time%
                 table += '<td>' + this.heartRateData.hrrZones[zone].percentDistrib.toFixed(0) + '%</td>'; // % in zone
@@ -65,7 +65,7 @@ var HeartRateDataView = AbstractDataView.extend(function(base) {
 
             var labelsData = [];
             for (var zone in this.heartRateData.hrrZones) {
-                var label = "Z" + (parseInt(zone) + 1) + " " + this.heartRateData.hrrZones[zone].fromHrr + "-" + this.heartRateData.hrrZones[zone].toHrr + "%";
+                var label = "Z" + (parseInt(zone) + 1) + ":   " + this.heartRateData.hrrZones[zone].fromHrr + "-" + this.heartRateData.hrrZones[zone].toHrr + "%";
                 labelsData.push(label);
             }
 
@@ -123,13 +123,14 @@ var HeartRateDataView = AbstractDataView.extend(function(base) {
             this.insertContentAtGridPosition(1, 0, this.heartRateData.averageHeartRate.toFixed(0), 'Average Heart Rate', 'bpm', 'displayAdvancedHrData'); // Usefull for running
             this.insertContentAtGridPosition(2, 0, this.heartRateData.activityHeartRateReserve.toFixed(0), 'Heart Rate Reserve Avg', '%', 'displayAdvancedHrData');
 
-            // Quartiles
-            this.insertContentAtGridPosition(0, 1, this.heartRateData.lowerQuartileHeartRate, '25% Quartile HeartRate', 'bpm', 'displayAdvancedHrData');
-            this.insertContentAtGridPosition(1, 1, this.heartRateData.medianHeartRate, '50% Quartile HeartRate', 'bpm', 'displayAdvancedHrData');
-            this.insertContentAtGridPosition(2, 1, this.heartRateData.upperQuartileHeartRate, '75% Quartile HeartRate', 'bpm', 'displayAdvancedHrData');
-            
             // Other
-            this.insertContentAtGridPosition(0, 2, this.heartRateData.TRIMPPerHour.toFixed(0), 'TRaining IMPulse / Hour', '', 'displayAdvancedHrData');
+            this.insertContentAtGridPosition(0, 1, this.heartRateData.TRIMPPerHour.toFixed(0), 'TRIMP/Hour', '', 'displayAdvancedHrData');
+
+            // Quartiles
+            this.insertContentAtGridPosition(0, 2, this.heartRateData.lowerQuartileHeartRate, '25% Quartile HeartRate', 'bpm', 'displayAdvancedHrData');
+            this.insertContentAtGridPosition(1, 2, this.heartRateData.medianHeartRate, '50% Quartile HeartRate', 'bpm', 'displayAdvancedHrData');
+            this.insertContentAtGridPosition(2, 2, this.heartRateData.upperQuartileHeartRate, '75% Quartile HeartRate', 'bpm', 'displayAdvancedHrData');
+            
         }
     }
 });

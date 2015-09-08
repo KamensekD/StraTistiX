@@ -80,22 +80,22 @@ var PaceDataView = AbstractDataView.extend(function(base) {
 
             // Generate table header
             table += '<tr>'; // Zone
-            table += '<td><strong>Zone</strong></td>'; // Zone
-            table += '<td><strong>From<br/>Time' + this.units.toUpperCase() + '</strong></td>'; // bpm
-            table += '<td><strong>To<br/>Time' + this.units.toUpperCase() + '</strong></td>'; // bpm
-            table += '<td><strong>Time<br/>(hh:mm:ss)</strong></td>'; // Time
-            table += '<td><strong>% in zone</strong></td>'; // % in zone
+            table += '<td></td>'; // Zone
+            table += '<td><strong>From<br/>time' + this.units.toLowerCase() + '</strong></td>'; // bpm
+            table += '<td><strong>To<br/>time' + this.units.toLowerCase() + '</strong></td>'; // bpm
+            table += '<td><strong>Time</strong><br/>(hh:mm:ss)</td>'; // Time
+            table += '<td><strong>%</strong></td>'; // % in zone
             table += '</tr>';
 
             var zoneId = 1;
             for (var zone in zones) {
                 
-                var from = (zones[zone].from === 'infinite') ? '&infin;' : Helper.secondsToHHMMSS((zones[zone].from * ratio).toFixed(0));
+                var from = (zones[zone].from === 'infinite') ? '&infin;' : Helper.secondsToHHMMSS((zones[zone].from * ratio).toFixed(0)).replace('00:', '');
 
                 table += '<tr>'; // Zone
                 table += '<td>Z' + zoneId + '</td>'; // Zone
                 table += '<td>' + from + '</th>'; // %HRR
-                table += '<td>' + Helper.secondsToHHMMSS((zones[zone].to * ratio).toFixed(0)) + '</th>'; // %HRR
+                table += '<td>' + Helper.secondsToHHMMSS((zones[zone].to * ratio).toFixed(0)).replace('00:', '') + '</th>'; // %HRR
                 table += '<td>' + Helper.secondsToHHMMSS(zones[zone].s) + '</td>'; // Time%
                 table += '<td>' + zones[zone].percentDistrib.toFixed(1) + '%</td>'; // % in zone
                 table += '</tr>';
@@ -116,8 +116,9 @@ var PaceDataView = AbstractDataView.extend(function(base) {
 
             var labelsData = [];
             for (var zone in zones) {
-                var from = (zones[zone].from === 'infinite') ? 'Infinite' : Helper.secondsToHHMMSS((zones[zone].from * ratio).toFixed(0));
-                var label = "Z" + (parseInt(zone) + 1) + ": " + from + " - " + Helper.secondsToHHMMSS((zones[zone].to * ratio).toFixed(0)) + " " + this.units;
+                var from = (zones[zone].from === 'infinite') ? 'Infinite' : Helper.secondsToHHMMSS((zones[zone].from * ratio).toFixed(0)).replace('00:', '');
+//                var label = "Z" + (parseInt(zone) + 1) + ": " + from + " - " + Helper.secondsToHHMMSS((zones[zone].to * ratio).toFixed(0)).replace('00:', '') + " " + this.units;
+                var label = "Z" + (parseInt(zone) + 1) + ":   " + from + " - " + Helper.secondsToHHMMSS((zones[zone].to * ratio).toFixed(0)).replace('00:', '');
                 labelsData.push(label);
             }
 

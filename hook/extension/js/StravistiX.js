@@ -63,6 +63,7 @@ StravistiX.prototype = {
         this.handleDefaultLeaderboardFilter_();
         this.handleSegmentRankPercentage_();
         this.handleActivityGoogleMapType_();
+        this.handleCustomMapboxStyle_();
         this.handleHidePremium_();
         this.handleHideFeed_();
 
@@ -255,6 +256,19 @@ StravistiX.prototype = {
         activityGoogleMapTypeModifier.modify();
     },
 
+    /**
+     *
+     */
+    handleCustomMapboxStyle_: function() {
+
+        // Test where are on an activity...
+        if (!window.location.pathname.match(/^\/activities/)) {
+            return;
+        }
+
+        if (env.debugMode) console.log("Execute handleCustomMapboxStyle_()");
+
+    },
     /**
      *
      */

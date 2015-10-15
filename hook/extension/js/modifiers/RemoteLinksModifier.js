@@ -45,20 +45,19 @@ RemoteLinksModifier.prototype = {
             	'heatmap', 'Strava Global Heatmap'],
             ["<img  src='" + this.appResources_.multimapIcon + "'/> MultiMap", 'http://www.jonathanokeeffe.com/strava/map.php',
             	'simple_link', "Jonathan o\'Keeffe\'s Multiple Ride Mapper"],
+            ["<img width='16px' src='" + this.appResources_.veloviewerIcon + "'/> VeloViewer", 'http://veloviewer.com/activities/', '?referrer=stravistiX'],
             ["<img width='16px' src='" + this.appResources_.AnnualSummIcon + "'/> AnnualSumm", 'http://www.jonathanokeeffe.com/strava/annualSummary.php',
             	'simple_link', "Jonathan o\'Keeffe\'s Annual Summary"],
             ["<img src='" + this.appResources_.gpsvisualizerIcon + "'/>", 'http://www.gpsvisualizer.com/',
             	'gpsvisualizer', this.appResources_.gpsvMapIcon, this.appResources_.gpsvProfileIcon],
-            ["<img width='16px' src='" + this.appResources_.veloviewerIcon + "'/> VeloViewer", 'http://veloviewer.com/activities/', '?referrer=stravistiX'],
-            ["MapFlipper", 'http://veloviewer.com/mapFlipper',
-            	'mapflipper',  this.appResources_.OCMIcon, this.appResources_.OCMlsIcon, this.appResources_.OCModIcon, this.appResources_.OSMIcon]
+            ["MapFlipper", '',
+            	'mapflipper',  this.appResources_.OCMIcon, this.appResources_.OCMlsIcon, this.appResources_.OCModIcon, this.appResources_.OSMIcon, this.appResources_.MBIcon]
 ];
 
 
         // Activity page
         // Adding remote view links on left panel
         var htmlRemoteViewForActivity = "<li class='group' style='" + this.htmlRemoteViewForActivityStyle + "'>";
-        htmlRemoteViewForActivity += "<div class='title'><span style='font-size: 14px;" + this.htmlRemoteViewTextStyle + "'>Remote Views</span> <img width='12px' src='" + this.appResources_.remoteViewIcon + "'/></div>";
         htmlRemoteViewForActivity += "<ul>";
 
 
@@ -81,12 +80,25 @@ RemoteLinksModifier.prototype = {
             // mapflipper
             //
             else if (this[2] == 'mapflipper') {
-                htmlRemoteViewForActivity += "<a title='Select Satellite Map and/or zoom in/out to enable MapFlipper!' data-menu='' target='_blank' style='color: #333; padding-bottom: 0px' href='" + this[1] + "'>" + this[0] + "</a>";
+
+                htmlRemoteViewForActivity += '<a title="Click here to disable MapFlipper!" data-menu="" style="color: #333; padding-bottom: 0px" onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){};document.getElementById(\'map-type-control\').getElementsByTagName(\'li\')[1].getElementsByTagName(\'a\')[0].click();document.getElementById(\'map-type-control\').getElementsByTagName(\'li\')[1].getElementsByTagName(\'a\')[0].click()}">' + this[0] + '</a>';
+
                 htmlRemoteViewForActivity += "<span style='color: #333; padding-left: 30px'>";
-                htmlRemoteViewForActivity += '<img onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}else{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)\\.png/,\'https://tile.thunderforest.com/cycle/$1/$2/$3.png\');})},1000)}"   title="Open Cycle Map" width="24px" src="' + this[3]+ '"/>';
-                htmlRemoteViewForActivity += "<img onclick='flip2()' title='Open Cycle Map Landscape' width='24px' src='" + this[4] + "'/><script>function flip2(){if(typeof(vv_flipMap)==='undefined'){var s=document.createElement('script');s.src='https://s3.amazonaws.com/s3.veloviewer.com/js/vv.mapFlipper.js?v='+Math.floor(Math.random()*1000);document.getElementsByTagName('head')[0].appendChild(s);s.onload=function(){vv_flipMap('landscape');}}else{vv_flipMap('landscape')}}</script>";
-                htmlRemoteViewForActivity += "<img onclick='flip3()' title='Open Cycle Map Outdoor' width='24px' src='" + this[5] + "'/><script>function flip3(){if(typeof(vv_flipMap)==='undefined'){var s=document.createElement('script');s.src='https://s3.amazonaws.com/s3.veloviewer.com/js/vv.mapFlipper.js?v='+Math.floor(Math.random()*1000);document.getElementsByTagName('head')[0].appendChild(s);s.onload=function(){vv_flipMap('outdoors');}}else{vv_flipMap('outdoors')}}</script>";
-                htmlRemoteViewForActivity += "<img onclick='flip4()' title='Open Street Map' width='24px' src='" + this[6] + "'/><script>function flip4(){if(typeof(vv_flipMap)==='undefined'){var s=document.createElement('script');s.src='https://s3.amazonaws.com/s3.veloviewer.com/js/vv.mapFlipper.js?v='+Math.floor(Math.random()*1000);document.getElementsByTagName('head')[0].appendChild(s);s.onload=function(){vv_flipMap('street');}}else{vv_flipMap('street')}}</script>";
+
+                htmlRemoteViewForActivity += '<img onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)\\.png/,\'https://tile.thunderforest.com/cycle/$1/$2/$3.png\');})},1000)}"   title="Open Cycle Map" width="24px" src="' + this[3]+ '"/>';
+
+                htmlRemoteViewForActivity += '<img onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)\\.png/,\'https://tile.thunderforest.com/landscape/$1/$2/$3.png\');})},1000)}"   title="Open Cycle Map Landscape" width="24px" src="' + this[4]+ '"/>';
+
+                htmlRemoteViewForActivity += '<img onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)\\.png/,\'https://tile.thunderforest.com/outdoors/$1/$2/$3.png\');})},1000)}"   title="Open Cycle Map Outdoors" width="24px" src="' + this[5]+ '"/>';
+
+                htmlRemoteViewForActivity += '<img onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)\\.png/,\'https://tiles.wmflabs.org/hikebike/$1/$2/$3.png\');})},1000)}"   title="Hike Bike Map" width="24px" src="' + this[6]+ '"/>';
+                htmlRemoteViewForActivity += "</span></li>";
+
+                htmlRemoteViewForActivity += "<span style='color: #333; padding-left: 30px'>";
+
+            htmlRemoteViewForActivity += '<img onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){if (this.src.indexOf(\'googleapis\')>-1){return}else{return this.src.replace(\'mapbox.com/v4/strava.map-zn3cjvc6/\',\'mapbox.com/v4/papics.ca6cf1f9/\');}})},1000)}{document.getElementById(\'map-type-control\').getElementsByTagName(\'li\')[0].getElementsByTagName(\'a\')[0].click();}"   title="Replace Standard Map with Custom Mapbox Style" height="12px" src="' + this[7]+ '"/>';
+
+                
                 htmlRemoteViewForActivity += "</span></li>";
 			//
             // heatmap
@@ -154,8 +166,8 @@ RemoteLinksModifier.prototype = {
 				bg_map: 'google_4umaps', bg_opacity: 75, form: 'google', google_full_screen: 1,
 				google_trk_clickable: 0, google_trk_outline: '0', google_wpt_filter_sort: 0,
 				width: 960,	height: 660, trk_width: 4, trk_stats: 1, trk_hue: 120, tickmark_interval: '1km',
-				trk_colorize: 'slope', colorize_max: 33, colorize_min: -33, colorize_gray: '0', colorize_reverse: 0, hue1: 0, hue2: 330,
-				colorize_spectrum: 'http://shrani.si/f/t/iY/3XOQyeNG/reliefmap-33-33.png', legend_steps: 23,
+				trk_colorize: 'slope', colorize_max: 36, colorize_min: -36, colorize_gray: '0', colorize_reverse: 0, hue1: 0, hue2: 330,
+				colorize_spectrum: 'http://shrani.si/f/o/U/vn1DrfO/1/reliefmap-36-36.png', legend_steps: 25,
 //				trk_distance_threshold: 33, moving_average: 3
 //				trk_distance_threshold: 25, moving_average: 2
 				trk_distance_threshold: 20, moving_average: 5
@@ -208,8 +220,8 @@ RemoteLinksModifier.prototype = {
 			post('http://www.gpsvisualizer.com/profile_input', {
 				data: GPSvis_Data(pageView._streams.attributes),		// get to streams with pageView._streams....
 				width: profile_width, height: profile_height, trk_width: 3, trk_stats: 1,
-				trk_colorize: 'slope', colorize_max: 33, colorize_min: -33, colorize_gray: '0', colorize_reverse: 0, hue1: 0, hue2: 330,
-				colorize_spectrum: 'http://shrani.si/f/t/iY/3XOQyeNG/reliefmap-33-33.png', legend_steps: 23,
+				trk_colorize: 'slope', colorize_max: 36, colorize_min: -36, colorize_gray: '0', colorize_reverse: 0, hue1: 0, hue2: 330,
+				colorize_spectrum: 'http://shrani.si/f/o/U/vn1DrfO/1/reliefmap-36-36.png', legend_steps: 25,
 //				trk_distance_threshold: 33, moving_average: 3
 //				trk_distance_threshold: 25, moving_average: 2
 				trk_distance_threshold: 20, moving_average: 5

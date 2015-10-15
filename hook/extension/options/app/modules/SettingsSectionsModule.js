@@ -87,6 +87,16 @@ settingsSectionsModule.data = [{
         }],
         optionTitle: 'Default Google Map type in activity page',
         optionHtml: 'Do what title describes...',
+    }, {
+        optionKey: 'customMapBoxStyle',
+        optionType: 'list',
+        optionTitle: 'Custom Mapbox Style',
+        optionLabels: ['All'],
+        optionList: [{
+            key: 'papics.ca6cf1f9',
+            name: 'papics.ca6cf1f9'
+        }],
+        optionHtml: 'Custom Mapbox ID that is used to replace Standard Map.<br /><br />',
     }]
 }, {
     sectionTitle: 'Segments viewing options',

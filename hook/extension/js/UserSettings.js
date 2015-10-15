@@ -341,6 +341,7 @@ var userSettings = {
     activateRunningGradeAdjustedPace: true,
     activateRunningHeartRate: true,
     activityGoogleMapType: 'satellite',
+	customMapBoxStyle: 'papics.ca6cf1f9',
     hidePremiumFeatures: true,
     displaySegmentRankPercentage: true,
     displayNearbySegments: true,

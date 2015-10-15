@@ -1,6 +1,6 @@
 var env = {
     preview: false, // Must be false in release
-    buildNumber: 604, // 0.6.0.4
+    buildNumber: 605, // 0.6.0.5
 //    analyticsTrackingID: 'UA-62527089-1', 	// my "Release" Google Analytics Code
     analyticsTrackingID: 'UA-62527089-2', 		// my "Development" Google Analytics Code
 

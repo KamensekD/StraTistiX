@@ -149,7 +149,6 @@ var appResources = {
    aRPEeIcon: chrome.extension.getURL('/icons/aRPEe.png'),
    AnnualSummIcon: chrome.extension.getURL('/icons/JOKAnnualSummary16.png'),
    multimapIcon: chrome.extension.getURL('/icons/JOKAmultimap.png'),
-   mesmerideIcon: chrome.extension.getURL('/icons/mesmeride.png'),
    gpsvisualizerIcon: chrome.extension.getURL('/icons/gpsvisualizer.png'),
    gpsvProfileIcon: chrome.extension.getURL('/icons/gpsvisualizer_profile.png'),
    gpsvMapIcon: chrome.extension.getURL('/icons/gpsvisualizer_map.png'),

@@ -3,7 +3,7 @@
     "name": "StraTistiX with aRPEe Score for Strava - develop",
     "short_name": "StraTistiX",
     "description": "Add lots of features to Strava website (forked from StravistiX plugin and enhanced with additional goodies and tweaks)",
-    "version": "0.6.0.4",
+    "version": "0.6.0.5",
     "background": {
         "scripts": [
             "js/UserSettings.js",

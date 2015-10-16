@@ -146,6 +146,7 @@ var appResources = {
    OCMlsIcon: chrome.extension.getURL('/icons/OCMls24.png'),
    OCModIcon: chrome.extension.getURL('/icons/OCMod24.png'),
    OSMIcon: chrome.extension.getURL('/icons/OSM24.png'),
+   OSMhbIcon: chrome.extension.getURL('/icons/OSMhikebike24.png'),
    MBIcon: chrome.extension.getURL('/icons/Mapbox24.png'),
    aRPEeIcon: chrome.extension.getURL('/icons/aRPEe.png'),
    AnnualSummIcon: chrome.extension.getURL('/icons/JOKAnnualSummary16.png'),

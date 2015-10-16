@@ -167,10 +167,10 @@ StravistiX.prototype = {
     handleRemoteLinks_: function() {
 
         // If we are not on a segment or activity page then return...
-        if (!window.location.pathname.match(/^\/segments\/(\d+)$/) && !window.location.pathname.match(/^\/activities/)) {
+        if (!window.location.pathname.match(/^\/segments\/(\d+)$/) && !window.location.pathname.match(/^\/activities/) && !window.location.pathname.match(/^\/publishes\/wizard\\?/)) {
             return;
         }
-
+		//console.log("...RemoteLinks modifier");
         if (!this.userSettings_.remoteLinks) {
             return;
         }

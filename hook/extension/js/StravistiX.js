@@ -120,9 +120,9 @@ StravistiX.prototype = {
             name: this.appResources_.extVersion
         };
 
-        _spTrack('send', 'event', updatedToEvent.categorie, updatedToEvent.action, updatedToEvent.name);
+        _spTrack('send', 'event', updatedToEvent.categorie, updatedToEvent.action, updatedToEvent.name+'_'+this.athleteName_+ ' #' + this.athleteId_,1);
 
-        // Now mark extension "just updated" to false...
+        // Now mark extension "just updated" to false...!!!
         Helper.setToStorage(this.extensionId_, StorageManager.storageSyncType, 'extensionHasJustUpdated', false, function(response) {});
     },
 

@@ -356,5 +356,7 @@ var userSettings = {
     enableBothLegsCadence: false,
     feedHideChallenges: false,
     feedHideCreatedRoutes: false,
-    highLightStravistiXFeature: false // For heartrate related data.
+    highLightStravistiXFeature: false, // For heartrate related data.
+    reviveGoogleMaps: true,
+    reviveGoogleMapsLayerType: 'hybrid'
 };

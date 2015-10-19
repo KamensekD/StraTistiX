@@ -81,6 +81,7 @@ StravistiX.prototype = {
 
         // Must be done at the end
         this.handleTrackTodayIncommingConnection_();
+        this.handleGoogleMapsComeBackModifier();
     },
 
     /**
@@ -526,6 +527,27 @@ StravistiX.prototype = {
         activityQRCodeDisplayModifier.modify();
 
     },
+
+
+	handleGoogleMapsComeBackModifier: function() {  
+   
+		if (window.location.pathname.match(/\/truncate/)) { // Skipping on activity cropping
+			return;
+		}
+		
+	  	if (!this.userSettings_.reviveGoogleMaps) {  
+	    	return;  
+    	}  
+ 
+    	// Test where are on an activity...  
+	    if (!window.location.pathname.match(/^\/activities/)) {  
+	    	return;  
+    	}  
+ 
+    	var googleMapsComeBackModifier = new GoogleMapsComeBackModifier(this.activityId_, this.appResources_, this.userSettings_);
+    	googleMapsComeBackModifier.modify();  
+   },  
+
 
     /**
      * Launch a track event once a day (is user use it once a day), to follow is account type

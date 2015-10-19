@@ -148,6 +148,7 @@ var appResources = {
    OSMIcon: chrome.extension.getURL('/icons/OSM24.png'),
    OSMhbIcon: chrome.extension.getURL('/icons/OSMhikebike24.png'),
    MBIcon: chrome.extension.getURL('/icons/Mapbox24.png'),
+   GMIcon: chrome.extension.getURL('/icons/GM24.png'),
    aRPEeIcon: chrome.extension.getURL('/icons/aRPEe.png'),
    AnnualSummIcon: chrome.extension.getURL('/icons/JOKAnnualSummary16.png'),
    multimapIcon: chrome.extension.getURL('/icons/JOKAmultimap.png'),
@@ -226,7 +227,7 @@ var jsDependencies = [
     'js/modifiers/RunningGradeAdjustedPaceModifier.js',
     'js/modifiers/RunningHeartRateModifier.js',
     'js/modifiers/NearbySegmentsModifier.js',
-    
+	'js/modifiers/GoogleMapsComeBackModifier.js'
 ];
 
 var cssDependencies = [

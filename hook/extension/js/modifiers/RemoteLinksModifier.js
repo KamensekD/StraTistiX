@@ -91,18 +91,20 @@ RemoteLinksModifier.prototype = {
 
                 htmlRemoteView += '<img onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)\\.png/,\'http://tile.openstreetmap.org/$1/$2/$3.png\');})},1000)}"   title="Open Street Map" width="20px" src="' + this[6]+ '"/>';
 
-                htmlRemoteView += '<img onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)\\.png/,\'https://tile.thunderforest.com/cycle/$1/$2/$3.png\');})},1000)}"   title="Open Cycle Map" width="20px" src="' + this[3]+ '"/>';
+                htmlRemoteView += '&nbsp<img onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)\\.png/,\'https://tile.thunderforest.com/cycle/$1/$2/$3.png\');})},1000)}"   title="Open Cycle Map" width="20px" src="' + this[3]+ '"/>';
 
                 htmlRemoteView += '<img onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)\\.png/,\'https://tile.thunderforest.com/landscape/$1/$2/$3.png\');})},1000)}"   title="Open Cycle Map Landscape" width="20px" src="' + this[4]+ '"/>';
 
                 htmlRemoteView += '<img onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)\\.png/,\'https://tile.thunderforest.com/outdoors/$1/$2/$3.png\');})},1000)}"   title="Open Cycle Map Outdoors" width="20px" src="' + this[5]+ '"/>';
 
-                htmlRemoteView += '<img onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)\\.png/,\'https://tiles.wmflabs.org/hikebike/$1/$2/$3.png\');})},1000)}"   title="Hike Bike Map" width="20px" src="' + this[8]+ '"/>';
+                htmlRemoteView += '&nbsp<img onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)\\.png/,\'https://tiles.wmflabs.org/hikebike/$1/$2/$3.png\');})},1000)}"   title="Hike Bike Map" width="20px" src="' + this[8]+ '"/>';
                 htmlRemoteView += "</span></li>";
 
                 htmlRemoteView += "<span style='color: #333; padding-left: 30px'>";
 
-            htmlRemoteView += '<img onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){if (this.src.indexOf(\'googleapis\')>-1){return}else{return this.src.replace(\'mapbox.com/v4/strava.map-zn3cjvc6/\',\'mapbox.com/v4/papics.ca6cf1f9/\');}})},1000)}{document.getElementById(\'map-type-control\').getElementsByTagName(\'li\')[0].getElementsByTagName(\'a\')[0].click();}"   title="Replace Standard Map with Custom Mapbox Style" height="12px" src="' + this[7]+ '"/>';
+	            htmlRemoteView += '<img onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){if (this.src.indexOf(\'googleapis\')>-1){return}else{return this.src.replace(\'mapbox.com/v4/strava.map-zn3cjvc6/\',\'mapbox.com/v4/papics.ca6cf1f9/\');}})},1000)}{document.getElementById(\'map-type-control\').getElementsByTagName(\'li\')[0].getElementsByTagName(\'a\')[0].click();}"   title="Replace Standard Map with Custom Mapbox Style" height="20px" src="' + this[7]+ '"/>';
+    
+    	        htmlRemoteView += '<span id="show_in_GM"></span>';
 
                 
                 htmlRemoteView += "</span></li>";

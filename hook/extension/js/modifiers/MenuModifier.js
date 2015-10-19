@@ -36,7 +36,7 @@ MenuModifier.prototype = {
         var twitterTweetLink = "https://twitter.com/intent/tweet?text=As%20%23strava%20user%20you%20should%20try%20%23stravistix%20web%20extension%20by%20%40champagnethomas%20or%20its%20%23StraTistiX%20fork%20by%20%40kamensekd!%20%23cycling%20%23running%20%23geek";
 
         stravaMenuHtml += "<a href='https://www.strava.com/dashboard?feed_type=my_activity' class='selection' oncontextmenu='return false;'" + menuStyle + "><img style='vertical-align:middle' id='drop-down-menu_img'  src='" + menuIcon + "'/></a>";
-        stravaMenuHtml += "<script>document.getElementById('drop-down-menu_img').parentNode.onmousedown = function(event) { if (event.which == 3) { window.location.href = 'https://www.strava.com/athlete/training?utm_source=top-nav';}}</script>";
+        stravaMenuHtml += "<script>document.getElementById('drop-down-menu_img').parentNode.onmousedown = function(event) { if (event.which == 3) { window.location.href = 'https://www.strava.com/athlete/training';}}</script>";
         stravaMenuHtml += "<ul class='options' height='' style='width: 300px; max-height: 650px !important; overflow:hidden;'>";
         stravaMenuHtml += "<li><a target='_blank' href='" + this.appResources_.settingsLink + "'><img style='vertical-align:middle' src='" + this.appResources_.settingsIcon + "'/> <span>Common Settings</span></a></li>";
         stravaMenuHtml += "<li><a target='_blank' href='" + this.appResources_.settingsLink + "#/healthSettings'><img style='vertical-align:middle' src='" + this.appResources_.heartIcon + "'> <span>Health Settings</span></a></li>";

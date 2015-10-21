@@ -1,12 +1,13 @@
 /**
  *   RemoteLinksModifier is responsible of ...
  */
-function RemoteLinksModifier(highLightStravistiXFeature, appResources, authorOfActivity) {
+function RemoteLinksModifier(highLightStravistiXFeature, appResources, authorOfActivity, customMapboxStyle) {
     this.appResources_ = appResources;
     this.highLightStravistiXFeature_ = highLightStravistiXFeature;
     this.htmlRemoteViewStyle = '';
     this.htmlRemoteViewForSegmentStyle = '';
     this.authorOfActivity = authorOfActivity;
+    this.customMapboxStyle_ = customMapboxStyle;
 }
 
 /**
@@ -39,7 +40,7 @@ RemoteLinksModifier.prototype = {
      * ...
      */
     modifyActivityPage_: function modifyActivityPage_() {
-
+   	    customMapboxStyle=this.customMapboxStyle_;
 
         var remoteViewActivityLinksArray = [  // [ 0:image/text , 1:link (ID will be added) , 2:additional_string ]   for special cases 2= heatmap, simple_link, mapflipper
 
@@ -67,7 +68,9 @@ RemoteLinksModifier.prototype = {
 
 
 
+//        $.each(remoteViewActivityLinksArray, function(customMapboxStyle) {
         $.each(remoteViewActivityLinksArray, function() {
+
             htmlRemoteView += "<li>";
 			//
             // gpsvisualizer
@@ -102,7 +105,9 @@ RemoteLinksModifier.prototype = {
 
                 htmlRemoteView += "<span style='color: #333; padding-left: 30px'>";
 
-	            htmlRemoteView += '<img onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){if (this.src.indexOf(\'googleapis\')>-1){return}else{return this.src.replace(\'mapbox.com/v4/strava.map-zn3cjvc6/\',\'mapbox.com/v4/papics.ca6cf1f9/\');}})},1000)}{document.getElementById(\'map-type-control\').getElementsByTagName(\'li\')[0].getElementsByTagName(\'a\')[0].click();}"   title="Replace Standard Map with Custom Mapbox Style" height="20px" src="' + this[7]+ '"/>';
+//				console.log("Mapbox style: "+customMapboxStyle);
+
+	            htmlRemoteView += '<img onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){if (this.src.indexOf(\'googleapis\')>-1){return}else{return this.src.replace(\'mapbox.com/v4/strava.map-zn3cjvc6/\',\'mapbox.com/v4/'+customMapboxStyle+'/\');}})},1000)}{document.getElementById(\'map-type-control\').getElementsByTagName(\'li\')[0].getElementsByTagName(\'a\')[0].click();}"   title="Toggle Replace Standard Map with Custom Mapbox Style" height="20px" src="' + this[7]+ '"/>';
     
     	        htmlRemoteView += '<span id="show_in_GM"></span>';
 
@@ -308,6 +313,7 @@ RemoteLinksModifier.prototype = {
      * ...
      */
     modifySegmentPage_: function modifySegmentPage_() {
+   	    customMapboxStyle=this.customMapboxStyle_;
 
         // // Segment external links
         var segmentData = window.location.pathname.match(/^\/segments\/(\d+)$/);
@@ -360,7 +366,9 @@ RemoteLinksModifier.prototype = {
 
                 htmlRemoteViewS += "<span style='color: #333; padding-left: 0px; vertical-align:middle'>";
 
-            	htmlRemoteViewS += '<img style="vertical-align:middle" onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){if (this.src.indexOf(\'googleapis\')>-1){return}else{return this.src.replace(\'mapbox.com/v4/strava.map-zn3cjvc6/\',\'mapbox.com/v4/papics.ca6cf1f9/\');}})},1000)}{document.getElementById(\'map-type-control\').getElementsByTagName(\'li\')[0].getElementsByTagName(\'a\')[0].click();}"   title="Replace Standard Map with Custom Mapbox Style" height="12px" src="' + this[7]+ '"/>&nbsp';
+            	htmlRemoteViewS += '<img style="vertical-align:middle" onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){if (this.src.indexOf(\'googleapis\')>-1){return}else{return this.src.replace(\'mapbox.com/v4/strava.map-zn3cjvc6/\',\'mapbox.com/v4/'+customMapboxStyle+'/\');}})},1000)}{document.getElementById(\'map-type-control\').getElementsByTagName(\'li\')[0].getElementsByTagName(\'a\')[0].click();}"   title="Toggle Replace Standard Map with Custom Mapbox Style" height="24px" src="' + this[7]+ '"/>&nbsp';
+
+				htmlRemoteViewS += '<span id="show_in_GM"></span>';
 
                 htmlRemoteViewS += '<img style="vertical-align:middle" onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)\\.png/,\'http://tile.openstreetmap.org/$1/$2/$3.png\');})},1000)}"   title="Open Street Map" width="24px" src="' + this[6]+ '"/>';
 

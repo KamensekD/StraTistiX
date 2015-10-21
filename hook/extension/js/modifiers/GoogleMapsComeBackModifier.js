@@ -21,10 +21,10 @@ GoogleMapsComeBackModifier.prototype = {
     modify: function modify() {
 
         // Skip modify if analysis section is watched
-        if (this.isAnalysisSection()) {
-            console.log('[GoogleMapsComeBackModifier] Skipping Analysis Section');
-            return;
-        }
+//        if (this.isAnalysisSection()) {
+//            console.log('[GoogleMapsComeBackModifier] Skipping Analysis Section');
+//            return;
+//        }
 
         // Bind function for be called when Google API loaded
         $(window).bind('gMapsLoaded', this.googleMapsApiLoaded(this.activityId));
@@ -76,15 +76,15 @@ GoogleMapsComeBackModifier.prototype = {
 
     },
 
-    showWaitLoadingMessage: function() {
-        $.fancybox('<div style="width:100px;height:50px">Loading...</div>', {
+    showWaitLoadingMessage: function(loadingMsg) {
+        $.fancybox('<div style="width:200px;height:75px">Loading...<br>'+loadingMsg+'</div>', {
             'autoScale': true
         });
     },
 
     placeGoogleMapsButtons: function(activityId) {
 
-        // Place show button over MapBox activity main map
+        // Place Show in GM button next to Mapbox Icon
         this.placeMainGoogleMapButton(activityId);
 
         // PLACE SEGMENT AREA BUTTON 'View in Google Maps'
@@ -97,15 +97,48 @@ GoogleMapsComeBackModifier.prototype = {
         if (!$('#map-canvas') || $('#map-canvas').is(':hidden')) {
             return;
         }
+        
+        // Button already existing, skiping...
+		if ($('#showInGoogleMap').length) {
+			return;
+		}
+
 
 //        $('#map-canvas').before('<a class="button btn-block btn-primary" id="showInGoogleMap">View in Google Maps</a>').each(function() {
-//        $('#show_in_GM').before('<a  id="showInGoogleMap"><font size=-3>View in GM</font></a>').each(function() {
-        $('#show_in_GM').before('&nbsp<img id="showInGoogleMap" title="View in Google Maps/StreetView" width="20px" src="'+this.appResources.GMIcon+'">').each(function() {
+        $('#show_in_GM').before('&nbsp<img id="showInGoogleMap" title="View in Google Maps/StreetView" height="20px" src="'+this.appResources.GMIcon+'">').each(function() {
 
             $('#showInGoogleMap').on('click', function() {
 
+			    if (window.location.pathname.match(/\/analysis\//)) {
+					if($('#effort-detail').children().length) {	// if segment is selected in analysis view
+						selected_segment = $('#effort-detail').children()[0].children[0].attributes['data-segment-effort-id'].value;
+						//console.log('Selected segment: '+selected_segment);
+
+             		   // Show loading message while loading gmaps and path
+                		this.showWaitLoadingMessage('<br>segment '+selected_segment+'<br>of activity '+activityId);
+
+                		this.fetchPathFromStream(activityId, function(pathArray) {
+
+                    		this.pathArray = pathArray;
+
+                    		// Check if effort id is given
+                    		var effortId = selected_segment;
+
+                    		if (effortId) {
+                        		this.fetchSegmentInfoAndDisplayWithGoogleMap(this.pathArray, effortId);
+                    		} else {
+                        		this.displayGoogleMapWithPath(this.pathArray);
+                    		}
+
+                		}.bind(this));
+
+					} //if
+
+            		return;
+	    		} //if
+	    		
                 // Show loading message while loading gmaps and path
-                this.showWaitLoadingMessage();
+                this.showWaitLoadingMessage('<br>activity '+activityId);
 
                 this.fetchPathFromStream(activityId, function(pathArray) {
 
@@ -162,11 +195,11 @@ GoogleMapsComeBackModifier.prototype = {
                 console.error('No anchor found to attach segment google map button');
             }
 
-            anchor.before('<a class="button btn-block btn-primary" id="showSegInGoogleMap">View in Google Maps</a>').each(function() {
+            anchor.before('<a class="button btn-xs btn-primary" id="showSegInGoogleMap">View in Google Maps</a>').each(function() {
 
                 $('#showSegInGoogleMap').on('click', function() {
 
-                    self.showWaitLoadingMessage();
+                    self.showWaitLoadingMessage('<br>segment of activity '+activityId);
 
                     self.fetchPathFromStream(activityId, function(pathArray) {
 

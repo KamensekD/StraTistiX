@@ -178,7 +178,7 @@ StravistiX.prototype = {
 
         if (env.debugMode) console.log("Execute handleRemoteLinks_()");
 
-        var remoteLinksModifier = new RemoteLinksModifier(this.userSettings_.highLightStravistiXFeature, this.appResources_, (this.athleteIdAuthorOfActivity_ === this.athleteId_));
+        var remoteLinksModifier = new RemoteLinksModifier(this.userSettings_.highLightStravistiXFeature, this.appResources_, (this.athleteIdAuthorOfActivity_ === this.athleteId_), this.userSettings_.customMapboxStyle);
         remoteLinksModifier.modify();
     },
 
@@ -539,7 +539,8 @@ StravistiX.prototype = {
 	    	return;  
     	}  
  
-    	// Test where are on an activity...  
+    	// Test where are on an activity...  or segment... // doesn't work on segment view, yet
+//	    if ((!window.location.pathname.match(/^\/activities/)) && (!window.location.pathname.match(/^\/segments/))) {  
 	    if (!window.location.pathname.match(/^\/activities/)) {  
 	    	return;  
     	}  

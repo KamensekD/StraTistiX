@@ -52,3 +52,34 @@
 .stravistiXExtendedData .grid td {
     max-width: 100px;
 }
+
+.summaryGrid table {
+    margin: 0;
+    padding: 0;
+}
+
+.summaryGrid td {
+    padding: 0px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+.summaryGrid .summaryGridDataContainer {
+    color: rgb(78, 78, 78);
+    cursor: pointer;
+    font-weight: bold;
+    font-size: medium;
+}
+
+.summaryGrid .summaryGridTitle {
+    cursor: pointer;
+    color: rgb(137, 133, 133);
+    font-size: small;
+    font-weight: normal;
+}
+
+.summaryGrid .summarySubGridTitle {
+    color: rgb(78, 78, 78);
+    font-size: small;
+    font-weight: normal;
+}

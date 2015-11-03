@@ -212,6 +212,19 @@ var AbstractDataView = Fiber.extend(function(base) {
             var speedUnitPerhour = (measurementPreference == 'meters') ? 'km/h' : 'mi/h';
             var speedUnitFactor = (speedUnitPerhour == 'km/h') ? 1 : 0.62137;
             return [speedUnitPerhour, speedUnitFactor, units];
-        }
+        },
+
+        /**
+         * @param speed in kph
+         * @return pace in seconds/km
+         */
+        convertSpeedToPace: function(speed) {
+
+            if(_.isNaN(speed)) {
+                return 0;
+            }
+
+            return (speed === 0) ? 'infinite' : parseInt((1 / speed) * 60 * 60);
+        },
     }
 });

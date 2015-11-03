@@ -200,6 +200,7 @@ var jsDependencies = [
     'js/modifiers/DefaultLeaderboardFilterModifier.js',
     'js/modifiers/MenuModifier.js',
     'js/modifiers/SegmentRankPercentageModifier.js',
+    'js/modifiers/VirtualPartnerModifier.js',
     'js/modifiers/ActivityGoogleMapTypeModifier.js',
     'js/modifiers/HidePremiumModifier.js',
     'js/modifiers/AthleteStatsModifier.js',
@@ -215,7 +216,11 @@ var jsDependencies = [
     'js/modifiers/extendedActivityData/views/CyclingCadenceDataView.js',
     'js/modifiers/extendedActivityData/views/RunningCadenceDataView.js',
     'js/modifiers/extendedActivityData/views/PowerDataView.js',
-    'js/modifiers/extendedActivityData/views/GradeDataView.js',
+//    'js/modifiers/extendedActivityData/views/GradeDataView.js',
+    'js/modifiers/extendedActivityData/views/ElevationDataView.js',
+    'js/modifiers/extendedActivityData/views/AbstractGradeDataView.js',
+    'js/modifiers/extendedActivityData/views/CyclingGradeDataView.js',
+    'js/modifiers/extendedActivityData/views/RunnningGradeDataView.js',
 
     // Extended data modifiers
     'js/modifiers/extendedActivityData/AbstractExtendedActivityDataModifier.js',
@@ -224,12 +229,13 @@ var jsDependencies = [
     'js/modifiers/extendedActivityData/GenericExtendedActivityDataModifier.js',
 
     'js/modifiers/HideFeedModifier.js',
+    'js/modifiers/DisplayFlyByFeedModifier.js',
     'js/modifiers/ActivityBikeOdoModifier.js',
     'js/modifiers/ActivityQRCodeDisplayModifier.js',
     'js/modifiers/RunningGradeAdjustedPaceModifier.js',
     'js/modifiers/RunningHeartRateModifier.js',
     'js/modifiers/NearbySegmentsModifier.js',
-	'js/modifiers/GoogleMapsComeBackModifier.js'
+    'js/modifiers/GoogleMapsComeBackModifier.js'
 ];
 
 var cssDependencies = [

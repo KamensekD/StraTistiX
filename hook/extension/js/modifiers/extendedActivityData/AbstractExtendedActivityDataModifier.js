@@ -8,15 +8,20 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 
         dataViews: [],
 
-        init: function(analysisData, appResources, userSettings, athleteId, athleteIdAuthorOfActivity) {
+        summaryGrid: null,
+
+        init: function(analysisData, appResources, userSettings, athleteId, athleteIdAuthorOfActivity, basicInfos) {
 
             this.analysisData_ = analysisData;
             this.appResources_ = appResources;
             this.userSettings_ = userSettings;
             this.athleteId_ = athleteId;
             this.athleteIdAuthorOfActivity_ = athleteIdAuthorOfActivity;
+            this.basicInfos = basicInfos;
 
             this.isAuthorOfViewedActivity = (this.athleteIdAuthorOfActivity_ == this.athleteId_);
+
+            this.speedUnitsData = this.getSpeedUnitData();
 
             this.setDataViewsNeeded();
         },
@@ -30,23 +35,32 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
                 this.content += view.getContent();
             }.bind(this));
 
-            // Add Show extended statistics to page
+/* works for cycling without this, but not for running!?
+			// Add Show extended statistics to page
             this.placeExtendedStatsButton(function() {
-                // Button has been placed...
+	        if (env.debugMode) console.log("Execute placeExtendedStatsButton");
             });
-
+            this.placeSummaryPanel(function() {});
+*/
         },
 
 
+        placeSummaryPanel: function(panelAdded) {
+        if (env.debugMode) console.log("Execute placeSummaryPanel");
+
+            this.makeSummaryGrid(2, 4);
+
+            this.insertContentSummaryGridContent();
+
+            $('.inline-stats.section').first().after(this.summaryGrid.html()).each(function() {
+                // Grid placed
+                if (panelAdded) panelAdded();
+            });
+        },
+
 
         placeExtendedStatsButton: function(buttonAdded) {
-
-//            var htmlButton = '<section>';
-//            var htmlButton = '<div>';
-//            htmlButton += '<a class="button btn-block btn-primary" id="extendedStatsButton" href="#">';
-//            htmlButton += '<a id="extendedStatsButton" href="#">';
-//            htmlButton += 'Show extended statistics';
-
+        if (env.debugMode) console.log("Execute placeExtendedStatsButton");
 
 
 
@@ -117,6 +131,7 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 
 
 			function myRPE(val,full,wid){
+			if (env.debugMode) console.log("Execute myRPE");
 			// *** for women use correction factor!!! MAX TRIM for man is 4.37/min (262/h) and for woman 3.4/min (204/h) !!!
     			document.getElementById("RPE").style.width=wid+1+'px';
     			var perc=Math.round((val*100)/full);
@@ -126,7 +141,7 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
     			document.getElementById("RPEtxt").style.left=5-Math.round(getTextWidth(document.getElementById("RPEtxt").innerHTML, "8.5pt sans-serif")/2)+'px';
     			document.getElementById("RPElin").style.width=document.getElementById("RPE").style.width.slice(0,-2)*val/full+'px';
 //				console.log(getTextWidth(document.getElementById("RPEtxt").innerHTML, "6.5pt sans-serif"))
-			}
+			};
 
 			function getTextWidth(text, font) {
     			var canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
@@ -157,7 +172,7 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 			html += '<td><strong>'+this.analysisData_.heartRateData.medianHeartRate.toFixed(0)+'</strong>bpm</td>';
 			html += '<td><strong>'+this.analysisData_.heartRateData.upperQuartileHeartRate.toFixed(0)+'</strong>bpm</td>';
 			html += '<td><strong>'+this.analysisData_.heartRateData.maxHeartRate.toFixed(0)+'</strong>bpm</td></tr>';
-		}
+		};
 		if (this.analysisData_.gradeData != null && !(this.analysisData_.gradeData.lowerQuartileGrade == 0 && this.analysisData_.gradeData.upperQuartileGrade == 0)) {
 			html += '<tr style="color: rgb(20,120,20)"><td><strong>'+this.analysisData_.gradeData.gradeProfile+'</strong> Grade</td>';
 			html += '<td><strong>'+this.analysisData_.gradeData.avgGrade.toFixed(1)+'</strong>%</td>';
@@ -165,7 +180,7 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 			html += '<td><strong>'+this.analysisData_.gradeData.medianGrade.toFixed(1)+'</strong>%</td>';
 			html += '<td><strong>'+this.analysisData_.gradeData.upperQuartileGrade.toFixed(1)+'</strong>%</td>';
 			html += '<td><strong>'+this.analysisData_.gradeData.maxGrade.toFixed(1)+'</strong>%</td></tr>';
-		}
+		};
 		if (this.analysisData_.speedData != null) {
 			html += '<tr style="color: rgb(60,155, 200)"><td>Speed [km/h]</td>';
 //			html += '<td><strong>'+(3600*window.distance/window.elapsedTime).toFixed(1)+'</strong></td>';
@@ -181,7 +196,7 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 			html += '<td><strong>'+Helper.secondsToHHMMSS((3600/this.analysisData_.speedData.medianSpeed).toFixed(0)).replace('00:','')+'</strong></td>';
 			html += '<td><strong>'+Helper.secondsToHHMMSS((3600/this.analysisData_.speedData.upperQuartileSpeed).toFixed(0)).replace('00:','')+'</strong></td>';
 			html += '<td><strong>'+Helper.secondsToHHMMSS((3600/this.analysisData_.speedData.maxSpeed).toFixed(0)).replace('00:','')+'</strong></td></tr>';
-		}
+		};
 		html += '</table></a></div>';
 
 
@@ -192,14 +207,11 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 	 		$('.others-section').css({'padding-top': '0px'});
 		} else {	// if there are other athletes, make a line between them and statistics table
 		 	$('.others-section').css({'border-bottom': '1px solid', color:'#eee','padding-top': '0px'});
-		}
+		};
 
 
 		// insert statistics table
 		$('.others-section').first().after(html).each(function() {
-// 		$('.others-section').css({'padding-top': '0px'});
-//		$('.others-section').append(html).each(function() {
-//		$('.details').first().after(html).each(function() {
 
 
 		$('#extendedStatsButton').click(function() {
@@ -228,16 +240,90 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 
 
 
+
+
+        makeSummaryGrid: function(columns, rows) {
+       	if (env.debugMode) console.log("Execute makeSummaryGrid");
+
+            var summaryGrid = '';
+            summaryGrid += '<div>';
+            summaryGrid += '<div class="summaryGrid">';
+            summaryGrid += '<table>';
+
+            for (var i = 0; i < rows; i++) {
+                summaryGrid += '<tr>';
+                for (var j = 0; j < columns; j++) {
+                    summaryGrid += '<td data-column="' + j + '" data-row="' + i + '">';
+                    summaryGrid += '</td>';
+                }
+                summaryGrid += '</tr>';
+            }
+            summaryGrid += '</table>';
+            summaryGrid += '</div>';
+            summaryGrid += '</div>';
+            this.summaryGrid = $(summaryGrid);
+        },
+
+        insertContentAtGridPosition: function(columnId, rowId, data, title, units, userSettingKey) {
+       	if (env.debugMode) console.log("Execute insertContentAtGridPosition ("+title+")");
+
+            var onClickHtmlBehaviour = "onclick='javascript:window.open(\"" + this.appResources_.settingsLink + "#/commonSettings?viewOptionHelperId=" + userSettingKey + "\",\"_blank\");'";
+
+            if (this.summaryGrid) {
+                var content = '<span class="summaryGridDataContainer" ' + onClickHtmlBehaviour + '>' + data + ' <span class="summaryGridUnits">' + units + '</span><br /><span class="summaryGridTitle">' + title + '</span></span>';
+                this.summaryGrid.find('[data-column=' + columnId + '][data-row=' + rowId + ']').html(content);
+            } else {
+                console.error('Grid is not initialized');
+            }
+        },
+
+        insertContentSummaryGridContent: function() {
+       	if (env.debugMode) console.log("Execute insertContentSummaryGridContent");
+            // Insert summary data
+            var moveRatio = '-';
+            if (this.analysisData_.moveRatio && this.userSettings_.displayActivityRatio) {
+                moveRatio = this.analysisData_.moveRatio.toFixed(2);
+            }
+            this.insertContentAtGridPosition(0, 0, moveRatio, 'Move Ratio', '', 'displayActivityRatio');
+
+            // ...
+            var TRIMP = activityHeartRateReserve = '-';
+            var activityHeartRateReserveUnit = '%';
+            if (this.analysisData_.heartRateData && this.userSettings_.displayAdvancedHrData) {
+                TRIMP = this.analysisData_.heartRateData.TRIMP.toFixed(0) + ' <span class="summarySubGridTitle">(' + this.analysisData_.heartRateData.TRIMPPerHour.toFixed(0) + ' / hour)</span>';
+                activityHeartRateReserve = this.analysisData_.heartRateData.activityHeartRateReserve.toFixed(0);
+                activityHeartRateReserveUnit = '%  <span class="summarySubGridTitle">(Max: ' + this.analysisData_.heartRateData.activityHeartRateReserveMax.toFixed(0) + '% @ ' + this.analysisData_.heartRateData.maxHeartRate + 'bpm)</span>';
+            }
+            this.insertContentAtGridPosition(0, 1, TRIMP, 'TRaining IMPulse', '', 'displayAdvancedHrData');
+            this.insertContentAtGridPosition(1, 1, activityHeartRateReserve, 'Heart Rate Reserve Avg', activityHeartRateReserveUnit, 'displayAdvancedHrData');
+
+            // ...
+            var climbTime = '-';
+            var climbTimeExtra = '';
+            if (this.analysisData_.gradeData && this.userSettings_.displayAdvancedGradeData) {
+                climbTime = Helper.secondsToHHMMSS(this.analysisData_.gradeData.upFlatDownInSeconds.up);
+                climbTimeExtra = '<span class="summarySubGridTitle">(' + (this.analysisData_.gradeData.upFlatDownInSeconds.up / this.analysisData_.gradeData.upFlatDownInSeconds.total * 100).toFixed(0) + '% of time)</span>';
+            }
+
+            this.insertContentAtGridPosition(0, 2, climbTime, 'Time climbing', climbTimeExtra, 'displayAdvancedGradeData');
+
+        },
+
+
+
+
+
         /**
          * Affect default view needed
          */
         setDataViewsNeeded: function() {
+       	if (env.debugMode) console.log("Execute setDataViewsNeeded");
 
             // By default we have... If data exist of course...
 
             // Featured view
             if (this.analysisData_) {
-                var featuredDataView = new FeaturedDataView(this.analysisData_, this.userSettings_);
+                var featuredDataView = new FeaturedDataView(this.analysisData_, this.userSettings_, this.basicInfos);
                 featuredDataView.setAppResources(this.appResources_);
                 featuredDataView.setIsAuthorOfViewedActivity(this.isAuthorOfViewedActivity);
                 this.dataViews.push(featuredDataView);
@@ -250,6 +336,14 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
                 heartRateDataView.setIsAuthorOfViewedActivity(this.isAuthorOfViewedActivity);
                 this.dataViews.push(heartRateDataView);
             }
-        }
+        },
+        
+        getSpeedUnitData: function() {
+            var measurementPreference = currentAthlete.get('measurement_preference');
+            var units = (measurementPreference == 'meters') ? 'km' : 'mi';
+            var speedUnitPerhour = (measurementPreference == 'meters') ? 'km/h' : 'mi/h';
+            var speedUnitFactor = (speedUnitPerhour == 'km/h') ? 1 : 0.62137;
+            return [speedUnitPerhour, speedUnitFactor, units];
+        },
     }
 });

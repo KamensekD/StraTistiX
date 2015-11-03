@@ -7,6 +7,7 @@ function ActivityProcessor(vacuumProcessor, userHrrZones, zones) {
     this.zones = zones;
 }
 
+// *** PUT THIS STUFF IN CONFIGURABLE SETTINGS!
 //ActivityProcessor.movingThresholdKph = 3.5; // Kph
 ActivityProcessor.movingThresholdKph = 2.5; // Kph
 ActivityProcessor.cadenceThresholdRpm = 35; // RPMs
@@ -55,7 +56,6 @@ ActivityProcessor.prototype = {
         // Else no cache... then call VacuumProcessor for getting data, compute them and cache them
         this.vacuumProcessor_.getActivityStream(function(activityStatsMap, activityStream, athleteWeight, hasPowerMeter) { // Get stream on page
 
-
             var result = this.computeAnalysisData_(userGender, userRestHr, userMaxHr, userFTP, athleteWeight, hasPowerMeter, activityStatsMap, activityStream);
 
             if (env.debugMode) console.log("Creating activity cache: " + JSON.stringify(result));
@@ -68,37 +68,38 @@ ActivityProcessor.prototype = {
 
     computeAnalysisData_: function(userGender, userRestHr, userMaxHr, userFTP, athleteWeight, hasPowerMeter, activityStatsMap, activityStream) {
 
-
         // Move ratio
         var moveRatio = this.moveRatio_(activityStatsMap, activityStream);
-
 
         // Toughness score
         var toughnessScore = this.toughnessScore_(activityStatsMap, activityStream, moveRatio);
 
         // Include speed and pace
-        var moveData = this.moveData_(activityStatsMap, activityStream.velocity_smooth, activityStream.time);
+//        var moveData = this.moveData_(activityStatsMap, activityStream.velocity_smooth, activityStream.time);
+        var moveData = [null, null];
+        if (activityStream.velocity_smooth) {
+            moveData = this.moveData_(activityStatsMap, activityStream.velocity_smooth, activityStream.time);
+        }
 
         // Q1 Speed
         // Median Speed
         // Q3 Speed
         // Standard deviation Speed
-        if (moveData) var speedData = moveData[0];
-
+//        if (moveData) var speedData = moveData[0];
+        var speedData = (_.isEmpty(moveData)) ? null : moveData[0];
 
         // Q1 Pace
         // Median Pace
         // Q3 Pace
         // Standard deviation Pace
-        if (moveData) var paceData = moveData[1];
-
+//        if (moveData) var paceData = moveData[1];
+        var paceData = (_.isEmpty(moveData)) ? null : moveData[1];
 
         // Estimated Normalized power
         // Estimated Variability index
         // Estimated Intensity factor
         // Normalized Watt per Kg
         var powerData = this.powerData_(athleteWeight, hasPowerMeter, userFTP, activityStatsMap, activityStream.watts, activityStream.velocity_smooth, activityStream.time);
-
 
         // TRaining IMPulse
         // %HRR Avg
@@ -108,7 +109,6 @@ ActivityProcessor.prototype = {
         // Q3 HR
         var heartRateData = this.heartRateData_(userGender, userRestHr, userMaxHr, activityStream.heartrate, activityStream.time, activityStatsMap);
 
-
         // Cadence percentage
         // Time Cadence
         // Crank revolution
@@ -117,9 +117,12 @@ ActivityProcessor.prototype = {
 
         // Avg grade
         // Q1/Q2/Q grade
-        var gradeData = this.gradeData_(activityStream.grade_smooth, activityStream.time);
+//        var gradeData = this.gradeData_(activityStream.grade_smooth, activityStream.time);
+        var gradeData = this.gradeData_(activityStream.grade_smooth, activityStream.velocity_smooth, activityStream.time);
 
-
+        // Avg grade
+        // Q1/Q2/Q3 grade
+        var elevationData = this.elevationData_(activityStream.altitude, activityStream.grade_smooth, activityStream.time);
 
         // Return an array with all that shit...
         return {
@@ -130,7 +133,8 @@ ActivityProcessor.prototype = {
             'powerData': powerData,
             'heartRateData': heartRateData,
             'cadenceData': cadenceData,
-            'gradeData': gradeData
+            'gradeData': gradeData,
+            'elevationData': elevationData
         };
     },
 
@@ -206,7 +210,8 @@ ActivityProcessor.prototype = {
      */
     moveData_: function(activityStatsMap, velocityArray, timeArray) {
 
-        if (!velocityArray) {
+//        if (!velocityArray) {
+        if (_.isEmpty(velocityArray) || _.isEmpty(timeArray)) {
             return null;
         }
 
@@ -319,7 +324,8 @@ ActivityProcessor.prototype = {
      */
     powerData_: function(athleteWeight, hasPowerMeter, userFTP, activityStatsMap, powerArray, velocityArray, timeArray) {
 
-        if (_.isEmpty(powerArray) || _.isEmpty(velocityArray)) {
+//        if (_.isEmpty(powerArray) || _.isEmpty(velocityArray)) {
+        if (_.isEmpty(powerArray) || _.isEmpty(velocityArray) || _.isEmpty(timeArray)) {
             return null;
         }
 
@@ -402,7 +408,8 @@ ActivityProcessor.prototype = {
      */
     heartRateData_: function(userGender, userRestHr, userMaxHr, heartRateArray, timeArray, activityStatsMap) {
 
-        if (_.isUndefined(heartRateArray)) {
+//        if (_.isUndefined(heartRateArray)) {
+        if (_.isEmpty(heartRateArray) || _.isEmpty(timeArray)) {
             return null;
         }
 
@@ -492,6 +499,7 @@ ActivityProcessor.prototype = {
 		'maxHeartRate': maxHeartRate,
  //          'activityHeartRateReserve': Helper.heartRateReserveFromHeartrate(activityStatsMap.averageHeartRate, userMaxHr, userRestHr) * 100,
              'activityHeartRateReserve': Math.round((100*Helper.heartRateReserveFromHeartrate(activityStatsMap.averageHeartRate, userMaxHr, userRestHr))*10)/10,
+            'activityHeartRateReserveMax': Helper.heartRateReserveFromHeartrate(activityStatsMap.maxHeartRate, userMaxHr, userRestHr) * 100,
             	'MaxHr':userMaxHr,
 		'RestHr':userRestHr
         };
@@ -510,12 +518,14 @@ ActivityProcessor.prototype = {
 
     cadenceData_: function(cadenceArray, velocityArray, activityStatsMap, timeArray) { // TODO add cadence type here
 
-        if (_.isUndefined(cadenceArray) || _.isUndefined(velocityArray)) {
-            return null;
+//        if (_.isUndefined(cadenceArray) || _.isUndefined(velocityArray)) {
+        if (_.isEmpty(cadenceArray) || _.isEmpty(velocityArray) || _.isEmpty(timeArray)) {
+          return null;
         }
 
         // On Moving
         var cadenceSumOnMoving = 0;
+        var cadenceVarianceSumOnMoving = 0;
         var cadenceOnMovingCount = 0;
         var cadenceOnMoveSampleCount = 0;
         var movingSampleCount = 0;
@@ -544,6 +554,7 @@ ActivityProcessor.prototype = {
                     // Rider is moving here while cadence
                     cadenceOnMoveSampleCount++;
                     cadenceSumOnMoving += cadenceArray[i];
+                    cadenceVarianceSumOnMoving += Math.pow(cadenceArray[i], 2);
                     cadenceOnMovingCount++;
                 }
 
@@ -568,6 +579,9 @@ ActivityProcessor.prototype = {
         var cadenceRatioOnMovingTime = cadenceOnMoveSampleCount / movingSampleCount;
         var averageCadenceOnMovingTime = cadenceSumOnMoving / cadenceOnMovingCount;
 
+        var varianceCadence = (cadenceVarianceSumOnMoving / cadenceOnMoveSampleCount) - Math.pow(averageCadenceOnMovingTime, 2);
+        var standardDeviationCadence = (varianceCadence > 0) ? Math.sqrt(varianceCadence) : 0;
+
         // Update zone distribution percentage
         for (var zone in cadenceZones) {
             cadenceZones[zone]['percentDistrib'] = ((cadenceZones[zone]['s'] / durationCount).toFixed(4) * 100);
@@ -581,6 +595,7 @@ ActivityProcessor.prototype = {
             'cadencePercentageMoving': cadenceRatioOnMovingTime * 100,
             'cadenceTimeMoving': (cadenceRatioOnMovingTime * activityStatsMap.movingTime),
             'averageCadenceMoving': averageCadenceOnMovingTime,
+            'standardDeviationCadence': standardDeviationCadence.toFixed(1),
             'crankRevolutions': (averageCadenceOnMovingTime / 60 * activityStatsMap.movingTime),
             'lowerQuartileCadence': Helper.lowerQuartile(cadenceArraySorted),
             'medianCadence': Helper.median(cadenceArraySorted),
@@ -591,11 +606,13 @@ ActivityProcessor.prototype = {
 
 
 
-    gradeData_: function(gradeArray, timeArray) {
+    gradeData_: function(gradeArray, velocityArray, timeArray) {
 
-        if (_.isEmpty(gradeArray) || _.isEmpty(timeArray)) {
+//        if (_.isEmpty(gradeArray) || _.isEmpty(timeArray)) {
+        if (_.isEmpty(gradeArray) || _.isEmpty(velocityArray) || _.isEmpty(timeArray)) {
             return null;
         }
+
 
         // If home trainer
         if (window.pageView && window.pageView.activity && window.pageView.activity().get('trainer')) {
@@ -613,10 +630,24 @@ ActivityProcessor.prototype = {
             total: 0
         };
 
+
         var maxGrade = _.max(gradeArray);
         var minGrade = _.min(gradeArray);
 
+        // Currently deals with avg speed/pace
+        var upFlatDownMoveData = {
+            up: 0,
+            flat: 0,
+            down: 0,
+            count: {
+                up: 0,
+                flat: 0,
+                down: 0,
+            }
+        };
+
         var durationInSeconds, durationCount = 0;
+        var currentSpeed;
 
         for (var i = 0; i < gradeArray.length; i++) { // Loop on samples
 
@@ -626,26 +657,37 @@ ActivityProcessor.prototype = {
             // Compute distribution for graph/table
             if (i > 0) {
 
-                durationInSeconds = (timeArray[i] - timeArray[i - 1]); // Getting deltaTime in seconds (current sample and previous one)
+                currentSpeed = velocityArray[i] * 3.6; // Multiply by 3.6 to convert to kph; 
 
-                var gradeZoneId = this.getZoneId(this.zones.grade, gradeArray[i]);
+                if (currentSpeed > 0) { // If moving...
 
-                if (!_.isUndefined(gradeZoneId) && !_.isUndefined(gradeZones[gradeZoneId])) {
-                    gradeZones[gradeZoneId]['s'] += durationInSeconds;
-                }
+                    durationInSeconds = (timeArray[i] - timeArray[i - 1]); // Getting deltaTime in seconds (current sample and previous one)
 
-                durationCount += durationInSeconds;
+                    var gradeZoneId = this.getZoneId(this.zones.grade, gradeArray[i]);
 
-                // Compute DOWN/FLAT/UP duration
-                if (gradeArray[i] > ActivityProcessor.gradeClimbingLimit) { // UPHILL
-                    upFlatDownInSeconds.up += durationInSeconds;
-                } else if (gradeArray[i] < ActivityProcessor.gradeDownHillLimit) { // DOWNHILL
-                    upFlatDownInSeconds.down += durationInSeconds;
-                } else { // FLAT
-                    upFlatDownInSeconds.flat += durationInSeconds;
+                    if (!_.isUndefined(gradeZoneId) && !_.isUndefined(gradeZones[gradeZoneId])) {
+                        gradeZones[gradeZoneId]['s'] += durationInSeconds;
+                    }
+
+                    durationCount += durationInSeconds;
+
+                    // Compute DOWN/FLAT/UP duration
+                    if (gradeArray[i] > ActivityProcessor.gradeClimbingLimit) { // UPHILL
+                        upFlatDownInSeconds.up += durationInSeconds;
+                        upFlatDownMoveData.up += currentSpeed;
+                        upFlatDownMoveData.count.up++;
+                    } else if (gradeArray[i] < ActivityProcessor.gradeDownHillLimit) { // DOWNHILL
+                        upFlatDownInSeconds.down += durationInSeconds;
+                        upFlatDownMoveData.down += currentSpeed;
+                        upFlatDownMoveData.count.down++;
+                    } else { // FLAT
+                        upFlatDownInSeconds.flat += durationInSeconds;
+                        upFlatDownMoveData.flat += currentSpeed;
+                        upFlatDownMoveData.count.flat++;
+                    }
                 }
             }
-        }
+       	}
 
         upFlatDownInSeconds.total = durationCount;
 
@@ -656,6 +698,11 @@ ActivityProcessor.prototype = {
         } else {
             gradeProfile = ActivityProcessor.gradeProfileHilly;
         }
+
+        // Compute speed while up, flat down
+        upFlatDownMoveData.up = upFlatDownMoveData.up / upFlatDownMoveData.count.up;
+        upFlatDownMoveData.down = upFlatDownMoveData.down / upFlatDownMoveData.count.down;
+        upFlatDownMoveData.flat = upFlatDownMoveData.flat / upFlatDownMoveData.count.flat;
 
         var avgGrade = gradeSum / gradeCount;
 
@@ -676,9 +723,106 @@ ActivityProcessor.prototype = {
             'gradeZones': gradeZones,
             'upFlatDownInSeconds': upFlatDownInSeconds,
             'gradeProfile': gradeProfile,
+            'upFlatDownMoveData': upFlatDownMoveData,
             'maxGrade': maxGrade
         };
 
+    },
+    
+        elevationData_: function(altitudeArray, gradeArray, timeArray) {
+
+        if (_.isEmpty(altitudeArray) || _.isEmpty(gradeArray) || _.isEmpty(timeArray)) {
+            return null;
+        }
+
+        var accumulatedElevation = 0;
+        var accumulatedElevationAscent = 0;
+        var ascentSpeedMeterPerHourSamples = [];
+        var ascentSpeedMeterPerHourSum = 0;
+        var elevationSampleCount = 0;
+        var elevationSamples = [];
+        var elevationZones = this.prepareZonesForDistribComputation(this.zones.elevation);
+        var durationInSeconds, durationCount = 0;
+        var ascentCountEverySample = 10;
+        var ascentDurationInSeconds = 0;
+
+        for (var i = 0; i < altitudeArray.length; i++) { // Loop on samples
+
+            // Compute distribution for graph/table
+            if (i > 0) {
+
+                // Compute average and normalized elevation
+                accumulatedElevation += altitudeArray[i];
+                elevationSampleCount++;
+                elevationSamples.push(altitudeArray[i]);
+
+                durationInSeconds = (timeArray[i] - timeArray[i - 1]); // Getting deltaTime in seconds (current sample and previous one)
+
+                var elevationZoneId = this.getZoneId(this.zones.elevation, altitudeArray[i]);
+
+                if (!_.isUndefined(elevationZoneId) && !_.isUndefined(elevationZones[elevationZoneId])) {
+                    elevationZones[elevationZoneId]['s'] += durationInSeconds;
+                }
+
+                durationCount += durationInSeconds;
+
+                // Compute elevation diff each ascentCountEverySample
+                if ((i % ascentCountEverySample) == 0) {
+
+                    // Meters climbed between current and sample at ascentCountEverySample position lower.
+                    var elevationDiff = altitudeArray[i] - altitudeArray[i - ascentCountEverySample];
+
+                    // If previous altitude lower than current then => climbing
+                    if (elevationDiff > 0) {
+
+                        // Take time from 'ascentCountEverySample' last samples 
+                        for (j = 0; j < ascentCountEverySample; j++) {
+                            ascentDurationInSeconds += timeArray[i - j] - timeArray[i - j - 1];
+                        }
+
+                        accumulatedElevationAscent += elevationDiff;
+                        var ascentSpeedMeterPerHour = elevationDiff / ascentDurationInSeconds * 3600; // m climbed / seconds
+
+                        ascentSpeedMeterPerHourSamples.push(ascentSpeedMeterPerHour);
+                        ascentSpeedMeterPerHourSum += ascentSpeedMeterPerHour;
+                        ascentDurationInSeconds = 0; // reset for next loop
+                    }
+                }
+            }
+        }
+
+        // Finalize compute of Elevation
+        var avgElevation = accumulatedElevation / elevationSampleCount;
+
+
+        var elevationSamplesSorted = elevationSamples.sort(function(a, b) {
+            return a - b;
+        });
+
+        var ascentSpeedMeterPerHourSamplesSorted = ascentSpeedMeterPerHourSamples.sort(function(a, b) {
+            return a - b;
+        });
+
+        var avgAscentSpeed = ascentSpeedMeterPerHourSum / ascentSpeedMeterPerHourSamples.length;
+
+        // Update zone distribution percentage
+        for (var zone in elevationZones) {
+            elevationZones[zone]['percentDistrib'] = ((elevationZones[zone]['s'] / durationCount).toFixed(4) * 100);
+        }
+
+        return {
+            'avgElevation': avgElevation.toFixed(0),
+            'lowerQuartileElevation': Helper.lowerQuartile(elevationSamplesSorted).toFixed(0),
+            'medianElevation': Helper.median(elevationSamplesSorted).toFixed(0),
+            'upperQuartileElevation': Helper.upperQuartile(elevationSamplesSorted).toFixed(0),
+            'elevationZones': elevationZones, // Only while moving
+            'ascentSpeed': {
+                'avg': avgAscentSpeed,
+                'lowerQuartile': Helper.lowerQuartile(ascentSpeedMeterPerHourSamplesSorted).toFixed(0),
+                'median': Helper.median(ascentSpeedMeterPerHourSamplesSorted).toFixed(0),
+                'upperQuartile': Helper.upperQuartile(ascentSpeedMeterPerHourSamplesSorted).toFixed(0)
+            }
+        };
     }
 
 

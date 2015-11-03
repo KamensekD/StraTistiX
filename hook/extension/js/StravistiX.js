@@ -66,6 +66,7 @@ StravistiX.prototype = {
         this.handleCustomMapboxStyle_();
         this.handleHidePremium_();
         this.handleHideFeed_();
+        this.handleDisplayFlyByFeedModifier_();
 
         // Bike
         this.handleExtendedActivityData_();
@@ -79,6 +80,7 @@ StravistiX.prototype = {
 
         // All activities
         this.handleActivityQRCodeDisplay_();
+        this.handleVirtualPartner_();
         this.handleAthletesStats();
 
         // Must be done at the end
@@ -338,6 +340,19 @@ StravistiX.prototype = {
         hideFeedModifier.modify();
     },
 
+    handleDisplayFlyByFeedModifier_: function() {
+
+        // Test if where are on dashboard page
+        if (!window.location.pathname.match(/^\/dashboard/)) {
+            return;
+        }
+
+        if (env.debugMode) console.log("Execute handleDisplayFlyByFeedModifier_()");
+
+        var displayFlyByFeedModifier = new DisplayFlyByFeedModifier();
+        displayFlyByFeedModifier.modify();
+    },
+
     /**
      *
      */
@@ -371,6 +386,11 @@ StravistiX.prototype = {
 //console.log("Analysis done; TRIMP:"+analysisData.heartRateData.TRIMP.toFixed(0));
                 var extendedActivityDataModifier = null;
 
+                var basicInfos = {
+                    activityName: this.vacuumProcessor_.getActivityName(),
+                    activityTime: this.vacuumProcessor_.getActivityTime()
+                }
+
                 // tell activity type for other than Ride/Run activities
 				if ( (activityType !== "Ride") && (activityType !== "Run") ) {
                     var html = '<div  style="padding: 0px 0px 0px 0px;background: #FFFFFF;font-size: 9px;color: rgb(103, 103, 103);">&nbsp&nbsp&nbspActivity type: '+window.pageView.activity().attributes.type+'</div>';
@@ -379,20 +399,20 @@ StravistiX.prototype = {
 
                 switch (activityType) {
                     case 'Ride':
-                        extendedActivityDataModifier = new CyclingExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_);
+                        extendedActivityDataModifier = new CyclingExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_, basicInfos);
                         break;
                     case 'Run':
-                        extendedActivityDataModifier = new RunningExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_);
+                        extendedActivityDataModifier = new RunningExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_, basicInfos);
                         break;
 
                     // for Workout, Rowing,...
                     case 'StationaryOther':
-                        extendedActivityDataModifier = new GenericExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_);
+                        extendedActivityDataModifier = new GenericExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_, basicInfos);
                         break;
 
                     // for Workout, Rowing,...
                     case 'Swim':
-                        extendedActivityDataModifier = new GenericExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_);
+                        extendedActivityDataModifier = new GenericExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_, basicInfos);
                         break;
 
                     default:
@@ -591,6 +611,18 @@ StravistiX.prototype = {
         var activityQRCodeDisplayModifier = new ActivityQRCodeDisplayModifier(this.appResources_, this.activityId_);
         activityQRCodeDisplayModifier.modify();
 
+    },
+
+
+    handleVirtualPartner_: function() {
+
+        // Test where are on an activity...
+        if (!window.location.pathname.match(/^\/activities/)) {
+            return;
+        }
+
+        var virtualPartnerModifier = new VirtualPartnerModifier(this.activityId_);
+        virtualPartnerModifier.modify();
     },
 
 

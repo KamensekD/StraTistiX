@@ -149,7 +149,7 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 		html += '<style>.statsplus td {text-align:center; border: 0px 0px 0px 1px; padding: 1px;}</style>';
 		html += '<table class="statsplus" style="margin: 0px; width:100%;">';
 		html += '<tr style="color: rgb(30, 30, 30)"><td>Move Ratio<br><strong>'+this.analysisData_.moveRatio.toFixed(2)+'</strong></td>';
-		html += '<td>Real<br>Average</td><td>Lower Quart<br>Q25%</td><td>Median<br>Q50%</td><td>Upper Quart<br>Q75%</td><td>max</td></tr>';
+		html += '<td>Real<br>Average</td><td>Q1<br>low 25%</td><td>Q2 (Median)<br>50th percentile</td><td>Q3<br>high 75%</td><td>max</td></tr>';
 		if (this.analysisData_.heartRateData != null) {
 			html += '<tr style="color: rgb(240, 40, 60)"><td>HRR <strong>'+this.analysisData_.heartRateData.activityHeartRateReserve.toFixed(0)+'</strong>%</td>';
 			html += '<td><strong>'+this.analysisData_.heartRateData.averageHeartRate.toFixed(0)+'</strong>bpm</td>';

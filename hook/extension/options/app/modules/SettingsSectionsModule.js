@@ -72,6 +72,18 @@ settingsSectionsModule.data = [{
         optionLabels: ['Running'],
         optionHtml: 'Activate running heart rate by default in running activity analysis.<br /><br /><img src="img/activateRunningHeartRate.png"/>',
     }, {
+        optionKey: 'displaySegmentTimeComparisonToKOM',
+        optionType: 'checkbox',
+        optionTitle: 'Enabled segment time comparison to KOM/QOM display',
+        optionLabels: ['Cycling'],
+        optionHtml: 'This option allow you to display the time difference between segment KOM/QOM time and the time from the activity for that segment.',
+    }, {
+        optionKey: 'displaySegmentTimeComparisonToPR',
+        optionType: 'checkbox',
+        optionTitle: 'Enabled segment time comparison to PR display',
+        optionLabels: ['Cycling'],
+        optionHtml: 'This option allow you to display the time difference between segment PR time and the time from the activity for that segment.',
+	}, {
         optionKey: 'reviveGoogleMaps',
         optionType: 'checkbox',
         optionTitle: 'Revive Google Maps on activities (BETA)',

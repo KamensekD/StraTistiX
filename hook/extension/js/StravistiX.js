@@ -71,6 +71,7 @@ StravistiX.prototype = {
         this.handleExtendedActivityData_();
         this.handleNearbySegments_();
         this.handleActivityBikeOdo_();
+        this.handleActivitySegmentTimeComparison_();
 
         // Run
         this.handleRunningGradeAdjustedPace_();
@@ -78,6 +79,7 @@ StravistiX.prototype = {
 
         // All activities
         this.handleActivityQRCodeDisplay_();
+        this.handleAthletesStats();
 
         // Must be done at the end
         this.handleTrackTodayIncommingConnection_();
@@ -132,16 +134,42 @@ StravistiX.prototype = {
      */
     handleUpdateRibbon_: function() {
 
-        var title = 'StraTistiX updated/installed to <strong>v' + this.appResources_.extVersion + '</strong>';
+//        var title = 'StraTistiX updated/installed to <strong>v' + this.appResources_.extVersion + '</strong>';
+        var title = '<strong>StraTistiX</strong> updated/installed to <strong>v0.6.1.2</strong>';
         var message = '';
-        message += "<h5>HOTFIXES:</h5>";
-        message += "<h5>- Mapbox map flipper fixed after Strava's mapbox style change</h5>";
+        message += "<br><h4><strong>NEW FEATURES:</strong></h4><h4>";
+
+        message += "- Added year progression (activity count, distance, elevation, time) table and chart (credit https://github.com/tazmanska)<br/>"
+		message += "- Added biking segment time comparison to KOM's and PR's<br>"
+		message += "- Search-able common settings<br>"
+
+        message += "</h4>";
+//        message += "<h4><strong>BUGFIXES:</strong></h4><h5>";
+//        message += "- bugfix<br/>"
+//        message += "</h5><br>";
+
         message += "<br>";
-        message += "<h4>This is StraTistiX - Dejan Kamensek's fork of StravistiX</h4>";
-        message += '<h4>Original StravistiX (formerly named StravaPlus) is being developed by Thomas Champagne</h4>';
+        message += "<h4>This is <strong><a href='https://chrome.google.com/webstore/detail/stratistix-with-arpee-sco/bilbbbdgdimchenccmooakpfomfajepd'>StraTistiX</a></strong> - Dejan Kamensek's <a href='https://github.com/KamensekD/StraTistiX'>fork</a> of <a href='https://chrome.google.com/webstore/detail/stravistix-for-strava/dhiaggccakkgdfcadnklkbljcgicpckn'>StravistiX</a>";
+        message += '<br><font size=-1>Original StravistiX (formerly named StravaPlus) is being developed by Thomas Champagne</font></h4>';
         message += '<h4><a target="_blank" href="' + this.appResources_.settingsLink + '#/donate">Donate Thomas Champagne to get more features</a></h4>';
 
         $.fancybox('<h2>' + title + '</h2>' + message);
+    },
+
+    /**
+     *
+     */
+    handleAthletesStats: function() {
+
+        // If we are not on the athletes page then return...
+        if (!window.location.pathname.match(new RegExp("/athletes/" + this.athleteId_ + "$", "g"))) {
+            return;
+        }
+
+        if (env.debugMode) console.log("Execute handleAthletesStats()");
+
+        var athleteStatsModifier = new AthleteStatsModifier();
+        athleteStatsModifier.modify();
     },
 
     /**
@@ -376,16 +404,21 @@ StravistiX.prototype = {
 
                 if (extendedActivityDataModifier) {
                     extendedActivityDataModifier.modify();
-
-
-
-
 							
                 }
 
             }.bind(this)
         );
+
+        // Send opened activity type to ga for stats
+        var updatedToEvent = {
+            categorie: 'Analyse',
+            action: 'openedActivityType',
+            name: activityType
+        };
+        _spTrack('send', 'event', updatedToEvent.categorie, updatedToEvent.action, updatedToEvent.name);
     },
+
 
     /**
      *
@@ -451,6 +484,36 @@ StravistiX.prototype = {
             activityBikeOdoModifier.modify();
 
         }.bind(this));
+    },
+
+    /**
+     *
+     */
+    handleActivitySegmentTimeComparison_: function() {
+
+        // Test where are on an activity...
+        if (!window.location.pathname.match(/^\/activities/)) {
+            return;
+        }
+
+        if (_.isUndefined(window.pageView)) {
+            return;
+        }
+
+        // Only cycling is supported
+        if (window.pageView.activity().attributes.type != "Ride") {
+            return;
+        }
+
+        // Only for own activities
+        if (this.athleteId_ != this.athleteIdAuthorOfActivity_) {
+            return;
+        }
+
+        if (env.debugMode) console.log("Execute handleActivitySegmentTimeComparison_()");
+
+        var activitySegmentTimeComparisonModifier = new ActivitySegmentTimeComparisonModifier(this.userSettings_);
+        activitySegmentTimeComparisonModifier.modify();
     },
 
     /**

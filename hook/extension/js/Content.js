@@ -202,6 +202,8 @@ var jsDependencies = [
     'js/modifiers/SegmentRankPercentageModifier.js',
     'js/modifiers/ActivityGoogleMapTypeModifier.js',
     'js/modifiers/HidePremiumModifier.js',
+    'js/modifiers/AthleteStatsModifier.js',
+    'js/modifiers/ActivitySegmentTimeComparisonModifier.js',
 
     // Extended data views
     'js/modifiers/extendedActivityData/views/AbstractDataView.js',

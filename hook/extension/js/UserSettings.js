@@ -2,7 +2,7 @@ var userSettings = {
     extensionHasJustUpdated: false,
     localStorageMustBeCleared: false,
     userGender: 'men',
-    userMaxHr: 180,
+    userMaxHr: 185,
     userRestHr: 50,
     userFTP: 300,
     userHrrZones: [
@@ -357,6 +357,8 @@ var userSettings = {
     feedHideChallenges: false,
     feedHideCreatedRoutes: false,
     highLightStravistiXFeature: false, // For heartrate related data.
+    displaySegmentTimeComparisonToKOM: true,
+    displaySegmentTimeComparisonToPR: true,
     reviveGoogleMaps: true,
     reviveGoogleMapsLayerType: 'hybrid'
 };

@@ -21,7 +21,9 @@ var HeartRateDataView = AbstractDataView.extend(function(base) {
             this.setupDistributionTable();
 
             this.tooltipTemplate = "<%if (label){";
-            this.tooltipTemplate += "var hr = label.split(' ')[1].replace('%','').split('-');";
+//            this.tooltipTemplate += "var hr = label.split(' ')[1].replace('%','').split('-');";
+            this.tooltipTemplate += "var hr = label.split('  ')[1].replace('%','').split('-');"; // double space split here!!! :)
+            if (env.debugMode) this.tooltipTemplate += " console.log('Label:'+label+' hr:'+hr);";
             this.tooltipTemplate += "var finalLabel = label + ' @ ' + Helper.heartrateFromHeartRateReserve(hr[0], stravistiX.userSettings_.userMaxHr, stravistiX.userSettings_.userRestHr) + '-' + Helper.heartrateFromHeartRateReserve(hr[1], stravistiX.userSettings_.userMaxHr, stravistiX.userSettings_.userRestHr) + 'bpm';";
             this.tooltipTemplate += "%><%=finalLabel%> during <%}%><%= Helper.secondsToHHMMSS(value * 60) %>";
 
@@ -46,7 +48,8 @@ var HeartRateDataView = AbstractDataView.extend(function(base) {
             for (var zone in this.heartRateData.hrrZones) {
                 table += '<tr>'; // Zone
                 table += '<td>Z' + zoneId + '</td>'; // Zone
-                table += '<td>' + this.heartRateData.hrrZones[zone].fromHrr + "-" + this.heartRateData.hrrZones[zone].toHrr + "%" + '</th>'; // %HRR
+//              table += '<td>' + this.heartRateData.hrrZones[zone].fromHrr + "-" + this.heartRateData.hrrZones[zone].toHrr + "%" + '</th>'; // %HRR
+                table += '<td>' + this.heartRateData.hrrZones[zone].fromHrr + "% - " + this.heartRateData.hrrZones[zone].toHrr + "%" + '</th>'; // %HRR
                 table += '<td>' + this.heartRateData.hrrZones[zone].fromHr + " - " + this.heartRateData.hrrZones[zone].toHr + '</td>'; // bpm%
                 table += '<td>' + Helper.secondsToHHMMSS(this.heartRateData.hrrZones[zone].s) + '</td>'; // Time%
                 table += '<td>' + this.heartRateData.hrrZones[zone].percentDistrib.toFixed(0) + '%</td>'; // % in zone

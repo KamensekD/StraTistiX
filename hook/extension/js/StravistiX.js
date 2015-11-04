@@ -77,6 +77,7 @@ StravistiX.prototype = {
         // Run
         this.handleRunningGradeAdjustedPace_();
         this.handleRunningHeartRate_();
+        this.handleMoveFooterOutofWay_();
 
         // All activities
         this.handleActivityQRCodeDisplay_();
@@ -593,6 +594,31 @@ StravistiX.prototype = {
         var runningHeartRateModifier = new RunningHeartRateModifier();
         runningHeartRateModifier.modify();
     },
+
+
+    /**
+     *
+     */
+    handleMoveFooterOutofWay_: function() {
+
+        // If we are not on a activitie's segment page then return...
+        if (!window.location.pathname.match(/activities\/\d*\/segments/)) {
+            return;
+        }
+
+        // Only for running activity
+        if (window.pageView.activity().attributes.type != "Run") {
+            return;
+        }
+
+		// ** manually refresh activity segment page if you want to move away footer **
+		fh=document.getElementsByClassName("run segments-list")[0].offsetHeight;
+		if (env.debugMode) console.log("Moving footer out of way..."+fh);
+		$('footer')[1].setAttribute("style", "position: relative; top: "+(fh-300)+"px; opacity: 0.33;");
+		$('footer')[2].setAttribute("style", "position: relative; top: "+(300)+"px; opacity: 0.33;");
+    },
+
+
 
     /**
      *

@@ -89,7 +89,7 @@ var userSettings = {
             to: 100
         }],
         pace: [{
-            from: 150,
+            from: 120,
             to: 180
         }, {
             from: 180,
@@ -335,9 +335,9 @@ var userSettings = {
         }],
         elevation: [{
             from: 0,
-            to: 125
+            to: 100
         }, {
-            from: 125,
+            from: 100,
             to: 250
         }, {
             from: 250,
@@ -350,6 +350,9 @@ var userSettings = {
             to: 1000
         }, {
             from: 1000,
+            to: 1250
+        }, {
+            from: 1250,
             to: 1500
         }, {
             from: 1500,
@@ -362,7 +365,7 @@ var userSettings = {
             to: 3000
         }, {
             from: 3000,
-            to: 3500
+            to: 8848
         }]
     },
     remoteLinks: true,
@@ -382,6 +385,7 @@ var userSettings = {
     displayAdvancedHrData: true,
     displayCadenceData: true,
     displayAdvancedGradeData: true,
+    displayAdvancedElevationData: true,
     displayBikeOdoInActivity: true,
     enableBothLegsCadence: false,
     feedHideChallenges: false,

@@ -34,14 +34,6 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
                 view.render();
                 this.content += view.getContent();
             }.bind(this));
-
-/* works for cycling without this, but not for running!?
-			// Add Show extended statistics to page
-            this.placeExtendedStatsButton(function() {
-	        if (env.debugMode) console.log("Execute placeExtendedStatsButton");
-            });
-            this.placeSummaryPanel(function() {});
-*/
         },
 
 

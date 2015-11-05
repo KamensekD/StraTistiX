@@ -3,6 +3,7 @@
 **/node_modules/
 dist/
 builds/
+chrome-win32/
 *.bak
 *.rar
 

@@ -1,0 +1,24 @@
+  ok  .gitignore: needs merge
+  ok  README.md: needs merge
+  ok  hooK/extension/config/env.js: needs merge
+  ok  hook/extension/css/extendedData.css: needs merge
+  ok  hook/extension/js/Content.js: needs merge
+  ok  hook/extension/js/StravistiX.js: needs merge
+  ok  hook/extension/js/UserSettings.js: needs merge
+hook/extension/js/modifiers/GoogleMapsComeBackModifier.js: needs merge
+hook/extension/js/modifiers/MenuModifier.js: needs merge
+hook/extension/js/modifiers/RemoteLinksModifier.js: needs merge
+hook/extension/js/modifiers/extendedActivityData/AbstractExtendedActivityDataModifier.js: needs merge
+hook/extension/js/modifiers/extendedActivityData/CyclingExtendedActivityDataModifier.js: needs merge
+hook/extension/js/modifiers/extendedActivityData/RunningExtendedActivityDataModifier.js: needs merge
+hook/extension/js/modifiers/extendedActivityData/views/FeaturedDataView.js: needs merge
+hook/extension/js/processors/ActivityProcessor.js: needs merge
+hook/extension/js/processors/VacuumProcessor.js: needs merge
+hook/extension/manifest.json: needs merge
+hook/extension/modules/vv.mapFlipper.js: needs merge
+  ok  hook/extension/options/app/controllers/CommonSettingsController.js: needs merge
+hook/extension/options/app/modules/SettingsSectionsModule.js: needs merge
+hook/extension/options/app/views/headerNav.html: needs merge
+hook/extension/options/app/views/releaseNotes.html: needs merge
+hook/extension/options/app/views/share.html: needs merge
+error: you need to resolve your current index first

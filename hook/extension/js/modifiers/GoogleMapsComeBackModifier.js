@@ -195,7 +195,7 @@ GoogleMapsComeBackModifier.prototype = {
                 console.error('No anchor found to attach segment google map button');
             }
 
-            anchor.before('<a class="button btn-xs btn-primary" id="showSegInGoogleMap">View in Google Maps</a>').each(function() {
+            anchor.after('<a class="button btn-xs btn-primary" id="showSegInGoogleMap">View in Google Maps</a>').each(function() {
 
                 $('#showSegInGoogleMap').on('click', function() {
 

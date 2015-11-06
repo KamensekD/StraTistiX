@@ -153,6 +153,7 @@ StravistiX.prototype = {
 		message += "- Added biking segment time comparison to KOM's and PR's<br>"
 		message += "- export of segments as Virtual Partner<br>"
 		message += "- Added weather (wind/temp/clouds/humidity)<br>"
+		message += "- more statistics<br>"
 		message += "- Search-able common settings<br>"
 
         message += "</h4>";

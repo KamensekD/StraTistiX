@@ -59,11 +59,7 @@ app.controller("CommonSettingsController", ['$scope', 'Notifier', '$timeout', '$
     };
 
     $scope.toggleSelectOption = function(option) {
-<<<<<<< HEAD:hook/extension/options/app/controllers/ComonSettingsController.js
        	if (option.optionKey == "customMapboxStyle" && option.active.name == 'custom') option.active.key = window.prompt("Custom Mapbox Style",option.active.key);
-=======
-
->>>>>>> refs/remotes/thomaschampagne/develop:hook/extension/options/app/controllers/CommonSettingsController.js
         ChromeStorageModule.updateUserSetting(option.optionKey, option.active.key, function() {
             console.log(option.optionKey + ' has been updated to ' + option.active.key + ' (' + option.active.name + ')' );
             

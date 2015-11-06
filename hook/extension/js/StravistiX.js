@@ -21,12 +21,14 @@ function StravistiX(userSettings, appResources) {
     this.init_();
 }
 
+
 /**
  *   Static vars
  */
 StravistiX.getFromStorageMethod = 'getFromStorage';
 StravistiX.setToStorageMethod = 'setToStorage';
 StravistiX.defaultIntervalTimeMillis = 750;
+
 
 /**
  * Define prototype
@@ -59,6 +61,7 @@ StravistiX.prototype = {
         // Common
         this.handleMenu_();
         this.handleRemoteLinks_();
+        this.handleWindyTyModifier_();
         this.handleActivityScrolling_();
         this.handleDefaultLeaderboardFilter_();
         this.handleSegmentRankPercentage_();
@@ -87,7 +90,9 @@ StravistiX.prototype = {
         // Must be done at the end
         this.handleTrackTodayIncommingConnection_();
         this.handleGoogleMapsComeBackModifier();
+
     },
+
 
     /**
      *
@@ -102,12 +107,13 @@ StravistiX.prototype = {
         return false;
     },
 
+
     /**
      *
      */
     handleExtensionHasJustUpdated_: function() {
 
-        // Clear localstorage 
+        // Clear localstorage
         // Especially for activies data stored in cache
         console.log("ExtensionHasJustUpdated, localstorage clear");
         localStorage.clear();
@@ -128,9 +134,10 @@ StravistiX.prototype = {
 
         _spTrack('send', 'event', updatedToEvent.categorie, updatedToEvent.action, updatedToEvent.name+'_'+this.athleteName_+ ' #' + this.athleteId_,1);
 
-        // Now mark extension "just updated" to false...!!!
+        // Now mark extension "just updated" to false...
         Helper.setToStorage(this.extensionId_, StorageManager.storageSyncType, 'extensionHasJustUpdated', false, function(response) {});
     },
+
 
     /**
      *
@@ -144,6 +151,8 @@ StravistiX.prototype = {
 
         message += "- Added year progression (activity count, distance, elevation, time) table and chart (credit https://github.com/tazmanska)<br/>"
 		message += "- Added biking segment time comparison to KOM's and PR's<br>"
+		message += "- export of segments as Virtual Partner<br>"
+		message += "- Added weather (wind/temp/clouds/humidity)<br>"
 		message += "- Search-able common settings<br>"
 
         message += "</h4>";
@@ -158,6 +167,7 @@ StravistiX.prototype = {
 
         $.fancybox('<h2>' + title + '</h2>' + message);
     },
+
 
     /**
      *
@@ -175,6 +185,7 @@ StravistiX.prototype = {
         athleteStatsModifier.modify();
     },
 
+
     /**
      *
      */
@@ -183,6 +194,7 @@ StravistiX.prototype = {
         var html = '<div id="updateRibbon" style="' + globalStyle + '"><strong>WARNING</strong> You are running a preview of <strong>StravistiX</strong>, to remove it, open a new tab and type <strong>chrome://extensions</strong></div>';
         $('body').before(html);
     },
+
 
     /**
      *
@@ -195,16 +207,18 @@ StravistiX.prototype = {
         menuModifier.modify();
     },
 
+
     /**
      *
      */
     handleRemoteLinks_: function() {
 
         // If we are not on a segment or activity page then return...
+//        if (!window.location.pathname.match(/^\/segments\/(\d+)$/) && !window.location.pathname.match(/^\/activities/)) {
         if (!window.location.pathname.match(/^\/segments\/(\d+)$/) && !window.location.pathname.match(/^\/activities/) && !window.location.pathname.match(/^\/publishes\/wizard\\?/)) {
             return;
         }
-		//console.log("...RemoteLinks modifier");
+
         if (!this.userSettings_.remoteLinks) {
             return;
         }
@@ -214,6 +228,38 @@ StravistiX.prototype = {
         var remoteLinksModifier = new RemoteLinksModifier(this.userSettings_.highLightStravistiXFeature, this.appResources_, (this.athleteIdAuthorOfActivity_ === this.athleteId_), this.userSettings_.customMapboxStyle);
         remoteLinksModifier.modify();
     },
+
+
+    /**
+     *
+     */
+    handleWindyTyModifier_: function() {
+
+        // If we are not on a segment or activity page then return...
+        if (!window.location.pathname.match(/^\/activities/)) {
+            return;
+        }
+
+        if (!window.pageView) {
+            return;
+        }
+
+        // Avoid running Extended data at the moment
+        if (window.pageView.activity().get('type') != "Ride") {
+            return;
+        }
+
+        // If home trainer skip (it will use gps data to locate weather data)
+        if (window.pageView.activity().get('trainer')) {
+            return;
+        }
+
+        if (env.debugMode) console.log("Execute handleWindyTyModifier_()");
+
+        var windyTyModifier = new WindyTyModifier(this.activityId_, this.appResources_);
+        windyTyModifier.modify();
+    },
+
 
     /**
      *
@@ -229,6 +275,7 @@ StravistiX.prototype = {
         var activityScrollingModifier = new ActivityScrollingModifier();
         activityScrollingModifier.modify();
     },
+
 
     /**
      *
@@ -254,6 +301,7 @@ StravistiX.prototype = {
         defaultLeaderboardFilterModifier.modify();
     },
 
+
     /**
      *
      */
@@ -274,6 +322,7 @@ StravistiX.prototype = {
         segmentRankPercentage.modify();
     },
 
+
     /**
      *
      */
@@ -290,6 +339,7 @@ StravistiX.prototype = {
         activityGoogleMapTypeModifier.modify();
     },
 
+
     /**
      *
      */
@@ -303,6 +353,8 @@ StravistiX.prototype = {
         if (env.debugMode) console.log("Execute handleCustomMapboxStyle_()");
 
     },
+
+
     /**
      *
      */
@@ -324,6 +376,10 @@ StravistiX.prototype = {
         hidePremiumModifier.modify();
     },
 
+
+    /**
+     *
+     */
     handleHideFeed_: function() {
 
         // Test if where are on dashboard page
@@ -341,6 +397,10 @@ StravistiX.prototype = {
         hideFeedModifier.modify();
     },
 
+
+    /**
+     *
+     */
     handleDisplayFlyByFeedModifier_: function() {
 
         // Test if where are on dashboard page
@@ -353,6 +413,7 @@ StravistiX.prototype = {
         var displayFlyByFeedModifier = new DisplayFlyByFeedModifier();
         displayFlyByFeedModifier.modify();
     },
+
 
     /**
      *
@@ -473,6 +534,7 @@ StravistiX.prototype = {
         }.bind(this));
     },
 
+
     /**
      *
      */
@@ -507,6 +569,7 @@ StravistiX.prototype = {
         }.bind(this));
     },
 
+
     /**
      *
      */
@@ -537,6 +600,7 @@ StravistiX.prototype = {
         activitySegmentTimeComparisonModifier.modify();
     },
 
+
     /**
      *
      */
@@ -565,6 +629,7 @@ StravistiX.prototype = {
         var runningGradeAdjustedPace = new RunningGradeAdjustedPaceModifier();
         runningGradeAdjustedPace.modify();
     },
+
 
     /**
      *
@@ -619,7 +684,6 @@ StravistiX.prototype = {
     },
 
 
-
     /**
      *
      */
@@ -640,6 +704,9 @@ StravistiX.prototype = {
     },
 
 
+    /**
+     *
+     */
     handleVirtualPartner_: function() {
 
         // Test where are on an activity...
@@ -652,6 +719,9 @@ StravistiX.prototype = {
     },
 
 
+    /**
+     *
+     */
 	handleGoogleMapsComeBackModifier: function() {  
    
 		if (window.location.pathname.match(/\/truncate/)) { // Skipping on activity cropping

@@ -395,4 +395,6 @@ var userSettings = {
     displaySegmentTimeComparisonToPR: true,
     reviveGoogleMaps: true,
     reviveGoogleMapsLayerType: 'hybrid'
+    displayActivityBestSplits: true,
+    bestSplitsConfiguration: null
 };

@@ -76,6 +76,7 @@ StravistiX.prototype = {
         this.handleNearbySegments_();
         this.handleActivityBikeOdo_();
         this.handleActivitySegmentTimeComparison_();
+        this.handleActivityBestSplits_();
 
         // Run
         this.handleRunningGradeAdjustedPace_();
@@ -603,6 +604,43 @@ StravistiX.prototype = {
         activitySegmentTimeComparisonModifier.modify();
     },
 
+
+    /**
+     *
+     */
+    handleActivityBestSplits_: function() {
+
+        if (!this.userSettings_.displayActivityBestSplits) {
+            return;
+        }
+
+        // Test where are on an activity...
+        if (!window.location.pathname.match(/^\/activities/)) {
+            return;
+        }
+
+        if (_.isUndefined(window.pageView)) {
+            return;
+        }
+
+        // Only cycling is supported
+        if (window.pageView.activity().attributes.type != "Ride") {
+            return;
+        }
+
+        if (env.debugMode) console.log("Execute handleActivityBestSplits_()");
+
+        var self = this;
+
+        this.vacuumProcessor_.getActivityStream(function(activityCommonStats, jsonResponse, athleteWeight, hasPowerMeter) {
+            Helper.getFromStorage(self.extensionId_, StorageManager.storageSyncType, 'bestSplitsConfiguration', function(response) {
+                var activityBestSplitsModifier = new ActivityBestSplitsModifier(self.userSettings_, jsonResponse, hasPowerMeter, response.data, function(splitsConfiguration) {
+                    Helper.setToStorage(self.extensionId_, StorageManager.storageSyncType, 'bestSplitsConfiguration', splitsConfiguration, function(response) {});
+                });
+                activityBestSplitsModifier.modify();
+            });
+        }.bind(this));
+    },
 
     /**
      *

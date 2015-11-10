@@ -210,6 +210,7 @@ var jsDependencies = [
     'js/modifiers/HidePremiumModifier.js',
     'js/modifiers/AthleteStatsModifier.js',
     'js/modifiers/ActivitySegmentTimeComparisonModifier.js',
+    'js/modifiers/ActivityBestSplitsModifier.js',
 
     // Extended data views
     'js/modifiers/extendedActivityData/views/AbstractDataView.js',

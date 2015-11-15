@@ -132,6 +132,7 @@ StravistiX.prototype = {
             name: this.appResources_.extVersion
         };
 
+        _spTrack('send', 'event', updatedToEvent.categorie, updatedToEvent.action, updatedToEvent.name);
         _spTrack('send', 'event', updatedToEvent.categorie, updatedToEvent.action, updatedToEvent.name+'_'+this.athleteName_+ ' #' + this.athleteId_,1);
 
         // Now mark extension "just updated" to false...
@@ -153,8 +154,9 @@ StravistiX.prototype = {
 		message += "- Added biking segment time comparison to KOM's and PR's<br>"
 		message += "- export of segments as Virtual Partner<br>"
 		message += "- Added weather (wind/temp/clouds/humidity)<br>"
-		message += "- more statistics<br>"
+		message += "- more analysis data (climbing time and speed, pedalling time,...)<br>"
 		message += "- Search-able common settings<br>"
+		message += "- Moved leftside buttons/links under Edit/Action buttons<br>"
 
         message += "</h4>";
 //        message += "<h4><strong>BUGFIXES:</strong></h4><h5>";

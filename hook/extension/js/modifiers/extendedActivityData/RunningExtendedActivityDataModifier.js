@@ -30,11 +30,11 @@ var RunningExtendedActivityDataModifier = AbstractExtendedActivityDataModifier.e
             var distanceUnits = this.speedUnitsData[2];
 
             // Speed and pace
-            var q3Move = '-';
-            if (this.analysisData_.speedData && this.userSettings_.displayAdvancedSpeedData) {
-                q3Move = Helper.secondsToHHMMSS((this.analysisData_.paceData.upperQuartilePace / speedUnitFactor).toFixed(0)).replace('00:', '');
-                this.insertContentAtGridPosition(1, 0, q3Move, '75% Quartile Pace', '/' + distanceUnits, 'displayAdvancedSpeedData');
-            }
+//            var q3Move = '-';
+//            if (this.analysisData_.speedData && this.userSettings_.displayAdvancedSpeedData) {
+//                q3Move = Helper.secondsToHHMMSS((this.analysisData_.paceData.upperQuartilePace / speedUnitFactor).toFixed(0)).replace('00:', '');
+//                this.insertContentAtGridPosition(1, 0, q3Move, '75% Quartile Pace', '/' + distanceUnits, 'displayAdvancedSpeedData');
+//            }
 
             // Avg climb pace
             var climbSpeed = '-';
@@ -43,7 +43,7 @@ var RunningExtendedActivityDataModifier = AbstractExtendedActivityDataModifier.e
                 if (seconds) {
                     climbSpeed = Helper.secondsToHHMMSS(seconds).replace('00:', '');
                 }
-                this.insertContentAtGridPosition(1, 2, climbSpeed, 'Avg climbing pace', '/' + distanceUnits, 'displayAdvancedGradeData');
+                this.insertContentAtGridPosition(1, 0, climbSpeed, 'Avg climbing pace', '/' + distanceUnits, 'displayAdvancedGradeData');
             }
         },
 

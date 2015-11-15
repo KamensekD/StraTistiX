@@ -62,8 +62,8 @@ RemoteLinksModifier.prototype = {
 
         // Activity page
         // Adding remote view links on left panel
-        var htmlRemoteView = "<li class='group' style='" + this.htmlRemoteViewStyle + "'>";
-        htmlRemoteView += "<ul>";
+        var htmlRemoteView = "<ul class='pagenav' id='StraTistiX'><li class='group' style='" + this.htmlRemoteViewStyle + "'>";
+        htmlRemoteView += "<ul class=''>";
 
 
 
@@ -150,13 +150,14 @@ RemoteLinksModifier.prototype = {
             };
 		    htmlRemoteView += "</li>";
         });
-        htmlRemoteView += "</ul>";
-        htmlRemoteView += "</li>";
+        htmlRemoteView += "</ul></ul>";
+        htmlRemoteView += "</li><ul>";
 
         htmlRemoteView = $(htmlRemoteView);
 
 
-        $("#pagenav").append(htmlRemoteView);
+//        $("#pagenav").append(htmlRemoteView);
+        $(document.getElementsByClassName("actions-menu")).parent().append(htmlRemoteView); // move under edit
 
 
 

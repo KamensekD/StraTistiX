@@ -28,30 +28,30 @@ var CyclingExtendedActivityDataModifier = AbstractExtendedActivityDataModifier.e
             var speedUnitFactor = this.speedUnitsData[1];
 
             // Speed and pace
-            var q3Move = '-';
-            if (this.analysisData_.speedData && this.userSettings_.displayAdvancedSpeedData) {
-                q3Move = (this.analysisData_.speedData.upperQuartileSpeed * speedUnitFactor).toFixed(1);
-                this.insertContentAtGridPosition(1, 0, q3Move, '75% Quartile Speed', speedUnitPerhour + ' <span class="summarySubGridTitle">(&sigma; :' + (this.analysisData_.speedData.standardDeviationSpeed * speedUnitFactor).toFixed(1) + ' )</span>', 'displayAdvancedSpeedData');
-            }
+//            var q3Move = '-';
+//            if (this.analysisData_.speedData && this.userSettings_.displayAdvancedSpeedData) {
+//                q3Move = (this.analysisData_.speedData.upperQuartileSpeed * speedUnitFactor).toFixed(1);
+//                this.insertContentAtGridPosition(1, 0, q3Move, '75% Quartile Speed', speedUnitPerhour + ' <span class="summarySubGridTitle">(&sigma; :' + (this.analysisData_.speedData.standardDeviationSpeed * speedUnitFactor).toFixed(1) + ' )</span>', 'displayAdvancedSpeedData');
+//            }
 
             // ... 
             var climbSpeed = '-';
             if (this.analysisData_.gradeData && this.userSettings_.displayAdvancedGradeData) {
                 climbSpeed = (this.analysisData_.gradeData.upFlatDownMoveData.up * speedUnitFactor).toFixed(1);
             }
-            this.insertContentAtGridPosition(1, 2, climbSpeed, 'Avg climbing speed', speedUnitPerhour, 'displayAdvancedGradeData');
+            this.insertContentAtGridPosition(1, 0, climbSpeed, 'Avg climbing speed', speedUnitPerhour, 'displayAdvancedGradeData');
 
             // Cadence
             var medianCadence = '-';
             if (this.analysisData_.cadenceData && this.userSettings_.displayCadenceData) {
                 medianCadence = this.analysisData_.cadenceData.medianCadence;
-                this.insertContentAtGridPosition(0, 3, medianCadence, 'Median Cadence', ' rpm <span class="summarySubGridTitle">(&sigma; :' + this.analysisData_.cadenceData.standardDeviationCadence + ' )</span>', 'displayCadenceData');
+                this.insertContentAtGridPosition(1, 1, medianCadence, 'Median Cadence', ' rpm <span class="summarySubGridTitle">(&sigma; :' + this.analysisData_.cadenceData.standardDeviationCadence + ' )</span>', 'displayCadenceData');
             }
             
             var cadenceTimeMoving = '-';
             if (this.analysisData_.cadenceData && this.userSettings_.displayCadenceData) {
                 cadenceTimeMoving = Helper.secondsToHHMMSS(this.analysisData_.cadenceData.cadenceTimeMoving);
-                this.insertContentAtGridPosition(1, 3, cadenceTimeMoving, 'Pedaling Time', ' <span class="summarySubGridTitle">(' + this.analysisData_.cadenceData.cadencePercentageMoving.toFixed(0) + '% of activity)</span>', 'displayCadenceData');
+                this.insertContentAtGridPosition(0, 1, cadenceTimeMoving, 'Pedaling Time', ' <span class="summarySubGridTitle">(' + this.analysisData_.cadenceData.cadencePercentageMoving.toFixed(0) + '% of activity)</span>', 'displayCadenceData');
             }
         },
 

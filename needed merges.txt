@@ -5,7 +5,7 @@
   ok  hook/extension/js/Content.js: needs merge
   ok  hook/extension/js/StravistiX.js: needs merge
   ok  hook/extension/js/UserSettings.js: needs merge
-hook/extension/js/modifiers/GoogleMapsComeBackModifier.js: needs merge
+  ok  hook/extension/js/modifiers/GoogleMapsComeBackModifier.js: needs merge
 hook/extension/js/modifiers/MenuModifier.js: needs merge
 hook/extension/js/modifiers/RemoteLinksModifier.js: needs merge
 hook/extension/js/modifiers/extendedActivityData/AbstractExtendedActivityDataModifier.js: needs merge

@@ -40,7 +40,8 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
         placeSummaryPanel: function(panelAdded) {
         if (env.debugMode) console.log("Execute placeSummaryPanel");
 
-            this.makeSummaryGrid(2, 4);
+//            this.makeSummaryGrid(2, 4);
+            this.makeSummaryGrid(2, 2);
 
             this.insertContentSummaryGridContent();
 
@@ -272,22 +273,22 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
         insertContentSummaryGridContent: function() {
        	if (env.debugMode) console.log("Execute insertContentSummaryGridContent");
             // Insert summary data
-            var moveRatio = '-';
-            if (this.analysisData_.moveRatio && this.userSettings_.displayActivityRatio) {
-                moveRatio = this.analysisData_.moveRatio.toFixed(2);
-            }
-            this.insertContentAtGridPosition(0, 0, moveRatio, 'Move Ratio', '', 'displayActivityRatio');
+//            var moveRatio = '-';
+//            if (this.analysisData_.moveRatio && this.userSettings_.displayActivityRatio) {
+//                moveRatio = this.analysisData_.moveRatio.toFixed(2);
+//            }
+//            this.insertContentAtGridPosition(0, 0, moveRatio, 'Move Ratio', '', 'displayActivityRatio');
 
             // ...
-            var TRIMP = activityHeartRateReserve = '-';
-            var activityHeartRateReserveUnit = '%';
-            if (this.analysisData_.heartRateData && this.userSettings_.displayAdvancedHrData) {
-                TRIMP = this.analysisData_.heartRateData.TRIMP.toFixed(0) + ' <span class="summarySubGridTitle">(' + this.analysisData_.heartRateData.TRIMPPerHour.toFixed(0) + ' / hour)</span>';
-                activityHeartRateReserve = this.analysisData_.heartRateData.activityHeartRateReserve.toFixed(0);
-                activityHeartRateReserveUnit = '%  <span class="summarySubGridTitle">(Max: ' + this.analysisData_.heartRateData.activityHeartRateReserveMax.toFixed(0) + '% @ ' + this.analysisData_.heartRateData.maxHeartRate + 'bpm)</span>';
-            }
-            this.insertContentAtGridPosition(0, 1, TRIMP, 'TRaining IMPulse', '', 'displayAdvancedHrData');
-            this.insertContentAtGridPosition(1, 1, activityHeartRateReserve, 'Heart Rate Reserve Avg', activityHeartRateReserveUnit, 'displayAdvancedHrData');
+//            var TRIMP = activityHeartRateReserve = '-';
+//            var activityHeartRateReserveUnit = '%';
+//            if (this.analysisData_.heartRateData && this.userSettings_.displayAdvancedHrData) {
+//                TRIMP = this.analysisData_.heartRateData.TRIMP.toFixed(0) + ' <span class="summarySubGridTitle">(' + this.analysisData_.heartRateData.TRIMPPerHour.toFixed(0) + ' / hour)</span>';
+//                activityHeartRateReserve = this.analysisData_.heartRateData.activityHeartRateReserve.toFixed(0);
+//                activityHeartRateReserveUnit = '%  <span class="summarySubGridTitle">(Max: ' + this.analysisData_.heartRateData.activityHeartRateReserveMax.toFixed(0) + '% @ ' + this.analysisData_.heartRateData.maxHeartRate + 'bpm)</span>';
+//            }
+//            this.insertContentAtGridPosition(0, 1, TRIMP, 'TRaining IMPulse', '', 'displayAdvancedHrData');
+//            this.insertContentAtGridPosition(1, 1, activityHeartRateReserve, 'Heart Rate Reserve Avg', activityHeartRateReserveUnit, 'displayAdvancedHrData');
 
             // ...
             var climbTime = '-';
@@ -297,7 +298,7 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
                 climbTimeExtra = '<span class="summarySubGridTitle">(' + (this.analysisData_.gradeData.upFlatDownInSeconds.up / this.analysisData_.gradeData.upFlatDownInSeconds.total * 100).toFixed(0) + '% of time)</span>';
             }
 
-            this.insertContentAtGridPosition(0, 2, climbTime, 'Time climbing', climbTimeExtra, 'displayAdvancedGradeData');
+            this.insertContentAtGridPosition(0, 0, climbTime, 'Time climbing', climbTimeExtra, 'displayAdvancedGradeData');
 
         },
 

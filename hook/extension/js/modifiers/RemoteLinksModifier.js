@@ -48,11 +48,11 @@ RemoteLinksModifier.prototype = {
             ["<img width='16px' src='" + this.appResources_.raceshapeIcon + "'/> Surface",  'http://strava-tools.raceshape.com/erea/?url=',  ''],
             ["HeatMap", "<img width='16px' src='" + this.appResources_.heatmapIcon + "'/>",
             	'heatmap', 'Strava Global Heatmap'],
-            ["<img  src='" + this.appResources_.multimapIcon + "'/> MultiMap", 'http://www.jonathanokeeffe.com/strava/map.php',
-            	'simple_link', "Jonathan o\'Keeffe\'s Multiple Ride Mapper"],
+//            ["<img  src='" + this.appResources_.multimapIcon + "'/> MultiMap", 'http://www.jonathanokeeffe.com/strava/map.php',
+//            	'simple_link', "Jonathan o\'Keeffe\'s Multiple Ride Mapper"],
             ["<img width='16px' src='" + this.appResources_.veloviewerIcon + "'/> VeloViewer", 'http://veloviewer.com/activities/', '?referrer=stravistiX'],
-            ["<img width='16px' src='" + this.appResources_.AnnualSummIcon + "'/> AnnualSumm", 'http://www.jonathanokeeffe.com/strava/annualSummary.php',
-            	'simple_link', "Jonathan o\'Keeffe\'s Annual Summary"],
+//            ["<img width='16px' src='" + this.appResources_.AnnualSummIcon + "'/> AnnualSumm", 'http://www.jonathanokeeffe.com/strava/annualSummary.php',
+//            	'simple_link', "Jonathan o\'Keeffe\'s Annual Summary"],
             ["<img src='" + this.appResources_.gpsvisualizerIcon + "'/>", 'http://www.gpsvisualizer.com/',
             	'gpsvisualizer', this.appResources_.gpsvMapIcon, this.appResources_.gpsvProfileIcon],
             ["MapFlipper", '',
@@ -327,8 +327,9 @@ RemoteLinksModifier.prototype = {
         var segmentId = segmentData[1];
 
         var remoteViewSegmentLinksArray = [
-            ["<img width='24px' style='vertical-align:middle' src='" + this.appResources_.veloviewerIcon + "'/> <span>VeloViewer</span>", 'http://veloviewer.com/segment/', '?referrer=stravistiX'],
-            ["<img width='24px' style='vertical-align:middle' src='" + this.appResources_.pollIcon + "'/> <span>Segment Stats</span>", 'http://www.jonathanokeeffe.com/strava/segmentDetails.php?segmentId=', '']
+            ["<img width='24px' style='vertical-align:middle' src='" + this.appResources_.pollIcon + "'/> <span> J o'K Segment Stats</span>", 'http://www.jonathanokeeffe.com/strava/segmentDetails.php?segmentId=', ''],
+            ["<img width='24px' style='vertical-align:middle' src='" + this.appResources_.segmentIcon + "'/> <span> Segment Builder</span>", 'http://gniza.org/segments/#/segment/', ''],
+            ["<img width='24px' style='vertical-align:middle' src='" + this.appResources_.veloviewerIcon + "'/> <span>VeloViewer</span>", 'http://veloviewer.com/segment/', '?referrer=stravistiX']
         ];
         var html = "<div class='module' style='padding-bottom: 10px;'>";
 //        html += "<div class='drop-down-menu' style='width: 100%; background: #fc4c02; color: white;'>";

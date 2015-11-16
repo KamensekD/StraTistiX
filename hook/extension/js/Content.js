@@ -165,6 +165,7 @@ var appResources = {
    MBIcon: chrome.extension.getURL('/icons/Mapbox24.png'),
    GMIcon: chrome.extension.getURL('/icons/GM24.png'),
    aRPEeIcon: chrome.extension.getURL('/icons/aRPEe.png'),
+   segmentIcon: chrome.extension.getURL('/icons/Segment64.png'),
    AnnualSummIcon: chrome.extension.getURL('/icons/JOKAnnualSummary16.png'),
    multimapIcon: chrome.extension.getURL('/icons/JOKAmultimap.png'),
    gpsvisualizerIcon: chrome.extension.getURL('/icons/gpsvisualizer.png'),

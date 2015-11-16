@@ -27,6 +27,7 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
         },
 
 
+
         modify: function() {
             
             _.each(this.dataViews, function(view) {
@@ -34,8 +35,17 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
                 view.render();
                 this.content += view.getContent();
             }.bind(this));
-        },
 
+
+// has to be done here, so that it works for all types of activities, not only cycling and running
+			// Add Show extended statistics to page
+//            this.placeSummaryPanel(function() {});
+            this.placeExtendedStatsButton(function() {
+	        if (env.debugMode) console.log("Execute placeExtendedStatsButton");
+            });
+
+
+        },
 
         placeSummaryPanel: function(panelAdded) {
         if (env.debugMode) console.log("Execute placeSummaryPanel");
@@ -298,7 +308,7 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
                 climbTimeExtra = '<span class="summarySubGridTitle">(' + (this.analysisData_.gradeData.upFlatDownInSeconds.up / this.analysisData_.gradeData.upFlatDownInSeconds.total * 100).toFixed(0) + '% of time)</span>';
             }
 
-            this.insertContentAtGridPosition(0, 0, climbTime, 'Time climbing', climbTimeExtra, 'displayAdvancedGradeData');
+            if (climbTime != '-') this.insertContentAtGridPosition(0, 0, climbTime, 'Time climbing', climbTimeExtra, 'displayAdvancedGradeData');
 
         },
 

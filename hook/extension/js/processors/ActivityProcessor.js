@@ -818,6 +818,8 @@ ActivityProcessor.prototype = {
             'elevationZones': elevationZones, // Only while moving
             'ascentSpeed': {
                 'avg': avgAscentSpeed,
+// preveri !!! ne dela ok pri vseh hiking	https://www.strava.com/activities/119185669	?
+//											https://www.strava.com/activities/214252443	OK
                 'lowerQuartile': Helper.lowerQuartile(ascentSpeedMeterPerHourSamplesSorted).toFixed(0),
                 'median': Helper.median(ascentSpeedMeterPerHourSamplesSorted).toFixed(0),
                 'upperQuartile': Helper.upperQuartile(ascentSpeedMeterPerHourSamplesSorted).toFixed(0)

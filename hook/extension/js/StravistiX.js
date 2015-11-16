@@ -473,16 +473,20 @@ StravistiX.prototype = {
                     case 'Run':
                         extendedActivityDataModifier = new RunningExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_, basicInfos);
                         break;
+// poglej se Hike:	*** hike=run ***	https://www.strava.com/activities/119185669	?
+//										https://www.strava.com/activities/83623294	?
+//										https://www.strava.com/activities/214252443	OK
 
                     // for Workout, Rowing,...
                     case 'StationaryOther':
                         extendedActivityDataModifier = new GenericExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_, basicInfos);
                         break;
 
-                    // for Workout, Rowing,...
+                    // for Swimming,...
                     case 'Swim':
                         extendedActivityDataModifier = new GenericExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_, basicInfos);
                         break;
+
 
                     default:
                         // extendedActivityDataModifier = new GenericExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_); // DELAYED_FOR_TESTING

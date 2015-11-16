@@ -2,24 +2,24 @@ var RunningExtendedActivityDataModifier = AbstractExtendedActivityDataModifier.e
 
     return {
 
-
         init: function(analysisData, appResources, userSettings, athleteId, athleteIdAuthorOfActivity, basicInfos) {
             base.init.call(this, analysisData, appResources, userSettings, athleteId, athleteIdAuthorOfActivity, basicInfos);
         },
 
         modify: function() {
             base.modify.call(this); // Super call
-            this.placeSummaryPanel(function() {
+
+// already done at AbstractExtendedActivityDataModifier.js
+/*            this.placeSummaryPanel(function() {
                 // Summary panel has been placed...
                 // Add Show extended statistics to page
-
                 this.placeExtendedStatsButton(function() {
                     // Button has been placed...
                 });
-
             }.bind(this));
-        },
+*/
 
+        },
 
         insertContentSummaryGridContent: function() {
 

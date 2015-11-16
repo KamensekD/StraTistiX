@@ -9,15 +9,16 @@ var CyclingExtendedActivityDataModifier = AbstractExtendedActivityDataModifier.e
         modify: function() {
             base.modify.call(this); // Super call
             
-            this.placeSummaryPanel(function() {
+// already done at AbstractExtendedActivityDataModifier.js
+/*            this.placeSummaryPanel(function() {
                 // Summary panel has been placed...
-
                 // Add Show extended statistics to page
                 this.placeExtendedStatsButton(function() {
                     // Button has been placed...
                 });
-
             }.bind(this));
+*/
+
         },
 
         insertContentSummaryGridContent: function() {

@@ -147,17 +147,20 @@ StravistiX.prototype = {
     handleUpdateRibbon_: function() {
 
 //        var title = 'StraTistiX updated/installed to <strong>v' + this.appResources_.extVersion + '</strong>';
-        var title = '<strong>StraTistiX</strong> updated/installed to <strong>v0.6.1.2</strong>';
+        var title = '<strong>StraTistiX</strong> updated/installed to <strong>v2.0.0.1</strong>';
         var message = '';
-        message += "<br><h4><strong>NEW FEATURES:</strong></h4><h4>";
+        message += "<br><h4><strong>BIG UPDATE WITH LOTS OF GREAT NEW FEATURES :)</strong></h4><h4>";
 
-        message += "- Added year progression (activity count, distance, elevation, time) table and chart (credit https://github.com/tazmanska)<br/>"
-		message += "- Added biking segment time comparison to KOM's and PR's<br>"
-		message += "- export of segments as Virtual Partner<br>"
-		message += "- Added weather (wind/temp/clouds/humidity)<br>"
+        message += "- Added year progression (activity count, distance, elevation, time) table and chart<br/>"
+		message += "- Added 'Best Splits' to biking activities<br>"
+		message += "- export of segments as Virtual Partner (cycling: button under segment compare)<br>"
+		message += "- Added biking segment time comparisons to KOM's and PR's<br>"
+		message += "- Added weather at activity date/time (wind/temp/clouds/humidity)<br>"
 		message += "- more analysis data (climbing time and speed, pedalling time,...)<br>"
-		message += "- Search-able common settings<br>"
+		message += "- Searchable common settings<br>"
 		message += "- Moved leftside buttons/links under Edit/Action buttons<br>"
+		message += "- Various Fixes<br>"
+		message += "<br>* Credits for many of new features go to <a href=https://github.com/tazmanska>tomasz.terlecki / tazmanska</a> !"
 
         message += "</h4>";
 //        message += "<h4><strong>BUGFIXES:</strong></h4><h5>";

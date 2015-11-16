@@ -154,11 +154,13 @@ StravistiX.prototype = {
         message += "- Added year progression (activity count, distance, elevation, time) table and chart<br/>"
 		message += "- Added 'Best Splits' to biking activities<br>"
 		message += "- export of segments as Virtual Partner (cycling: button under segment compare)<br>"
+		message += "- Added segment builder link to segments page<br>"
 		message += "- Added biking segment time comparisons to KOM's and PR's<br>"
 		message += "- Added weather at activity date/time (wind/temp/clouds/humidity)<br>"
 		message += "- more analysis data (climbing time and speed, pedalling time,...)<br>"
 		message += "- Searchable common settings<br>"
 		message += "- Moved leftside buttons/links under Edit/Action buttons<br>"
+		message += "- Moved some leftside links to menu, reordered menu a bit<br>"
 		message += "- Various Fixes<br>"
 		message += "<br>* Credits for many of new features go to <a href=https://github.com/tazmanska>tomasz.terlecki / tazmanska</a> !"
 

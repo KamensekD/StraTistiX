@@ -342,19 +342,10 @@ RemoteLinksModifier.prototype = {
 
 
 
-        var remoteViewSegmentLinksArray = [  // [ 0:image/text , 1:link (ID will be added) , 2:additional_string ]   for special cases 2= heatmap, simple_link, mapflipper
-
-            ["<img width='24px' style='vertical-align:middle' src='" + this.appResources_.pollIcon + "'/> <span>Segment Stats</span>", 'http://www.jonathanokeeffe.com/strava/segmentDetails.php?segmentId=', ''],
-            ["MapFlipper", '',
-            	'mapflipper',  this.appResources_.OCMIcon, this.appResources_.OCMlsIcon, this.appResources_.OCModIcon, this.appResources_.OSMIcon, this.appResources_.MBIcon, this.appResources_.OSMhbIcon]
-];
-
-
         // Segment page
         // Adding remote view links on right panel
         var htmlRemoteViewS = "<ul class='group' style='" + this.htmlRemoteViewStyle + "'>";
         //htmlRemoteViewS += "<ul>";
-
 
 
 
@@ -424,7 +415,6 @@ RemoteLinksModifier.prototype = {
 
         var remoteCreateSegmentLinksArray = [  // [ 0:image/text , 1:link (ID will be added) , 2:additional_string ]   for special cases 2= heatmap, simple_link, mapflipper
 
-            ["<img width='24px' style='vertical-align:middle' src='" + this.appResources_.pollIcon + "'/> <span>Segment Stats</span>", 'http://www.jonathanokeeffe.com/strava/segmentDetails.php?segmentId=', ''],
             ["MapFlipper", this.appResources_.veloviewerIcon,
             	'mapflipper',  this.appResources_.OCMIcon, this.appResources_.OCMlsIcon, this.appResources_.OCModIcon, this.appResources_.OSMIcon, this.appResources_.MBIcon, this.appResources_.OSMhbIcon]
 ];
@@ -484,8 +474,6 @@ RemoteLinksModifier.prototype = {
 			//
             // everything else ([0:link]+activity_id+[1:additional_string])
             //
-            } else {
-//                htmlRemoteViewS += "<a data-menu='' target='_blank' style='color: #333;' href='" + this[1] + pageView.activity().id + this[2] + "'>" + this[0] + "</a>";                
             };
 		    htmlRemoteViewS += "</li>";
         });

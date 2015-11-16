@@ -37,7 +37,7 @@ MenuModifier.prototype = {
 
         stravaMenuHtml += "<a href='https://www.strava.com/dashboard?feed_type=my_activity' class='selection' oncontextmenu='return false;'" + menuStyle + "><img style='vertical-align:middle' id='drop-down-menu_img'  src='" + menuIcon + "'/></a>";
         stravaMenuHtml += "<script>document.getElementById('drop-down-menu_img').parentNode.onmousedown = function(event) { if (event.which == 3) { window.location.href = 'https://www.strava.com/athlete/training';}}</script>";
-        stravaMenuHtml += "<ul class='options' height='' style='width: 300px; max-height: 650px !important; overflow:hidden;'>";
+        stravaMenuHtml += "<ul class='options' height='' style='width: 350px; max-height: 650px !important; overflow:hidden;'>";
 
 
 //  Common Settings
@@ -45,15 +45,22 @@ MenuModifier.prototype = {
 //  Health Settings
         stravaMenuHtml += "<li><a target='_blank' href='" + this.appResources_.settingsLink + "#/healthSettings'><img style='vertical-align:middle' src='" + this.appResources_.heartIcon + "'> <span>Health Settings</span></a></li>";
 //  Zones Settings
-        stravaMenuHtml += "<li><a target='_blank' href='" + this.appResources_.settingsLink + "#/zonesSettings'><img style='vertical-align:middle' src='" + this.appResources_.zonesIcon + "'> <span>Zones Settings</span></a></li>";
+        stravaMenuHtml += "<li'><a target='_blank' href='" + this.appResources_.settingsLink + "#/zonesSettings'><img style='vertical-align:middle' src='" + this.appResources_.zonesIcon + "'> <span>Zones Settings</span></a></li>";
+
 //  KOM/CR Map
-        stravaMenuHtml += "<li style='border-top: 1px solid #DDD;'><a href='http://labs.strava.com/achievement-map/' target='_blank'><img style='vertical-align:middle' src='" + this.appResources_.komMapIcon + "'/> <span>KOM/CR Map</span></a></li>";
+        stravaMenuHtml += "<li style='" + styleSideRight + "'><a href='http://labs.strava.com/achievement-map/' target='_blank'><img style='vertical-align:middle' src='" + this.appResources_.komMapIcon + "'/> <span>KOM/CR Map</span></a></li>";
 //  Heat Map
-	stravaMenuHtml += "<li id='splus_menu_heatmap'><a href='#' target='_blank'><img style='vertical-align:middle' src='" + this.appResources_.heatmapIcon + "'/> <span>Heat Map</span></a></li>";
+	stravaMenuHtml += "<li id='splus_menu_heatmap' style='" + styleSideLeft + "'><a href='#' target='_blank'><img style='vertical-align:middle' src='" + this.appResources_.heatmapIcon + "'/> <span>Heat Map</span></a></li>";
+
 //  Multi Map
-	stravaMenuHtml += "<li id='splus_menu_mulmap'><a href='http://www.jonathanokeeffe.com/strava/map.php' target='_blank'><img style='vertical-align:middle' src='" + this.appResources_.multimapIcon + "'/> <span> J o'K Multi Map</span></a></li>";
+	stravaMenuHtml += "<li id='splus_menu_mulmap' style='" + styleSideRight + "'><a href='http://www.jonathanokeeffe.com/strava/map.php' target='_blank'><img style='vertical-align:middle' src='" + this.appResources_.multimapIcon + "'/> <span> J o'K Multi Map</span></a></li>";
 //  Annual Summary
-	stravaMenuHtml += "<li id='splus_menu_annsumm'><a href='http://www.jonathanokeeffe.com/strava/annualSummary.php' target='_blank'><img style='vertical-align:middle' src='" + this.appResources_.AnnualSummIcon + "'/> <span> J o'K Annual Summary</span></a></li>";
+	stravaMenuHtml += "<li id='splus_menu_annsumm' style='" + styleSideLeft + "'><a href='http://www.jonathanokeeffe.com/strava/annualSummary.php' target='_blank'><img style='vertical-align:middle' src='" + this.appResources_.AnnualSummIcon + "'/> <span> J o'K Annual Summ</span></a></li>";
+
+//  SISU
+	stravaMenuHtml += "<li id='splus_menu_mulmap' style='" + styleSideRight + "'><a href='http://www.madewithsisu.com/' target='_blank'><img style='vertical-align:middle'   height=20 src='" + this.appResources_.sisuIcon + "'/> <span> SISU</span></a></li>";
+//  KOMDefender
+	stravaMenuHtml += "<li id='splus_menu_annsumm' style='" + styleSideLeft + "'><a href='http://www.komdefender.com/' target='_blank'><img style='vertical-align:middle' height=22 width=24 src='" + this.appResources_.KOMdefenderIcon + "'/> <span> KOM Defender</span></a></li>";
 
 
 //  Strava Challenges Veloviewer

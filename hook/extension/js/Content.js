@@ -165,6 +165,8 @@ var appResources = {
    MBIcon: chrome.extension.getURL('/icons/Mapbox24.png'),
    GMIcon: chrome.extension.getURL('/icons/GM24.png'),
    aRPEeIcon: chrome.extension.getURL('/icons/aRPEe.png'),
+   sisuIcon: chrome.extension.getURL('/icons/sisu.png'),
+   KOMdefenderIcon: chrome.extension.getURL('/icons/komdefender.png'),
    segmentIcon: chrome.extension.getURL('/icons/Segment64.png'),
    AnnualSummIcon: chrome.extension.getURL('/icons/JOKAnnualSummary16.png'),
    multimapIcon: chrome.extension.getURL('/icons/JOKAmultimap.png'),

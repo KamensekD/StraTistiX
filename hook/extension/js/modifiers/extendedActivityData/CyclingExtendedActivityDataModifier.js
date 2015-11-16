@@ -28,13 +28,14 @@ var CyclingExtendedActivityDataModifier = AbstractExtendedActivityDataModifier.e
             var speedUnitPerhour = this.speedUnitsData[0];
             var speedUnitFactor = this.speedUnitsData[1];
 
+/*
             // Speed and pace
-//            var q3Move = '-';
-//            if (this.analysisData_.speedData && this.userSettings_.displayAdvancedSpeedData) {
-//                q3Move = (this.analysisData_.speedData.upperQuartileSpeed * speedUnitFactor).toFixed(1);
-//                this.insertContentAtGridPosition(1, 0, q3Move, '75% Quartile Speed', speedUnitPerhour + ' <span class="summarySubGridTitle">(&sigma; :' + (this.analysisData_.speedData.standardDeviationSpeed * speedUnitFactor).toFixed(1) + ' )</span>', 'displayAdvancedSpeedData');
-//            }
-
+            var q3Move = '-';
+            if (this.analysisData_.speedData && this.userSettings_.displayAdvancedSpeedData) {
+                q3Move = (this.analysisData_.speedData.upperQuartileSpeed * speedUnitFactor).toFixed(1);
+                this.insertContentAtGridPosition(1, 0, q3Move, '75% Quartile Speed', speedUnitPerhour + ' <span class="summarySubGridTitle">(&sigma; :' + (this.analysisData_.speedData.standardDeviationSpeed * speedUnitFactor).toFixed(1) + ' )</span>', 'displayAdvancedSpeedData');
+            }
+*/
             // ... 
             var climbSpeed = '-';
             if (this.analysisData_.gradeData && this.userSettings_.displayAdvancedGradeData) {

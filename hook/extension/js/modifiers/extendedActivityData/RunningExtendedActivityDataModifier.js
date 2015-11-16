@@ -29,13 +29,14 @@ var RunningExtendedActivityDataModifier = AbstractExtendedActivityDataModifier.e
             var speedUnitFactor = this.speedUnitsData[1];
             var distanceUnits = this.speedUnitsData[2];
 
+/*
             // Speed and pace
-//            var q3Move = '-';
-//            if (this.analysisData_.speedData && this.userSettings_.displayAdvancedSpeedData) {
-//                q3Move = Helper.secondsToHHMMSS((this.analysisData_.paceData.upperQuartilePace / speedUnitFactor).toFixed(0)).replace('00:', '');
-//                this.insertContentAtGridPosition(1, 0, q3Move, '75% Quartile Pace', '/' + distanceUnits, 'displayAdvancedSpeedData');
-//            }
-
+            var q3Move = '-';
+            if (this.analysisData_.speedData && this.userSettings_.displayAdvancedSpeedData) {
+                q3Move = Helper.secondsToHHMMSS((this.analysisData_.paceData.upperQuartilePace / speedUnitFactor).toFixed(0)).replace('00:', '');
+                this.insertContentAtGridPosition(1, 0, q3Move, '75% Quartile Pace', '/' + distanceUnits, 'displayAdvancedSpeedData');
+            }
+*/
             // Avg climb pace
             var climbSpeed = '-';
             if (this.analysisData_.gradeData && this.userSettings_.displayAdvancedGradeData) {
@@ -71,10 +72,12 @@ var RunningExtendedActivityDataModifier = AbstractExtendedActivityDataModifier.e
             }
             
             if (this.analysisData_.gradeData && this.userSettings_.displayAdvancedGradeData) {
-//                var gradeDataView = new GradeDataView(this.analysisData_.gradeData, '%');
-//                gradeDataView.setAppResources(this.appResources_);
-//                gradeDataView.setIsAuthorOfViewedActivity(this.isAuthorOfViewedActivity);
-//                this.dataViews.push(gradeDataView);
+/* !!!!! check this
+                var gradeDataView = new GradeDataView(this.analysisData_.gradeData, '%');
+                gradeDataView.setAppResources(this.appResources_);
+                gradeDataView.setIsAuthorOfViewedActivity(this.isAuthorOfViewedActivity);
+                this.dataViews.push(gradeDataView);
+*/
                 var runnningGradeDataView = new RunnningGradeDataView(this.analysisData_.gradeData, '%');
                 runnningGradeDataView.setAppResources(this.appResources_);
                 runnningGradeDataView.setIsAuthorOfViewedActivity(this.isAuthorOfViewedActivity);

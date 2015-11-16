@@ -166,7 +166,9 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 		html = '<div><a title="Click to show extended statistics" id="extendedStatsButton" href="#">';
 		html += '<style>.statsplus td {text-align:center; border: 0px 0px 0px 1px; padding: 1px;}</style>';
 		html += '<table class="statsplus" style="margin: 0px; width:100%;">';
-		html += '<tr style="color: rgb(30, 30, 30)"><td>Move Ratio<br><strong>'+this.analysisData_.moveRatio.toFixed(2)+'</strong></td>';
+		html += '<tr style="color: rgb(30, 30, 30)"><td>Move Ratio<br><strong>';
+		if (this.analysisData_.moveRatio != null) {html+=this.analysisData_.moveRatio.toFixed(2)} else {html+="-"};
+		html +=	'</strong></td>';
 		html += '<td>Real<br>Average</td><td>Q1<br>low 25%</td><td>Q2 (Median)<br>50th percentile</td><td>Q3<br>high 75%</td><td>max</td></tr>';
 		if (this.analysisData_.heartRateData != null) {
 			html += '<tr style="color: rgb(240, 40, 60)"><td>HRR <strong>'+this.analysisData_.heartRateData.activityHeartRateReserve.toFixed(0)+'</strong>%</td>';
@@ -282,24 +284,26 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 
         insertContentSummaryGridContent: function() {
        	if (env.debugMode) console.log("Execute insertContentSummaryGridContent");
+/*
             // Insert summary data
-//            var moveRatio = '-';
-//            if (this.analysisData_.moveRatio && this.userSettings_.displayActivityRatio) {
-//                moveRatio = this.analysisData_.moveRatio.toFixed(2);
-//            }
-//            this.insertContentAtGridPosition(0, 0, moveRatio, 'Move Ratio', '', 'displayActivityRatio');
-
+            var moveRatio = '-';
+            if (this.analysisData_.moveRatio && this.userSettings_.displayActivityRatio) {
+                moveRatio = this.analysisData_.moveRatio.toFixed(2);
+            }
+            this.insertContentAtGridPosition(0, 0, moveRatio, 'Move Ratio', '', 'displayActivityRatio');
+*/
             // ...
-//            var TRIMP = activityHeartRateReserve = '-';
-//            var activityHeartRateReserveUnit = '%';
-//            if (this.analysisData_.heartRateData && this.userSettings_.displayAdvancedHrData) {
-//                TRIMP = this.analysisData_.heartRateData.TRIMP.toFixed(0) + ' <span class="summarySubGridTitle">(' + this.analysisData_.heartRateData.TRIMPPerHour.toFixed(0) + ' / hour)</span>';
-//                activityHeartRateReserve = this.analysisData_.heartRateData.activityHeartRateReserve.toFixed(0);
-//                activityHeartRateReserveUnit = '%  <span class="summarySubGridTitle">(Max: ' + this.analysisData_.heartRateData.activityHeartRateReserveMax.toFixed(0) + '% @ ' + this.analysisData_.heartRateData.maxHeartRate + 'bpm)</span>';
-//            }
-//            this.insertContentAtGridPosition(0, 1, TRIMP, 'TRaining IMPulse', '', 'displayAdvancedHrData');
-//            this.insertContentAtGridPosition(1, 1, activityHeartRateReserve, 'Heart Rate Reserve Avg', activityHeartRateReserveUnit, 'displayAdvancedHrData');
-
+/*
+            var TRIMP = activityHeartRateReserve = '-';
+            var activityHeartRateReserveUnit = '%';
+            if (this.analysisData_.heartRateData && this.userSettings_.displayAdvancedHrData) {
+                TRIMP = this.analysisData_.heartRateData.TRIMP.toFixed(0) + ' <span class="summarySubGridTitle">(' + this.analysisData_.heartRateData.TRIMPPerHour.toFixed(0) + ' / hour)</span>';
+                activityHeartRateReserve = this.analysisData_.heartRateData.activityHeartRateReserve.toFixed(0);
+                activityHeartRateReserveUnit = '%  <span class="summarySubGridTitle">(Max: ' + this.analysisData_.heartRateData.activityHeartRateReserveMax.toFixed(0) + '% @ ' + this.analysisData_.heartRateData.maxHeartRate + 'bpm)</span>';
+            }
+            this.insertContentAtGridPosition(0, 1, TRIMP, 'TRaining IMPulse', '', 'displayAdvancedHrData');
+            this.insertContentAtGridPosition(1, 1, activityHeartRateReserve, 'Heart Rate Reserve Avg', activityHeartRateReserveUnit, 'displayAdvancedHrData');
+*/
             // ...
             var climbTime = '-';
             var climbTimeExtra = '';

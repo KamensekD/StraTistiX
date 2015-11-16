@@ -147,8 +147,8 @@ ActivityProcessor.prototype = {
 
         if (_.isNull(activityStatsMap.movingTime) || _.isNull(activityStatsMap.elapsedTime)) {
             Helper.log('WARN', 'Unable to compute ActivityRatio on this activity with following data: ' + JSON.stringify(activityStatsMap))
-//            return null;
-						return 1;
+            return null;
+//						return 1;
         }
 				if (activityStatsMap.movingTime) {
 	        var ratio = activityStatsMap.movingTime / activityStatsMap.elapsedTime;
@@ -482,6 +482,8 @@ ActivityProcessor.prototype = {
 //		var TRIMP_hr = TRIMP/(activityStatsMap.elapsedTime/3600);
 //	}
 //	var TRIMP_hr = Math.round((TRIMP/(activityStatsMap.elapsedTime/3600))*10)/10;
+//
+// when calculating TRIMP, non-movin time HR should count in for TRIMP!
 
         var TRIMPPerHour = TRIMP / hrrSecondsCount * 60 * 60;
         var TRIMP_hr = Math.round(TRIMPPerHour*10)/10;
@@ -722,14 +724,14 @@ ActivityProcessor.prototype = {
             'upperQuartileGrade': Helper.upperQuartile(gradeSortedSamples),
             'gradeZones': gradeZones,
             'upFlatDownInSeconds': upFlatDownInSeconds,
-            'gradeProfile': gradeProfile,
             'upFlatDownMoveData': upFlatDownMoveData,
+            'gradeProfile': gradeProfile,
             'maxGrade': maxGrade
         };
 
     },
     
-        elevationData_: function(altitudeArray, gradeArray, timeArray) {
+    elevationData_: function(altitudeArray, gradeArray, timeArray) {
 
         if (_.isEmpty(altitudeArray) || _.isEmpty(gradeArray) || _.isEmpty(timeArray)) {
             return null;
@@ -826,70 +828,4 @@ ActivityProcessor.prototype = {
             }
         };
     }
-
-
-
-    /**
-     *  @param
-     *  @param Remove set of value under minPercentExistence
-     *  @return array of values cleaned. /!\ this will return less values
-     */
-    /*
-    // Currently unstable
-    removeUnrepresentativeValues: function(setOfValues, timeArray, minPercentExistence) {
-
-        var setOfValuesCleaned = [];
-
-        var cutSize = 20;
-        var valueZones = [];
-        var maxValue = _.max(setOfValues);
-        var minValue = _.min(setOfValues);
-        var distributionStep = (maxValue - minValue) / cutSize;
-
-        // Prepare zones
-        var currentZoneFrom = minValue,
-            currentZoneTo;
-
-        for (var i = 0; i < cutSize; i++) {
-            currentZoneTo = currentZoneFrom + distributionStep;
-            valueZones.push({
-                from: currentZoneFrom,
-                to: currentZoneTo,
-                s: 0,
-                percentDistrib: null
-            });
-            currentZoneFrom = currentZoneTo;
-        }
-
-        // Determine zone of value and count in zone
-        var durationInSeconds, durationCount = 0;
-        for (var i = 0; i < setOfValues.length; i++) {
-            if (i > 0) {
-                durationInSeconds = (timeArray[i] - timeArray[i - 1]); // Getting deltaTime in seconds (current sample and previous one)
-                var valueZoneId = this.getZoneFromDistributionStep_(setOfValues[i], distributionStep, minValue);
-
-                if (!_.isUndefined(valueZoneId) && !_.isUndefined(valueZones[valueZoneId])) {
-                    valueZones[valueZoneId]['s'] += durationInSeconds;
-                }
-                durationCount += durationInSeconds;
-            }
-        }
-
-        // Process percentage in zone
-        for (var zone in valueZones) {
-            valueZones[zone]['percentDistrib'] = valueZones[zone]['s'] / durationCount * 100;
-        }
-
-        // Reloop values and find percentage of sample to keep it or not along minPercentExistence
-        for (var i = 0; i < setOfValues.length; i++) {
-            var valueZoneId = this.getZoneFromDistributionStep_(setOfValues[i], distributionStep, minValue);
-            if (!_.isUndefined(valueZoneId) && !_.isUndefined(valueZones[valueZoneId])) {
-                if (valueZones[valueZoneId].percentDistrib > minPercentExistence) {
-                    setOfValuesCleaned.push(setOfValues[i]);
-                }
-            }
-        }
-        return setOfValuesCleaned;
-    }
-    */
 };

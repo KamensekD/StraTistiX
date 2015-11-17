@@ -4,7 +4,8 @@
     "short_name": "StraTistiX",
     "description": "Add lots of features to Strava website (forked from StravistiX plugin and enhanced with additional goodies and tweaks)",
     "version": "2.0.0.1",
-    "version_name": "2.0.0.1 development",
+//    "version_name": "2.0.0.1 development",
+    "version_name": "2.0.0.1 release",
     "background": {
         "scripts": [
             "js/UserSettings.js",

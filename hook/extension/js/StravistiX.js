@@ -18,10 +18,10 @@ function StravistiX(userSettings, appResources) {
     this.activityTime_ = this.vacuumProcessor_.getActivityTime();
 
     // Make the work...
-    if (env.debugMode) console.log("Activity:" + pageView.activity().get('type')+" ("+pageView.activity().get('id')+")");
-    if (env.debugMode && pageView.activityAthlete()!=null) console.log("Athlete: "+pageView.activityAthlete().get('display_name')+" ("+pageView.activityAthlete().get('id')+")");
-	if (env.debugMode) console.log("--------------------");
     this.init_();
+    if (env.debugMode && (typeof pageView !== 'undefined')) console.log("Activity:" + pageView.activity().get('type')+" ("+pageView.activity().get('id')+")");
+    if (env.debugMode && (typeof pageView !== 'undefined')) if(pageView.activityAthlete()!=null) console.log("Athlete: "+pageView.activityAthlete().get('display_name')+" ("+pageView.activityAthlete().get('id')+")");
+	if (env.debugMode) console.log("--------------------");
 }
 
 

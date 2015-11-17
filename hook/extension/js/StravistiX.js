@@ -18,6 +18,9 @@ function StravistiX(userSettings, appResources) {
     this.activityTime_ = this.vacuumProcessor_.getActivityTime();
 
     // Make the work...
+    if (env.debugMode) console.log("Activity:" + pageView.activity().get('type')+" ("+pageView.activity().get('id')+")");
+    if (env.debugMode && pageView.activityAthlete()!=null) console.log("Athlete: "+pageView.activityAthlete().get('display_name')+" ("+pageView.activityAthlete().get('id')+")");
+	if (env.debugMode) console.log("--------------------");
     this.init_();
 }
 
@@ -439,6 +442,7 @@ StravistiX.prototype = {
 
         // Skip manual activities
         if (activityType === 'Manual') {
+            if (env.debugMode) console.log("--- StravistiX.js skip Manual activity: " + activityType);
             return;
         }
 
@@ -468,6 +472,7 @@ StravistiX.prototype = {
                     $('.inset').parent().children().first().before(html);
 				}
 
+	            if (env.debugMode) console.log("--- StravistiX.js switch (activityType): " + activityType);
                 switch (activityType) {
                     case 'Ride':
                         extendedActivityDataModifier = new CyclingExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_, basicInfos);
@@ -492,7 +497,7 @@ StravistiX.prototype = {
 
                     default:
                         // extendedActivityDataModifier = new GenericExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_); // DELAYED_FOR_TESTING
-                        var html = '<p style="padding: 10px;background: #FFF0A0;font-size: 12px;color: rgb(103, 103, 103);">StraTistiX don\'t support <strong>Extended Data Features</strong> for this type of activity at the moment. Feature will be available in version 0.6.x. Working hard! Please wait... ;).</br></br>Stay tunned via <a href="https://twitter.com/champagnethomas">@champagnethomas</a></p>';
+                        var html = '<p style="padding: 10px;background: #FFF0A0;font-size: 12px;color: rgb(103, 103, 103);">StraTistiX don\'t support <strong>Extended Data Features</strong> for this type of activity at the moment.</br></p>';
                         $('.inline-stats.section').parent().children().last().after(html);
                         break;
                 }

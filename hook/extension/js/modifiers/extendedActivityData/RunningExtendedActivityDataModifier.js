@@ -9,17 +9,22 @@ var RunningExtendedActivityDataModifier = AbstractExtendedActivityDataModifier.e
         modify: function() {
             base.modify.call(this); // Super call
 
-// already done at AbstractExtendedActivityDataModifier.js
-/*            this.placeSummaryPanel(function() {
+            this.placeSummaryPanel(function() {
                 // Summary panel has been placed...
                 // Add Show extended statistics to page
+// already done at AbstractExtendedActivityDataModifier.js
+/*
                 this.placeExtendedStatsButton(function() {
                     // Button has been placed...
                 });
-            }.bind(this));
 */
+            }.bind(this));
 
         },
+
+
+
+
 
         insertContentSummaryGridContent: function() {
 

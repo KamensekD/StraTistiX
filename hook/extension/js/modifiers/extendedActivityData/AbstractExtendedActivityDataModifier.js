@@ -46,6 +46,10 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 
 
         },
+        
+        
+        
+
 
         placeSummaryPanel: function(panelAdded) {
         if (env.debugMode) console.log("Execute placeSummaryPanel");
@@ -67,7 +71,7 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 
 
 
-		// print HIGHLIGHTED STATS under inline-stats section
+		// print TRIMP and aRPEe Score under inline-stats section
 		var html = '<div style="font-size: 15px; padding: 10px 0px 10px 0px; border-bottom: 0px; margin-bottom:4px;" id="histats">';
 
 		if (this.analysisData_.heartRateData != null) {

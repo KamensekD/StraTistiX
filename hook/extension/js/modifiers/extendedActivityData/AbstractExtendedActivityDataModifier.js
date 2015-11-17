@@ -169,15 +169,38 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 		html += '<tr style="color: rgb(30, 30, 30)"><td>Move Ratio<br><strong>';
 		if (this.analysisData_.moveRatio != null) {html+=this.analysisData_.moveRatio.toFixed(2)} else {html+="-"};
 		html +=	'</strong></td>';
-		html += '<td>Real<br>Average</td><td>Q1<br>low 25%</td><td>Q2 (Median)<br>50th percentile</td><td>Q3<br>high 75%</td><td>max</td></tr>';
+		html += '<td><strong>Average</strong></td><td>Q1<br><font style="font-size:9px">low 25%</font></td><td>Q2 (Median)<br><font style="font-size:9px">50th percentile</font></td><td>Q3<br><font style="font-size:9px">high 75%</font></td><td><strong>Max</strong></td></tr>';
 		if (this.analysisData_.heartRateData != null) {
-			html += '<tr style="color: rgb(240, 40, 60)"><td>HRR <strong>'+this.analysisData_.heartRateData.activityHeartRateReserve.toFixed(0)+'</strong>%</td>';
-			html += '<td><strong>'+this.analysisData_.heartRateData.averageHeartRate.toFixed(0)+'</strong>bpm</td>';
-			html += '<td><strong>'+this.analysisData_.heartRateData.lowerQuartileHeartRate.toFixed(0)+'</strong>bpm</td>';
-			html += '<td><strong>'+this.analysisData_.heartRateData.medianHeartRate.toFixed(0)+'</strong>bpm</td>';
-			html += '<td><strong>'+this.analysisData_.heartRateData.upperQuartileHeartRate.toFixed(0)+'</strong>bpm</td>';
-			html += '<td><strong>'+this.analysisData_.heartRateData.maxHeartRate.toFixed(0)+'</strong>bpm</td></tr>';
+			html += '<tr style="color: rgb(240, 40, 60)"><td style="line-height: 0.8">';
+			 html += '<img src="' + this.appResources_.heartbeatIcon + '"height=18 style="padding:3px"><br>';
+			 html += '<font size=-2>'+this.analysisData_.heartRateData.RestHr+'-'+this.analysisData_.heartRateData.MaxHr+' bpm</font></td>';
+			html += '<td style="line-height: 1.1">';
+			 html+= '<font style="font-size:10px">'+Helper.hrPercentFromHeartrate(this.analysisData_.heartRateData.averageHeartRate,this.analysisData_.heartRateData.MaxHr).toFixed(0)+'%</font><font style="font-size:7px">HRM</font>';
+			 html+= '<br><font style="font-size:12px"><strong>'+this.analysisData_.heartRateData.averageHeartRate.toFixed(0)+'</strong> bpm</font>';
+			 html+= '<br><font style="font-size:10px">'+Helper.hrrPercentFromHeartrate(this.analysisData_.heartRateData.averageHeartRate,this.analysisData_.heartRateData.MaxHr,this.analysisData_.heartRateData.RestHr).toFixed(0)+'</strong>%</font><font style="font-size:7px">HRR</font>';
+			 html+= '</td>';
+			html += '<td style="line-height: 1.1">';
+			 html+= '<font style="font-size:10px">'+Helper.hrPercentFromHeartrate(this.analysisData_.heartRateData.lowerQuartileHeartRate,this.analysisData_.heartRateData.MaxHr).toFixed(0)+'%</font><font style="font-size:7px">HRM</font>';
+			 html+= '<br><font style="font-size:12px"><strong>'+this.analysisData_.heartRateData.lowerQuartileHeartRate.toFixed(0)+'</strong> bpm</font>';
+			 html+= '<br><font style="font-size:10px">'+Helper.hrrPercentFromHeartrate(this.analysisData_.heartRateData.lowerQuartileHeartRate,this.analysisData_.heartRateData.MaxHr,this.analysisData_.heartRateData.RestHr).toFixed(0)+'</strong>%</font><font style="font-size:7px">HRR</font>';
+			 html+= '</td>';
+			html += '<td style="line-height: 1.1">';
+			 html+= '<font style="font-size:10px">'+Helper.hrPercentFromHeartrate(this.analysisData_.heartRateData.medianHeartRate,this.analysisData_.heartRateData.MaxHr).toFixed(0)+'%</font><font style="font-size:7px">HRM</font>';
+			 html+= '<br><font style="font-size:12px"><strong>'+this.analysisData_.heartRateData.medianHeartRate.toFixed(0)+'</strong> bpm</font>';
+			 html+= '<br><font style="font-size:10px">'+Helper.hrrPercentFromHeartrate(this.analysisData_.heartRateData.medianHeartRate,this.analysisData_.heartRateData.MaxHr,this.analysisData_.heartRateData.RestHr).toFixed(0)+'</strong>%</font><font style="font-size:7px">HRR</font>';
+			 html+= '</td>';
+			html += '<td style="line-height: 1.1">';
+			 html+= '<font style="font-size:10px">'+Helper.hrPercentFromHeartrate(this.analysisData_.heartRateData.upperQuartileHeartRate,this.analysisData_.heartRateData.MaxHr).toFixed(0)+'%</font><font style="font-size:7px">HRM</font>';
+			 html+= '<br><font style="font-size:12px"><strong>'+this.analysisData_.heartRateData.upperQuartileHeartRate.toFixed(0)+'</strong> bpm</font>';
+			 html+= '<br><font style="font-size:10px">'+Helper.hrrPercentFromHeartrate(this.analysisData_.heartRateData.upperQuartileHeartRate,this.analysisData_.heartRateData.MaxHr,this.analysisData_.heartRateData.RestHr).toFixed(0)+'</strong>%</font><font style="font-size:7px">HRR</font>';
+			 html+= '</td>';
+			html += '<td style="line-height: 1.1">';
+			 html+= '<font style="font-size:10px">'+Helper.hrPercentFromHeartrate(this.analysisData_.heartRateData.maxHeartRate,this.analysisData_.heartRateData.MaxHr).toFixed(0)+'%</font><font style="font-size:7px">HRM</font>';
+			 html+= '<br><font style="font-size:12px"><strong>'+this.analysisData_.heartRateData.maxHeartRate.toFixed(0)+'</strong> bpm</font>';
+			 html+= '<br><font style="font-size:10px">'+Helper.hrrPercentFromHeartrate(this.analysisData_.heartRateData.maxHeartRate,this.analysisData_.heartRateData.MaxHr,this.analysisData_.heartRateData.RestHr).toFixed(0)+'</strong>%</font><font style="font-size:7px">HRR</font>';
+			 html+= '</td>';
 		};
+
 		if (this.analysisData_.gradeData != null && !(this.analysisData_.gradeData.lowerQuartileGrade == 0 && this.analysisData_.gradeData.upperQuartileGrade == 0)) {
 			html += '<tr style="color: rgb(20,120,20)"><td><strong>'+this.analysisData_.gradeData.gradeProfile+'</strong> Grade</td>';
 			html += '<td><strong>'+this.analysisData_.gradeData.avgGrade.toFixed(1)+'</strong>%</td>';

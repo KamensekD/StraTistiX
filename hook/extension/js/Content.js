@@ -165,6 +165,7 @@ var appResources = {
    MBIcon: chrome.extension.getURL('/icons/Mapbox24.png'),
    GMIcon: chrome.extension.getURL('/icons/GM24.png'),
    aRPEeIcon: chrome.extension.getURL('/icons/aRPEe.png'),
+   heartbeatIcon: chrome.extension.getURL('/icons/heartbeat.png'),
    sisuIcon: chrome.extension.getURL('/icons/sisu.png'),
    KOMdefenderIcon: chrome.extension.getURL('/icons/komdefender.png'),
    segmentIcon: chrome.extension.getURL('/icons/Segment64.png'),

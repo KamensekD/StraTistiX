@@ -84,6 +84,13 @@ Helper.heartRateReserveFromHeartrate = function(hr, maxHr, restHr) {
     return (parseFloat(hr) - parseInt(restHr)) / (parseInt(maxHr) - parseInt(restHr));
 };
 
+Helper.hrrPercentFromHeartrate = function(hr, maxHr, restHr) {
+    return 100 * (parseFloat(hr) - parseInt(restHr)) / (parseInt(maxHr) - parseInt(restHr));
+};
+
+Helper.hrPercentFromHeartrate = function(hr, maxHr) {
+    return 100 * parseFloat(hr) / parseInt(maxHr);
+};
 
 Helper.setToStorage = function(extensionId, storageType, key, value, callback) {
 

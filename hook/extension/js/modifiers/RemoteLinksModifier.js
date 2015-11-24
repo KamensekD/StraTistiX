@@ -341,6 +341,14 @@ RemoteLinksModifier.prototype = {
         });
 
 
+		// MapFlipper on Segment Page
+        var remoteViewSegmentLinksArray = [  // [ 0:image/text , 1:link (ID will be added) , 2:additional_string ]   for special cases 2= heatmap, simple_link, mapflipper
+
+            ["<img width='24px' style='vertical-align:middle' src='" + this.appResources_.pollIcon + "'/> <span>Segment Stats</span>", 'http://www.jonathanokeeffe.com/strava/segmentDetails.php?segmentId=', ''],
+            ["MapFlipper", '',
+            	'mapflipper',  this.appResources_.OCMIcon, this.appResources_.OCMlsIcon, this.appResources_.OCModIcon, this.appResources_.OSMIcon, this.appResources_.MBIcon, this.appResources_.OSMhbIcon]
+];
+
 
         // Segment page
         // Adding remote view links on right panel

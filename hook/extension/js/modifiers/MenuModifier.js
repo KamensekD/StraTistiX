@@ -69,7 +69,7 @@ MenuModifier.prototype = {
     stravaMenuHtml += "<li style='" + styleSideLeft + "'><a href='http://veloviewer.com/athlete/" + this.athleteId_ + "/summary' target='_blank'><img style='vertical-align:middle' src='" + this.appResources_.veloviewerDashboardIcon + "'/><span> VV Dashboard</span></a></li>";
 
 //  Release Notes
-    stravaMenuHtml += "<li style='border-top: 1px solid #DDD;'><a style='font-style: italic;' href='" + this.appResources_.settingsLink + "#/releaseNotes' target='_blank'><img style='vertical-align:middle' src='" + this.appResources_.systemUpdatesIcon + "'/><span> StraTistiX <strong>v" + this.appResources_.extVersion + "</strong> release notes</span></a></li>";
+    stravaMenuHtml += "<li style='border-top: 1px solid #DDD; text-align: center;'><a style='font-style: italic;' href='" + this.appResources_.settingsLink + "#/releaseNotes' target='_blank'><img style='vertical-align:middle' src='" + this.appResources_.systemUpdatesIcon + "'/><span> StraTistiX <strong>v" + this.appResources_.extVersion + "</strong> release notes</span></a></li>";
 
 
 //  Rate this fork

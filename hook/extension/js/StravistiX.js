@@ -150,12 +150,13 @@ StravistiX.prototype = {
     handleUpdateRibbon_: function() {
 
 //        var title = 'StraTistiX updated/installed to <strong>v' + this.appResources_.extVersion + '</strong>';
-        var title = '<strong>StraTistiX</strong> updated/installed to <strong>v2.0.0.1</strong>';
+        var title = '<strong>StraTistiX</strong> updated/installed to <strong>v2.0.0.2</strong>';
         var message = '';
-        message += "<br><h4><strong>BIG UPDATE WITH LOTS OF GREAT NEW FEATURES :)</strong></h4><h4>";
+        message += "<br><h4><strong>BIG UPDATE WITH LOTS OF GREAT NEW FEATURES :)";
+        message += "<br>Rebased to StravistiX v2.0 for easier updates</strong></h4><h4>";
 
         message += "- Added year progression (activity count, distance, elevation, time) table and chart<br/>"
-		message += "- Added 'Best Splits' to biking activities<br>"
+		message += "- Added 'Best Splits' (distance, time, elevation, hr,...) to biking activities<br>"
 		message += "- export of segments as Virtual Partner (cycling: button under segment compare)<br>"
 		message += "- Added segment builder link to segments page<br>"
 		message += "- Added biking segment time comparisons to KOM's and PR's<br>"
@@ -164,8 +165,11 @@ StravistiX.prototype = {
 		message += "- Searchable common settings<br>"
 		message += "- Moved leftside buttons/links under Edit/Action buttons<br>"
 		message += "- Moved some leftside links to menu, reordered menu a bit<br>"
+		message += "- Changed HR related computations from total to moving time<br>"
+		message += "- Filtering altitude for gain computations<br>"
 		message += "- Various Fixes<br>"
 		message += "<br>* Credits for many of new features go to <a href=https://github.com/tazmanska>tomasz.terlecki / tazmanska</a> !"
+		message += "<br>  and <a href=https://github.com/glandais>Gabriel Landais / glandais</a> !"
 
         message += "</h4>";
 //        message += "<h4><strong>BUGFIXES:</strong></h4><h5>";

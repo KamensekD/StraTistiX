@@ -732,7 +732,7 @@ ActivityProcessor.prototype = {
         };
 
     },
-    elevationData_: function(altitudeArray, gradeArray, timeArray) {
+//    elevationData_: function(altitudeArray, gradeArray, timeArray) {
 
     filterData_: function(data, distance, smoothing) {
         // http://phrogz.net/js/framerate-independent-low-pass-filter.html

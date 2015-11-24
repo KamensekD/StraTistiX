@@ -107,7 +107,7 @@ ActivityProcessor.prototype = {
         // Q1 HR
         // Median HR
         // Q3 HR
-        var heartRateData = this.heartRateData_(userGender, userRestHr, userMaxHr, activityStream.heartrate, activityStream.time, activityStatsMap);
+        var heartRateData = this.heartRateData_(userGender, userRestHr, userMaxHr, activityStream.heartrate, activityStream.time, activityStream.velocity_smooth, activityStatsMap);
 
         // Cadence percentage
         // Time Cadence
@@ -406,10 +406,9 @@ ActivityProcessor.prototype = {
     /**
      * ...
      */
-    heartRateData_: function(userGender, userRestHr, userMaxHr, heartRateArray, timeArray, activityStatsMap) {
+    heartRateData_: function(userGender, userRestHr, userMaxHr, heartRateArray, timeArray, velocityArray, activityStatsMap) {
 
-//        if (_.isUndefined(heartRateArray)) {
-        if (_.isEmpty(heartRateArray) || _.isEmpty(timeArray)) {
+        if (_.isEmpty(heartRateArray) || _.isEmpty(timeArray) || _.isEmpty(velocityArray)) {
             return null;
         }
 
@@ -436,29 +435,32 @@ ActivityProcessor.prototype = {
 
         for (var i = 0; i < heartRateArray.length; i++) { // Loop on samples
 
-            // Compute heartrate data
-            if (i > 0) {
 
-                hrSum += heartRateArray[i];
+            if (velocityArray[i] * 3.6 > ActivityProcessor.movingThresholdKph) {
 
-                // Compute TRIMP
-                hr = (heartRateArray[i] + heartRateArray[i - 1]) / 2; // Getting HR avg between current sample and previous one.
-                heartRateReserveAvg = Helper.heartRateReserveFromHeartrate(hr, userMaxHr, userRestHr); //(hr - userSettings.userRestHr) / (userSettings.userMaxHr - userSettings.userRestHr);
-                durationInSeconds = (timeArray[i] - timeArray[i - 1]); // Getting deltaTime in seconds (current sample and previous one)
-                durationInMinutes = durationInSeconds / 60;
+                // Compute heartrate data while moving from now
+                if (i > 0) {
 
-                // TRIMP += durationInMinutes * heartRateReserveAvg * Math.pow(0.64, TRIMPGenderFactor * heartRateReserveAvg);
-                TRIMP += durationInMinutes * heartRateReserveAvg * 0.64 * Math.exp(TRIMPGenderFactor * heartRateReserveAvg);
-								
-                // Count Heart Rate Reserve distribution
-                zoneId = this.getHrrZoneId(hrrZonesCount, heartRateReserveAvg * 100);
+                    hrSum += heartRateArray[i];
 
-                if (!_.isUndefined(zoneId)) {
-                    this.userHrrZones_[zoneId]['s'] += durationInSeconds;
+                    // Compute TRIMP
+                    hr = (heartRateArray[i] + heartRateArray[i - 1]) / 2; // Getting HR avg between current sample and previous one.
+                    heartRateReserveAvg = Helper.heartRateReserveFromHeartrate(hr, userMaxHr, userRestHr); //(hr - userSettings.userRestHr) / (userSettings.userMaxHr - userSettings.userRestHr);
+                    durationInSeconds = (timeArray[i] - timeArray[i - 1]); // Getting deltaTime in seconds (current sample and previous one)
+                    durationInMinutes = durationInSeconds / 60;
+
+                    TRIMP += durationInMinutes * heartRateReserveAvg * 0.64 * Math.exp(TRIMPGenderFactor * heartRateReserveAvg);
+
+                    // Count Heart Rate Reserve distribution
+                    zoneId = this.getHrrZoneId(hrrZonesCount, heartRateReserveAvg * 100);
+
+                    if (!_.isUndefined(zoneId)) {
+                        this.userHrrZones_[zoneId]['s'] += durationInSeconds;
+                    }
+
+                    hrrSecondsCount += durationInSeconds;
+                    hrCount++;
                 }
-
-                hrrSecondsCount += durationInSeconds;
-                hrCount++;
             }
         }
 

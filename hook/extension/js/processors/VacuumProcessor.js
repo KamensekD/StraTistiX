@@ -5,7 +5,8 @@ function VacuumProcessor() {
 
 }
 
-
+//VacuumProcessor.movingThresholdKph = 3.5; // Kph
+VacuumProcessor.movingThresholdKph = 2.5; // Kph
 
 /**
  * Define prototype
@@ -183,7 +184,7 @@ VacuumProcessor.prototype = {
     /**
      * @returns Common activity stats given by Strava throught right panel
      */
-    getActivityCommonStats: function getActivityStats() {
+    getActivityCommonStats: function getActivityStats(activityStream) {
 
         var actStatsContainer = $(".activity-summary-container");
 
@@ -348,6 +349,8 @@ VacuumProcessor.prototype = {
 */
 
 
+        var altitude_smooth = this.smoothAltitude_(activityStream, elevation);
+
         // Create activityData Map
         return {
             'distance': distance,
@@ -361,10 +364,55 @@ VacuumProcessor.prototype = {
             'averageSpeed': averageSpeed,
 //            'averageHeartRate': averageHeartRate,	// calculated in ActivityProcessor.js
 //            'maxHeartRate': maxHeartRate					// calculated in ActivityProcessor.js
+            'altitude_smooth': altitude_smooth,
         };
     },
 
+    filterData_: function(data, distance, smoothing) {
+        // http://phrogz.net/js/framerate-independent-low-pass-filter.html
+        if (data && distance) {
+            var result = [];
+            result[0] = data[0];
+            for (i = 1, max = data.length; i < max; i++) {
+                if (smoothing === 0) {
+                    result[i] = data[i];
+                } else {
+                    result[i] = result[i-1] + (distance[i] - distance[i-1]) * (data[i] - result[i-1]) / smoothing;
+                }
+            }
+            return result;
+        }
+    },
 
+    smoothAltitude_: function smoothAltitude(activityStream, stravaElevation) {
+        var activityAltitudeArray = activityStream.altitude;
+        var distanceArray = activityStream.distance;
+        var velocityArray = activityStream.velocity_smooth;
+        var smoothingL = 10;
+        var smoothingH = 600;
+        var smoothing;
+        var altitudeArray; 
+        while (smoothingH - smoothingL >= 1) {
+            smoothing = smoothingL + (smoothingH - smoothingL) / 2;
+            altitudeArray = this.filterData_(activityAltitudeArray, distanceArray, smoothing);
+            var totalElevation = 0;
+            for (var i = 0; i < altitudeArray.length; i++) { // Loop on samples
+                if (i > 0 && velocityArray[i] * 3.6 > VacuumProcessor.movingThresholdKph) {
+                    var elevationDiff = altitudeArray[i] - altitudeArray[i - 1];
+                    if (elevationDiff > 0) {
+                        totalElevation += elevationDiff;
+                    }
+                }
+            }
+            
+            if (totalElevation < stravaElevation) {
+                smoothingH = smoothing;
+            } else {
+                smoothingL = smoothing;
+            }
+        }
+        return altitudeArray;
+    },
 
     /**
      *
@@ -440,7 +488,7 @@ var simpl_array=simplify(full_array,0.1,1);
                 hasPowerMeter = false;
             }
 
-            callback(this.getActivityCommonStats(), jsonResponse, this.getAthleteWeight(), hasPowerMeter);
+            callback(this.getActivityCommonStats(jsonResponse), jsonResponse, this.getAthleteWeight(), hasPowerMeter);
 
             jsonResponse = null; // Memory clean
 

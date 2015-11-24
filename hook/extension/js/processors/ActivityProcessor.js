@@ -122,7 +122,7 @@ ActivityProcessor.prototype = {
 
         // Avg grade
         // Q1/Q2/Q3 grade
-        var elevationData = this.elevationData_(activityStream.altitude, activityStream.grade_smooth, activityStream.time);
+        var elevationData = this.elevationData_(activityStream.distance, activityStream.altitude, activityStream.grade_smooth, activityStream.time, activityStream.velocity_smooth, activityStatsMap.elevation);
 
         // Return an array with all that shit...
         return {
@@ -732,28 +732,76 @@ ActivityProcessor.prototype = {
         };
 
     },
-    
     elevationData_: function(altitudeArray, gradeArray, timeArray) {
 
-        if (_.isEmpty(altitudeArray) || _.isEmpty(gradeArray) || _.isEmpty(timeArray)) {
+    filterData_: function(data, distance, smoothing) {
+        // http://phrogz.net/js/framerate-independent-low-pass-filter.html
+        if (data && distance) {
+            var result = [];
+            result[0] = data[0];
+            for (i = 1, max = data.length; i < max; i++) {
+                if (smoothing === 0) {
+                    result[i] = data[i];
+                } else {
+                    result[i] = result[i-1] + (distance[i] - distance[i-1]) * (data[i] - result[i-1]) / smoothing;
+                }
+            }
+            return result;
+        }
+    },
+
+    elevationData_: function(distanceArray, activityAltitudeArray, gradeArray, timeArray, velocityArray, stravaElevation) {
+
+        if (_.isEmpty(activityAltitudeArray) || _.isEmpty(gradeArray) || _.isEmpty(timeArray)) {
             return null;
+        }
+
+        var smoothingL = 10;
+        var smoothingH = 600;
+        var smoothing;
+        var altitudeArray; 
+        while (smoothingH - smoothingL >= 1) {
+            smoothing = smoothingL + (smoothingH - smoothingL) / 2;
+            altitudeArray = this.filterData_(activityAltitudeArray, distanceArray, smoothing);
+            var totalElevation = 0;
+            for (var i = 0; i < altitudeArray.length; i++) { // Loop on samples
+                if (i > 0 && velocityArray[i] * 3.6 > ActivityProcessor.movingThresholdKph) {
+                    var elevationDiff = altitudeArray[i] - altitudeArray[i - 1];
+                    if (elevationDiff > 0) {
+                        totalElevation += elevationDiff;
+                    }
+                }
+            }
+            
+            if (totalElevation < stravaElevation) {
+                smoothingH = smoothing;
+            } else {
+                smoothingL = smoothing;
+            }
         }
 
         var accumulatedElevation = 0;
         var accumulatedElevationAscent = 0;
+        var accumulatedElevationDescent = 0;
+        var accumulatedDistance = 0;
+        // special arrays for ascent speeds
         var ascentSpeedMeterPerHourSamples = [];
+        var ascentSpeedMeterPerHourDistance = [];
+        var ascentSpeedMeterPerHourTime = [];
         var ascentSpeedMeterPerHourSum = 0;
         var elevationSampleCount = 0;
         var elevationSamples = [];
         var elevationZones = this.prepareZonesForDistribComputation(this.zones.elevation);
-        var durationInSeconds, durationCount = 0;
-        var ascentCountEverySample = 10;
+        var ascentSpeedZones = this.prepareZonesForDistribComputation(this.zones.ascent);
+        var durationInSeconds = 0;
+        var durationCount = 0;
+        var durationAscentSpeedCount = 0;
         var ascentDurationInSeconds = 0;
 
         for (var i = 0; i < altitudeArray.length; i++) { // Loop on samples
 
             // Compute distribution for graph/table
-            if (i > 0) {
+            if (i > 0 && velocityArray[i] * 3.6 > ActivityProcessor.movingThresholdKph) {
 
                 // Compute average and normalized elevation
                 accumulatedElevation += altitudeArray[i];
@@ -770,28 +818,40 @@ ActivityProcessor.prototype = {
 
                 durationCount += durationInSeconds;
 
-                // Compute elevation diff each ascentCountEverySample
-                if ((i % ascentCountEverySample) == 0) {
+                // Meters climbed between current and previous
+                var elevationDiff = altitudeArray[i] - altitudeArray[i - 1];
 
-                    // Meters climbed between current and sample at ascentCountEverySample position lower.
-                    var elevationDiff = altitudeArray[i] - altitudeArray[i - ascentCountEverySample];
+                // If previous altitude lower than current then => climbing
+                if (elevationDiff > 0) {
+                    accumulatedElevationAscent += elevationDiff;
+                    ascentDurationInSeconds = timeArray[i] - timeArray[i - 1];
 
-                    // If previous altitude lower than current then => climbing
-                    if (elevationDiff > 0) {
+                    var ascentSpeedMeterPerHour = elevationDiff / ascentDurationInSeconds * 3600; // m climbed / seconds
 
-                        // Take time from 'ascentCountEverySample' last samples 
-                        for (j = 0; j < ascentCountEverySample; j++) {
-                            ascentDurationInSeconds += timeArray[i - j] - timeArray[i - j - 1];
-                        }
-
-                        accumulatedElevationAscent += elevationDiff;
-                        var ascentSpeedMeterPerHour = elevationDiff / ascentDurationInSeconds * 3600; // m climbed / seconds
-
+                    var distance = distanceArray[i] - distanceArray[i - 1];
+                    // only if grade is > 3%
+                    if (distance > 0 && (elevationDiff / distance) > 0.03) {
+                        accumulatedDistance += distanceArray[i] - distanceArray[i - 1];
                         ascentSpeedMeterPerHourSamples.push(ascentSpeedMeterPerHour);
+                        ascentSpeedMeterPerHourDistance.push(accumulatedDistance);
+                        ascentSpeedMeterPerHourTime.push(ascentDurationInSeconds);
                         ascentSpeedMeterPerHourSum += ascentSpeedMeterPerHour;
-                        ascentDurationInSeconds = 0; // reset for next loop
                     }
+                } else {
+                    accumulatedElevationDescent -= elevationDiff;
                 }
+
+            }
+        }
+
+        var ascentSpeedArray = ascentSpeedMeterPerHourSamples;//this.filterData_(ascentSpeedMeterPerHourSamples, ascentSpeedMeterPerHourDistance, 200);
+        var j = 0;
+        for (j = 0; j < ascentSpeedArray.length; j++) {
+            var ascentSpeedZoneId = this.getZoneId(this.zones.ascent, ascentSpeedArray[j]);
+
+            if (!_.isUndefined(ascentSpeedZoneId) && !_.isUndefined(ascentSpeedZones[ascentSpeedZoneId])) {
+                ascentSpeedZones[ascentSpeedZoneId]['s'] += ascentSpeedMeterPerHourTime[j];
+                durationAscentSpeedCount += ascentSpeedMeterPerHourTime[j];
             }
         }
 
@@ -813,13 +873,21 @@ ActivityProcessor.prototype = {
         for (var zone in elevationZones) {
             elevationZones[zone]['percentDistrib'] = ((elevationZones[zone]['s'] / durationCount).toFixed(4) * 100);
         }
+        if (durationAscentSpeedCount > 0) {
+            for (var zone in ascentSpeedZones) {
+                ascentSpeedZones[zone]['percentDistrib'] = ((ascentSpeedZones[zone]['s'] / durationAscentSpeedCount).toFixed(4) * 100);
+            }
+        }
 
         return {
             'avgElevation': avgElevation.toFixed(0),
+            'accumulatedElevationAscent': accumulatedElevationAscent,
+            'accumulatedElevationDescent': accumulatedElevationDescent,
             'lowerQuartileElevation': Helper.lowerQuartile(elevationSamplesSorted).toFixed(0),
             'medianElevation': Helper.median(elevationSamplesSorted).toFixed(0),
             'upperQuartileElevation': Helper.upperQuartile(elevationSamplesSorted).toFixed(0),
             'elevationZones': elevationZones, // Only while moving
+            'ascentSpeedZones': ascentSpeedZones, // Only while moving
             'ascentSpeed': {
                 'avg': avgAscentSpeed,
 // preveri !!! ne dela ok pri vseh hiking	https://www.strava.com/activities/119185669	?

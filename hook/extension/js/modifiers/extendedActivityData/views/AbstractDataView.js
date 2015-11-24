@@ -51,7 +51,7 @@ var AbstractDataView = Fiber.extend(function(base) {
         },
 
         render: function() {
-            this.setGraphTitle((new String(this.units)).toUpperCase() + ' distribution in minutes');
+            this.setGraphTitle('<strong>'+(new String(this.units)) + '</strong> distribution in minutes');
         },
 
         getContent: function() {
@@ -73,7 +73,7 @@ var AbstractDataView = Fiber.extend(function(base) {
             graph += '<div>';
             graph += '<div>';
             graph += '<div class="distributionGraphTitle">' + this.graphTitle + '</div>';
-            graph += '<canvas id="' + this.viewId + '" height="450" width="450"></canvas>';
+            graph += '<canvas id="' + this.viewId + '"  width="500" height="400"></canvas>';
             graph += '</div>';
             graph += '</div>';
             this.graph = $(graph);
@@ -87,7 +87,8 @@ var AbstractDataView = Fiber.extend(function(base) {
 
             var labelsData = [];
             for (var zone in zones) {
-                var label = "Z" + (parseInt(zone) + 1) + " " + (zones[zone].from * ratio).toFixed(1) + " to " + (zones[zone].to * ratio).toFixed(1) + " " + this.units;
+                var label = "Z" + (parseInt(zone) + 1) + ":   " + (zones[zone].from * ratio).toFixed(0) + " to " + (zones[zone].to * ratio).toFixed(0);
+//                var label = "Z" + (parseInt(zone) + 1) + ": " + (zones[zone].from * ratio).toFixed(0) + " to " + (zones[zone].to * ratio).toFixed(0) + " " + this.units;
                 labelsData.push(label);
             }
 
@@ -147,11 +148,11 @@ var AbstractDataView = Fiber.extend(function(base) {
 
             // Generate table header
             table += '<tr>'; // Zone
-            table += '<td><strong>Zone</strong></td>'; // Zone
-            table += '<td><strong>From ' + this.units.toUpperCase() + '</strong></td>'; // bpm
-            table += '<td><strong>To ' + this.units.toUpperCase() + '</strong></td>'; // bpm
-            table += '<td><strong>Time<br/>(hh:mm:ss)</strong></td>'; // Time
-            table += '<td><strong>% in zone</strong></td>'; // % in zone
+            table += '<td></td>'; // Zone
+            table += '<td><strong>From<br/>' + this.units.toUpperCase() + '</strong></td>'; // bpm
+            table += '<td><strong>To<br/>' + this.units.toUpperCase() + '</strong></td>'; // bpm
+            table += '<td><strong>Time</strong><br/>(hh:mm:ss)</td>'; // Time
+            table += '<td><strong>%</strong></td>'; // % in zone
             table += '</tr>';
 
             var zoneId = 1;

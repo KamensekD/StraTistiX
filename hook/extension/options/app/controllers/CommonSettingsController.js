@@ -21,6 +21,7 @@ app.controller("CommonSettingsController", ['$scope', 'Notifier', '$timeout', '$
                     }
 
                 } else if (option.optionType === 'list') {
+                	//if (option.optionKey == "customMapboxStyle" ) userSettings.customMapboxStyle = window.prompt("User Mapbox Style",userSettings.customMapboxStyle);
                     option.active = _.findWhere(option.optionList, {
                         key: userSettingsSynced[option.optionKey]
                     });
@@ -58,9 +59,10 @@ app.controller("CommonSettingsController", ['$scope', 'Notifier', '$timeout', '$
     };
 
     $scope.toggleSelectOption = function(option) {
-
+       	if (option.optionKey == "customMapboxStyle" && option.active.name == 'custom') option.active.key = window.prompt("Custom Mapbox Style",option.active.key);
         ChromeStorageModule.updateUserSetting(option.optionKey, option.active.key, function() {
-            console.log(option.optionKey + ' has been updated to ' + option.active);
+            console.log(option.optionKey + ' has been updated to ' + option.active.key + ' (' + option.active.name + ')' );
+            
         });
     };
 

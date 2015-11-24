@@ -29,8 +29,7 @@ app.config(['$routeProvider', function($routeProvider) {
     });
 
     $routeProvider.when(routeMap.donateRoute, {
-        templateUrl: 'views/donate.html',
-        controller: 'DonateController'
+        templateUrl: 'views/donate.html'
     });
 
     $routeProvider.when(routeMap.shareRoute, {

@@ -2,7 +2,6 @@ var RunningExtendedActivityDataModifier = AbstractExtendedActivityDataModifier.e
 
     return {
 
-
         init: function(analysisData, appResources, userSettings, athleteId, athleteIdAuthorOfActivity, basicInfos) {
             base.init.call(this, analysisData, appResources, userSettings, athleteId, athleteIdAuthorOfActivity, basicInfos);
         },
@@ -13,13 +12,18 @@ var RunningExtendedActivityDataModifier = AbstractExtendedActivityDataModifier.e
             this.placeSummaryPanel(function() {
                 // Summary panel has been placed...
                 // Add Show extended statistics to page
-
+// already done at AbstractExtendedActivityDataModifier.js
+/*
                 this.placeExtendedStatsButton(function() {
                     // Button has been placed...
                 });
-
+*/
             }.bind(this));
+
         },
+
+
+
 
 
         insertContentSummaryGridContent: function() {
@@ -30,13 +34,14 @@ var RunningExtendedActivityDataModifier = AbstractExtendedActivityDataModifier.e
             var speedUnitFactor = this.speedUnitsData[1];
             var distanceUnits = this.speedUnitsData[2];
 
+/*
             // Speed and pace
             var q3Move = '-';
             if (this.analysisData_.speedData && this.userSettings_.displayAdvancedSpeedData) {
                 q3Move = Helper.secondsToHHMMSS((this.analysisData_.paceData.upperQuartilePace / speedUnitFactor).toFixed(0)).replace('00:', '');
                 this.insertContentAtGridPosition(1, 0, q3Move, '75% Quartile Pace', '/' + distanceUnits, 'displayAdvancedSpeedData');
             }
-
+*/
             // Avg climb pace
             var climbSpeed = '-';
             if (this.analysisData_.gradeData && this.userSettings_.displayAdvancedGradeData) {
@@ -44,7 +49,7 @@ var RunningExtendedActivityDataModifier = AbstractExtendedActivityDataModifier.e
                 if (seconds) {
                     climbSpeed = Helper.secondsToHHMMSS(seconds).replace('00:', '');
                 }
-                this.insertContentAtGridPosition(1, 2, climbSpeed, 'Avg climbing pace', '/' + distanceUnits, 'displayAdvancedGradeData');
+                this.insertContentAtGridPosition(1, 0, climbSpeed, 'Avg climbing pace', '/' + distanceUnits, 'displayAdvancedGradeData');
             }
         },
 
@@ -70,8 +75,14 @@ var RunningExtendedActivityDataModifier = AbstractExtendedActivityDataModifier.e
                 runningCadenceDataView.setIsAuthorOfViewedActivity(this.isAuthorOfViewedActivity);
                 this.dataViews.push(runningCadenceDataView);
             }
-
+            
             if (this.analysisData_.gradeData && this.userSettings_.displayAdvancedGradeData) {
+/* !!!!! check this
+                var gradeDataView = new GradeDataView(this.analysisData_.gradeData, '%');
+                gradeDataView.setAppResources(this.appResources_);
+                gradeDataView.setIsAuthorOfViewedActivity(this.isAuthorOfViewedActivity);
+                this.dataViews.push(gradeDataView);
+*/
                 var runnningGradeDataView = new RunnningGradeDataView(this.analysisData_.gradeData, '%');
                 runnningGradeDataView.setAppResources(this.appResources_);
                 runnningGradeDataView.setIsAuthorOfViewedActivity(this.isAuthorOfViewedActivity);
@@ -84,7 +95,6 @@ var RunningExtendedActivityDataModifier = AbstractExtendedActivityDataModifier.e
                 elevationDataView.setIsAuthorOfViewedActivity(this.isAuthorOfViewedActivity);
                 this.dataViews.push(elevationDataView);
             }
-
         }
     }
 });

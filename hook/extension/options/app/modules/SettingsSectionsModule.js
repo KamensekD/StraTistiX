@@ -1,4 +1,4 @@
-var settingsSectionsModule = angular.module("SettingsSectionsModule", []);
+﻿var settingsSectionsModule = angular.module("SettingsSectionsModule",[]);
 
 settingsSectionsModule.data = [{
     sectionTitle: 'Activities Extended Data',
@@ -49,7 +49,7 @@ settingsSectionsModule.data = [{
         optionType: 'checkbox',
         optionTitle: 'Elevation data',
         optionLabels: ['Cycling', 'Running'],
-        optionHtml: '<h3>Average Elevation</h3> The... average elevation of your activity :) <h3>Elevation Quartiles</h3> For understanding these indicators, we assume that 0% to 100% are all the elevations sorted ascending you obtained during an activity.</br> </br> <strong>25% Quartile</strong>: This indicator represents the elevations you maintained at the position "25%". This is commonly called "Lower quartile" or Q1.</br> </br> <strong>50% Median</strong>: This indicator represents the elevations you maintained at the position "50%". It\'s simply the median...</br> </br> <strong>75% Quartile</strong>: This indicator represents the elevations you maintai</strong>ned at the position "75%". This is commonly called "Upper quartile" or Q3. <h3>Average Ascent Speed or VAM</h3> VAM is an abbreviation for the Italian term "Velocità Ascensionale Media", translated in English to mean "average ascent speed" or "mean ascent velocity". This is basically your average ascent speed while climbing. The unit used in StravistiX to represent this indicator is "Vm/h" for vertical metres per hour. <h3>Ascent Speed Quartiles</h3> For understanding these indicators, we assume that 0% to 100% are all the ascent speeds sorted ascending you obtained during an activity.  The unit used in StravistiX to represent this indicator is "Vm/h" for vertical metres per hour.</br> </br> <strong>25% Quartile</strong>: This indicator represents the ascent speed you maintained at the position "25%". This is commonly called "Lower quartile" or Q1.</br> </br> <strong>50% Median</strong>: This indicator represents the ascent speed you maintained at the position "50%". It\'s simply the median...</br> </br> <strong>75% Quartile</strong>: This indicator represents the ascent speed you maintained at the position "75%". This is commonly called "Upper quartile" or Q3.',
+        optionHtml: '<h3>Average Elevation</h3> The... average elevation of your activity :) <h3>Elevation Quartiles</h3> For understanding these indicators, we assume that 0% to 100% are all the elevations sorted ascending you obtained during an activity.</br> </br> <strong>25% Quartile</strong>: This indicator represents the elevations you maintained at the position "25%". This is commonly called "Lower quartile" or Q1.</br> </br> <strong>50% Median</strong>: This indicator represents the elevations you maintained at the position "50%". It\'s simply the median...</br> </br> <strong>75% Quartile</strong>: This indicator represents the elevations you maintai</strong>ned at the position "75%". This is commonly called "Upper quartile" or Q3. <h3>Average Ascent Speed or VAM</h3> VAM is an abbreviation for the Italian term "Velocità Ascensionale Media", translated in English to mean "average ascent speed" or "mean ascent velocity". This is basically your average ascent speed while climbing. The unit used in StraTistiX to represent this indicator is "Vm/h" for vertical metres per hour. <h3>Ascent Speed Quartiles</h3> For understanding these indicators, we assume that 0% to 100% are all the ascent speeds sorted ascending you obtained during an activity.  The unit used in StravistiX to represent this indicator is "Vm/h" for vertical metres per hour.</br> </br> <strong>25% Quartile</strong>: This indicator represents the ascent speed you maintained at the position "25%". This is commonly called "Lower quartile" or Q1.</br> </br> <strong>50% Median</strong>: This indicator represents the ascent speed you maintained at the position "50%". It\'s simply the median...</br> </br> <strong>75% Quartile</strong>: This indicator represents the ascent speed you maintained at the position "75%". This is commonly called "Upper quartile" or Q3.',
     }]
 }, {
     sectionTitle: 'Activity viewing options',
@@ -59,7 +59,7 @@ settingsSectionsModule.data = [{
         optionTitle: 'Enable both legs extended cadence data',
         optionLabels: ['Running'],
         optionHtml: 'This will display StravistiX extended cadence data for 2 legs instead of 1 e.g 180 SPM, not 90 SPM.',
-    }, {
+    },{
         optionKey: 'displayBikeOdoInActivity',
         optionType: 'checkbox',
         optionTitle: 'Enable bike odo display',
@@ -77,22 +77,6 @@ settingsSectionsModule.data = [{
         optionTitle: 'Enable Heart Rate graph',
         optionLabels: ['Running'],
         optionHtml: 'Activate running heart rate by default in running activity analysis.<br /><br /><img src="img/activateRunningHeartRate.png"/>',
-    }, {
-        optionKey: 'activityGoogleMapType',
-        optionType: 'list',
-        optionLabels: ['All'],
-        optionList: [{
-            key: 'terrain',
-            name: 'Terrain'
-        }, {
-            key: 'standard',
-            name: 'Standard'
-        }, {
-            key: 'satellite',
-            name: 'Satellite'
-        }],
-        optionTitle: 'Default Map type in activity page',
-        optionHtml: 'Do what title describes...',
     }, {
         optionKey: 'displaySegmentTimeComparisonToKOM',
         optionType: 'checkbox',
@@ -132,6 +116,60 @@ settingsSectionsModule.data = [{
         optionTitle: 'Default Google Maps layer type',
         optionHtml: 'Do what title describes...',
     }, {
+        optionKey: 'customMapboxStyle',
+        optionType: 'list',
+        optionTitle: 'Custom Mapbox Style',
+        optionLabels: ['All'],
+        optionList: [{
+            key: 'mapbox.streets',
+            name: 'Mapbox Streets'
+        },{
+            key: 'mapbox.light',
+            name: 'Mapbox Light'
+        },{
+            key: 'mapbox.dark',
+            name: 'Mapbox Dark'
+        },{
+            key: 'mapbox.satellite',
+            name: 'Mapbox Satellite'
+        },{
+            key: 'mapbox.streets-satellite',
+            name: 'Mapbox Streets-Satellite'
+        },{
+            key: 'mapbox.wheatpaste',
+            name: 'Mapbox Wheatpaste'
+        },{
+            key: 'mapbox.streets-basic',
+            name: 'Mapbox Streets-Basic'
+        },{
+            key: 'mapbox.comic',
+            name: 'Mapbox Comic'
+        },{
+            key: 'mapbox.outdoors',
+            name: 'Mapbox Outdoors'
+        },{
+            key: 'mapbox.run-bike-hike',
+            name: 'Mapbox Run-Bike-Hike'
+        },{
+            key: 'mapbox.pencil',
+            name: 'Mapbox Pencil'
+        },{
+            key: 'mapbox.pirates',
+            name: 'Mapbox Pirates'
+        },{
+            key: 'mapbox.emerald',
+            name: 'Mapbox Emerald'
+        },{
+            key: 'mapbox.high-contrast',
+            name: 'Mapbox High-Contrast'
+        },{
+            key: 'papics.ca6cf1f9',
+            name: 'Papics'
+        },{
+            key: 'kamac.e58a8d34',
+            name: 'custom'
+        }],
+        optionHtml: 'Mapbox Style ID that is used to replace "Standard Map" background map.<br /><br/>Look at: <a href="http://www.mapbox.com/developers/api/maps/#mapids">www.mapbox.com/developers/api/maps/#mapids</a> and <a href="http://www.mapbox.com/editor/#style">www.mapbox.com/editor/#style</a> for details<br/><br/>Use <b>custom</b> to set user defined style. You can create Your own style with Mapbox free account!<br />',
         optionKey: 'displayActivityBestSplits',
         optionType: 'checkbox',
         optionTitle: 'Enable best splits into your cycling activities',

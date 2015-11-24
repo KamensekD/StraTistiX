@@ -13,7 +13,7 @@
                         Max heartrate
                     </td>
                     <td>
-                        <input name="userMaxHr" type="number" min="{{userRestHr + 10}}" max="300" class="form-control input-lg" data-ng-model="userMaxHr" placeholder="Enter max HR" data-ng-change="userMaxHrChanged()" data-ng-keydown="avoidInputKeyEdit($event)" data-popover="Use arrows &#8645; to set your MAX heart rate in beat per minute (bpm)." data-popover-trigger="mouseenter"></input>
+                        <input name="userMaxHr" type="number" min="{{userRestHr + 10}}" max="250" class="form-control input-lg" data-ng-model="userMaxHr" placeholder="Enter max HR" data-ng-change="userMaxHrChanged()" data-ng-keydown="avoidInputKeyEdit($event)" data-popover="Use arrows &#8645; to set your MAX heart rate in beat per minute (bpm)." data-popover-trigger="mouseenter"></input>
                     </td>
                     <td class="hint">
                         <button data-popover="Click for help" data-popover-trigger="mouseenter" class="btn btn-default" data-ng-click="displayUserMaxHrHelper()">Hint</button>

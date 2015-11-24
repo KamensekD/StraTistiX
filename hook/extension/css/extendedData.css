@@ -3,23 +3,22 @@
     padding: 0;
     border-spacing: 0px;
 }
-
 .stravistiXExtendedData td {
     text-align: center;
     padding: 3px;
 }
-
 .stravistiXExtendedData div {
     display: inline-block;
     vertical-align: middle;
-    padding-right: 15px;
+    padding: 2px;
 }
+
 /* Remove padding on grid for featured data */
 
 .stravistiXExtendedData .featuredData .grid td {
     padding-bottom: 0px;
     max-width: 200px;
-    padding-right: 30px;
+    padding-right: 25px;
 }
 
 .stravistiXExtendedData .distributionGraphTitle {
@@ -28,35 +27,28 @@
     font-size: 16px;
     font-style: italic;
 }
-
 .stravistiXExtendedData .distributionTable tr:hover {
     background-color: #ffff99;
 }
-
 .stravistiXExtendedData .grid {
-    font-size: 22px;
+    font-size: 21px;
 }
-
 .stravistiXExtendedData .grid td {
     text-align: left;
     border: 0px;
-    padding-bottom: 30px;
+    padding-bottom: 25px;
 }
-
 .stravistiXExtendedData .gridDataContainer {
     cursor: pointer;
 }
-
 .stravistiXExtendedData .gridUnits {
     font-size: 14px;
     text-transform: uppercase;
 }
-
 .stravistiXExtendedData .gridTitle {
     font-size: 14px;
     cursor: pointer;
 }
-
 .stravistiXExtendedData .grid td {
     max-width: 100px;
 }
@@ -91,5 +83,3 @@
     font-size: small;
     font-weight: normal;
 }
-
-

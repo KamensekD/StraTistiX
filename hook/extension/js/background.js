@@ -42,14 +42,13 @@ chrome.runtime.onInstalled.addListener(function(details) {
     if (details.reason == "install") {
 
         chrome.tabs.create({
-            url: 'http://thomaschampagne.github.io/stravistix/'
+
+            url: chrome.extension.getURL('/options/app/index.html#/')
+
         }, function(tab) {
-            console.log("First install. Display site");
-            chrome.tabs.create({
-                url: chrome.extension.getURL('/options/app/index.html#/')
-            }, function(tab) {
-                console.log("First install. Display settings");
-            });
+
+            console.log("First install. Display settings");
+
         });
 
         // On install too: persist that extension has been updated.

@@ -5,21 +5,21 @@ app.controller("XtdZonesSettingsController", function($scope) {
         name: 'Cycling Speed',
         value: 'speed',
         units: 'KPH',
-        step: 0.1,
+        step: 1,
         min: 0,
-        max: 9999
+        max: 999
     }, {
         name: 'Running Pace',
         value: 'pace',
         units: 'Seconds', // s/mi?!
-        step: 1,
+        step: 5,
         min: 0,
-        max: 9999
+        max: 999
     }, {
         name: 'Cycling Power',
         value: 'power',
         units: 'Watts',
-        step: 1,
+        step: 10,
         min: 0,
         max: 9999
     }, {
@@ -28,26 +28,26 @@ app.controller("XtdZonesSettingsController", function($scope) {
         units: 'RPM',
         step: 1,
         min: 0,
-        max: 9999
+        max: 999
     }, {
         name: 'Running Cadence',
         value: 'runningCadence',
         units: 'SPM',
-        step: 0.1,
+        step: 1,
         min: 0,
-        max: 9999
+        max: 999
     }, {
         name: 'Grade',
         value: 'grade',
         units: '%',
-        step: 0.1,
-        min: -9999,
-        max: 9999
+        step: 1,
+        min: -100,
+        max: 100
     }, {
         name: 'Elevation',
         value: 'elevation',
         units: 'm',
-        step: 5,
+        step: 10,
         min: 0,
         max: 9999
     }];

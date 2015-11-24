@@ -7,16 +7,21 @@ function ActivityProcessor(vacuumProcessor, userHrrZones, zones) {
     this.zones = zones;
 }
 
-ActivityProcessor.movingThresholdKph = 3.5; // Kph
+// *** PUT THIS STUFF IN CONFIGURABLE SETTINGS!
+//ActivityProcessor.movingThresholdKph = 3.5; // Kph
+ActivityProcessor.movingThresholdKph = 2.5; // Kph
 ActivityProcessor.cadenceThresholdRpm = 35; // RPMs
 ActivityProcessor.cadenceLimitRpm = 125;
 ActivityProcessor.defaultBikeWeight = 10; // KGs
 ActivityProcessor.cachePrefix = 'stravistix_activity_';
-ActivityProcessor.gradeClimbingLimit = 1.6;
-ActivityProcessor.gradeDownHillLimit = -1.6;
+ActivityProcessor.gradeClimbingLimit = 2.5;
+ActivityProcessor.gradeDownHillLimit = -2.5;
+//ActivityProcessor.gradeClimbingLimit = 1.6;
+//ActivityProcessor.gradeDownHillLimit = -1.6;
 ActivityProcessor.gradeProfileFlatPercentageDetected = 60;
 ActivityProcessor.gradeProfileFlat = 'FLAT';
 ActivityProcessor.gradeProfileHilly = 'HILLY';
+// make also "a bit hilly" and "mountanous"
 
 
 /**
@@ -70,6 +75,7 @@ ActivityProcessor.prototype = {
         var toughnessScore = this.toughnessScore_(activityStatsMap, activityStream, moveRatio);
 
         // Include speed and pace
+//        var moveData = this.moveData_(activityStatsMap, activityStream.velocity_smooth, activityStream.time);
         var moveData = [null, null];
         if (activityStream.velocity_smooth) {
             moveData = this.moveData_(activityStatsMap, activityStream.velocity_smooth, activityStream.time);
@@ -79,12 +85,14 @@ ActivityProcessor.prototype = {
         // Median Speed
         // Q3 Speed
         // Standard deviation Speed
+//        if (moveData) var speedData = moveData[0];
         var speedData = (_.isEmpty(moveData)) ? null : moveData[0];
 
         // Q1 Pace
         // Median Pace
         // Q3 Pace
         // Standard deviation Pace
+//        if (moveData) var paceData = moveData[1];
         var paceData = (_.isEmpty(moveData)) ? null : moveData[1];
 
         // Estimated Normalized power
@@ -108,7 +116,8 @@ ActivityProcessor.prototype = {
 
 
         // Avg grade
-        // Q1/Q2/Q3 grade
+        // Q1/Q2/Q grade
+//        var gradeData = this.gradeData_(activityStream.grade_smooth, activityStream.time);
         var gradeData = this.gradeData_(activityStream.grade_smooth, activityStream.velocity_smooth, activityStream.time);
 
         // Avg grade
@@ -129,6 +138,8 @@ ActivityProcessor.prototype = {
         };
     },
 
+
+
     /**
      * ...
      */
@@ -137,16 +148,15 @@ ActivityProcessor.prototype = {
         if (_.isNull(activityStatsMap.movingTime) || _.isNull(activityStatsMap.elapsedTime)) {
             Helper.log('WARN', 'Unable to compute ActivityRatio on this activity with following data: ' + JSON.stringify(activityStatsMap))
             return null;
+//						return 1;
         }
-
-        var ratio = activityStatsMap.movingTime / activityStatsMap.elapsedTime;
-
-        if (_.isNaN(ratio)) {
-            return null;
-        }
-
+				if (activityStatsMap.movingTime) {
+	        var ratio = activityStatsMap.movingTime / activityStatsMap.elapsedTime;
+      	}
         return ratio;
     },
+
+
 
     /**
      * ...
@@ -200,6 +210,7 @@ ActivityProcessor.prototype = {
      */
     moveData_: function(activityStatsMap, velocityArray, timeArray) {
 
+//        if (!velocityArray) {
         if (_.isEmpty(velocityArray) || _.isEmpty(timeArray)) {
             return null;
         }
@@ -209,6 +220,10 @@ ActivityProcessor.prototype = {
         var speedsNonZero = Array();
         var speedVarianceSum = 0;
         var currentSpeed;
+
+		var realAvgSpeed = 3600 * activityStatsMap.distance / activityStatsMap.elapsedTime;
+        var maxSpeed = _.max(velocityArray) * 3.6;
+        var minSpeed = _.min(velocityArray) * 3.6;
 
         var speedZones = this.prepareZonesForDistribComputation(this.zones.speed);
         var paceZones = this.prepareZonesForDistribComputation(this.zones.pace);
@@ -273,14 +288,16 @@ ActivityProcessor.prototype = {
 
         return [{
             'genuineAvgSpeed': genuineAvgSpeed,
+            'realAvgSpeed': realAvgSpeed,
             'avgPace': parseInt(((1 / genuineAvgSpeed) * 60 * 60).toFixed(0)), // send in seconds
             'lowerQuartileSpeed': Helper.lowerQuartile(speedsNonZeroSorted),
             'medianSpeed': Helper.median(speedsNonZeroSorted),
             'upperQuartileSpeed': Helper.upperQuartile(speedsNonZeroSorted),
             'varianceSpeed': varianceSpeed,
             'standardDeviationSpeed': standardDeviationSpeed,
-            'speedZones': speedZones
-        }, {
+            'speedZones': speedZones,
+            'maxSpeed': maxSpeed
+    	}, {
             'lowerQuartilePace': this.convertSpeedToPace(Helper.lowerQuartile(speedsNonZeroSorted)),
             'medianPace': this.convertSpeedToPace(Helper.median(speedsNonZeroSorted)),
             'upperQuartilePace': this.convertSpeedToPace(Helper.upperQuartile(speedsNonZeroSorted)),
@@ -288,6 +305,9 @@ ActivityProcessor.prototype = {
             'paceZones': paceZones
         }];
     },
+
+
+
 
     /**
      * @param speed in kph
@@ -297,11 +317,14 @@ ActivityProcessor.prototype = {
         return (speed === 0) ? 'infinite' : parseInt((1 / speed) * 60 * 60);
     },
 
+
+
     /**
      * ...
      */
     powerData_: function(athleteWeight, hasPowerMeter, userFTP, activityStatsMap, powerArray, velocityArray, timeArray) {
 
+//        if (_.isEmpty(powerArray) || _.isEmpty(velocityArray)) {
         if (_.isEmpty(powerArray) || _.isEmpty(velocityArray) || _.isEmpty(timeArray)) {
             return null;
         }
@@ -378,22 +401,28 @@ ActivityProcessor.prototype = {
 
     },
 
+
+
     /**
      * ...
      */
     heartRateData_: function(userGender, userRestHr, userMaxHr, heartRateArray, timeArray, activityStatsMap) {
 
+//        if (_.isUndefined(heartRateArray)) {
         if (_.isEmpty(heartRateArray) || _.isEmpty(timeArray)) {
             return null;
         }
 
         var TRIMP = 0;
         var TRIMPGenderFactor = (userGender == 'men') ? 1.92 : 1.67;
+        var aRPEeGenderFactor = (userGender == 'men') ? 25 : 20;
         var hrrSecondsCount = 0;
         var hrrZonesCount = Object.keys(this.userHrrZones_).length;
         var hr, heartRateReserveAvg, durationInSeconds, durationInMinutes, zoneId;
         var hrSum = 0;
         var hrCount = 0;
+	var maxHeartRate = Math.max.apply(Math, heartRateArray);
+	activityStatsMap.maxHeartRate=maxHeartRate;
 
         // Find HR for each Hrr of each zones
         for (var zone in this.userHrrZones_) {
@@ -420,7 +449,7 @@ ActivityProcessor.prototype = {
 
                 // TRIMP += durationInMinutes * heartRateReserveAvg * Math.pow(0.64, TRIMPGenderFactor * heartRateReserveAvg);
                 TRIMP += durationInMinutes * heartRateReserveAvg * 0.64 * Math.exp(TRIMPGenderFactor * heartRateReserveAvg);
-
+								
                 // Count Heart Rate Reserve distribution
                 zoneId = this.getHrrZoneId(hrrZonesCount, heartRateReserveAvg * 100);
 
@@ -442,25 +471,44 @@ ActivityProcessor.prototype = {
             this.userHrrZones_[zone]['percentDistrib'] = ((this.userHrrZones_[zone]['s'] / hrrSecondsCount).toFixed(4) * 100);
         }
 
-        activityStatsMap.averageHeartRate = hrSum / hrCount;
-        activityStatsMap.maxHeartRate = heartRateArraySorted[heartRateArraySorted.length - 1];
+        activityStatsMap.averageHeartRate = Math.round((hrSum / hrCount)*10)/10;
+
+	TRIMP = Math.round(TRIMP*10)/10;
+// using of moving time sometimes results in too big TRIMP/hr numbers, but it mostly works OK for biking (Ride)
+// because moving time is detected a lot more reliable than for example in running uphill
+//	if (activityStatsMap.movingTime && (window.activityType == 'Ride')) {
+//		var TRIMP_hr = TRIMP/(activityStatsMap.movingTime/3600);
+//	}else{
+//		var TRIMP_hr = TRIMP/(activityStatsMap.elapsedTime/3600);
+//	}
+//	var TRIMP_hr = Math.round((TRIMP/(activityStatsMap.elapsedTime/3600))*10)/10;
+//
+// when calculating TRIMP, non-movin time HR should count in for TRIMP!
 
         var TRIMPPerHour = TRIMP / hrrSecondsCount * 60 * 60;
+        var TRIMP_hr = Math.round(TRIMPPerHour*10)/10;
 
         return {
             'TRIMP': TRIMP,
+		'TRIMP_hr': TRIMP_hr,
+		'aRPEe': Math.round((TRIMP_hr / aRPEeGenderFactor)*10)/10,
             'TRIMPPerHour': TRIMPPerHour,
             'hrrZones': this.userHrrZones_,
             'lowerQuartileHeartRate': Helper.lowerQuartile(heartRateArraySorted),
             'medianHeartRate': Helper.median(heartRateArraySorted),
             'upperQuartileHeartRate': Helper.upperQuartile(heartRateArraySorted),
             'averageHeartRate': activityStatsMap.averageHeartRate,
-            'maxHeartRate': activityStatsMap.maxHeartRate,
-            'activityHeartRateReserve': Helper.heartRateReserveFromHeartrate(activityStatsMap.averageHeartRate, userMaxHr, userRestHr) * 100,
-            'activityHeartRateReserveMax': Helper.heartRateReserveFromHeartrate(activityStatsMap.maxHeartRate, userMaxHr, userRestHr) * 100
+		'maxHeartRate': maxHeartRate,
+ //          'activityHeartRateReserve': Helper.heartRateReserveFromHeartrate(activityStatsMap.averageHeartRate, userMaxHr, userRestHr) * 100,
+             'activityHeartRateReserve': Math.round((100*Helper.heartRateReserveFromHeartrate(activityStatsMap.averageHeartRate, userMaxHr, userRestHr))*10)/10,
+            'activityHeartRateReserveMax': Helper.heartRateReserveFromHeartrate(activityStatsMap.maxHeartRate, userMaxHr, userRestHr) * 100,
+            	'MaxHr':userMaxHr,
+		'RestHr':userRestHr
         };
 
     },
+
+
 
     getHrrZoneId: function(hrrZonesCount, hrrValue) {
         for (zoneId = 0; zoneId < hrrZonesCount; zoneId++) {
@@ -470,10 +518,11 @@ ActivityProcessor.prototype = {
         }
     },
 
-    cadenceData_: function(cadenceArray, velocityArray, activityStatsMap, timeArray) {
+    cadenceData_: function(cadenceArray, velocityArray, activityStatsMap, timeArray) { // TODO add cadence type here
 
+//        if (_.isUndefined(cadenceArray) || _.isUndefined(velocityArray)) {
         if (_.isEmpty(cadenceArray) || _.isEmpty(velocityArray) || _.isEmpty(timeArray)) {
-            return null;
+          return null;
         }
 
         // On Moving
@@ -532,7 +581,6 @@ ActivityProcessor.prototype = {
         var cadenceRatioOnMovingTime = cadenceOnMoveSampleCount / movingSampleCount;
         var averageCadenceOnMovingTime = cadenceSumOnMoving / cadenceOnMovingCount;
 
-
         var varianceCadence = (cadenceVarianceSumOnMoving / cadenceOnMoveSampleCount) - Math.pow(averageCadenceOnMovingTime, 2);
         var standardDeviationCadence = (varianceCadence > 0) ? Math.sqrt(varianceCadence) : 0;
 
@@ -558,11 +606,15 @@ ActivityProcessor.prototype = {
         };
     },
 
+
+
     gradeData_: function(gradeArray, velocityArray, timeArray) {
 
+//        if (_.isEmpty(gradeArray) || _.isEmpty(timeArray)) {
         if (_.isEmpty(gradeArray) || _.isEmpty(velocityArray) || _.isEmpty(timeArray)) {
             return null;
         }
+
 
         // If home trainer
         if (window.pageView && window.pageView.activity && window.pageView.activity().get('trainer')) {
@@ -579,6 +631,10 @@ ActivityProcessor.prototype = {
             down: 0,
             total: 0
         };
+
+
+        var maxGrade = _.max(gradeArray);
+        var minGrade = _.min(gradeArray);
 
         // Currently deals with avg speed/pace
         var upFlatDownMoveData = {
@@ -633,7 +689,7 @@ ActivityProcessor.prototype = {
                     }
                 }
             }
-        }
+       	}
 
         upFlatDownInSeconds.total = durationCount;
 
@@ -669,11 +725,12 @@ ActivityProcessor.prototype = {
             'gradeZones': gradeZones,
             'upFlatDownInSeconds': upFlatDownInSeconds,
             'upFlatDownMoveData': upFlatDownMoveData,
-            'gradeProfile': gradeProfile
+            'gradeProfile': gradeProfile,
+            'maxGrade': maxGrade
         };
 
     },
-
+    
     elevationData_: function(altitudeArray, gradeArray, timeArray) {
 
         if (_.isEmpty(altitudeArray) || _.isEmpty(gradeArray) || _.isEmpty(timeArray)) {
@@ -763,6 +820,8 @@ ActivityProcessor.prototype = {
             'elevationZones': elevationZones, // Only while moving
             'ascentSpeed': {
                 'avg': avgAscentSpeed,
+// preveri !!! ne dela ok pri vseh hiking	https://www.strava.com/activities/119185669	?
+//											https://www.strava.com/activities/214252443	OK
                 'lowerQuartile': Helper.lowerQuartile(ascentSpeedMeterPerHourSamplesSorted).toFixed(0),
                 'median': Helper.median(ascentSpeedMeterPerHourSamplesSorted).toFixed(0),
                 'upperQuartile': Helper.upperQuartile(ascentSpeedMeterPerHourSamplesSorted).toFixed(0)

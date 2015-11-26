@@ -184,7 +184,7 @@ VacuumProcessor.prototype = {
     /**
      * @returns Common activity stats given by Strava throught right panel
      */
-    getActivityCommonStats: function getActivityStats(activityStream) {
+    getActivityCommonStats: function () {
 
         var actStatsContainer = $(".activity-summary-container");
 
@@ -364,7 +364,9 @@ VacuumProcessor.prototype = {
             'averageSpeed': averageSpeed,
 //            'averageHeartRate': averageHeartRate,	// calculated in ActivityProcessor.js
 //            'maxHeartRate': maxHeartRate					// calculated in ActivityProcessor.js
-            'altitude_smooth': altitude_smooth,
+//            'altitude_smooth': altitude_smooth,
+            'averageHeartRate': averageHeartRate,
+            'maxHeartRate': maxHeartRate
         };
     },
 

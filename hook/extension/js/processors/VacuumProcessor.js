@@ -349,7 +349,9 @@ VacuumProcessor.prototype = {
 */
 
 
-        var altitude_smooth = this.smoothAltitude_(activityStream, elevation);
+        if (typeof elevation !== 'undefined') {
+        	var altitude_smooth = this.smoothAltitude_(activityStream, elevation);
+        }
 
         // Create activityData Map
         return {

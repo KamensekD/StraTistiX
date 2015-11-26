@@ -83,6 +83,49 @@ Helper.weightedPercentiles = function(values, weights, percentiles) {
     return result;
 };
 
+
+
+
+
+Helper.median = function(valuesSorted) {
+    var half = Math.floor(valuesSorted.length / 2);
+    if (valuesSorted.length % 2)
+        return valuesSorted[half];
+    else
+        return (valuesSorted[half - 1] + valuesSorted[half]) / 2.0;
+};
+
+
+Helper.upperQuartile = function(valuesSorted) {
+	if(valuesSorted.length<3) return (0);
+//	if(valuesSorted.length<3) return ("-");
+	if(Helper.isEven(valuesSorted.length)) { 
+		var valuesSortedUpperHalf=valuesSorted.slice(valuesSorted.length/2);
+	} else {
+		var valuesSortedUpperHalf=valuesSorted.slice((valuesSorted.length+1)/2);
+	}
+	return Helper.median(valuesSortedUpperHalf);
+//    var q3 = Math.round(0.75 * (valuesSorted.length + 1));
+//    return (valuesSorted[q3]);
+};
+
+Helper.lowerQuartile = function(valuesSorted) {
+	if(valuesSorted.length<3) return (0);
+//	if(valuesSorted.length<3) return ("-");
+	if(Helper.isEven(valuesSorted.length)) {
+		var valuesSortedLowerHalf=valuesSorted.slice(0,valuesSorted.length/2);
+	} else {
+		var valuesSortedLowerHalf=valuesSorted.slice(0,(valuesSorted.length-1)/2);
+	}
+	return Helper.median(valuesSortedLowerHalf);
+//    var q1 = Math.round(0.25 * (valuesSorted.length + 1));
+//    return (valuesSorted[q1]);
+};
+
+
+
+
+
 // Use abstract equality == for "is number" test
 Helper.isEven = function(n) {
     return n == parseFloat(n) ? !(n % 2) : void 0;

@@ -57,7 +57,9 @@ ActivityProcessor.prototype = {
         this.vacuumProcessor_.getActivityStream(function(activityStatsMap, activityStream, athleteWeight, hasPowerMeter) { // Get stream on page
 
             // Append altitude_smooth to fetched strava activity stream before compute analysis data on
-            activityStream.altitude_smooth = this.smoothAltitude_(activityStream, activityStatsMap.elevation);
+            if (typeof activityStatsMap.elevation !== 'undefined') {
+	            activityStream.altitude_smooth = this.smoothAltitude_(activityStream, activityStatsMap.elevation);
+        	}
 
             var result = this.computeAnalysisData_(userGender, userRestHr, userMaxHr, userFTP, athleteWeight, hasPowerMeter, activityStatsMap, activityStream);
 
@@ -424,9 +426,101 @@ ActivityProcessor.prototype = {
      */
     heartRateData_: function(userGender, userRestHr, userMaxHr, heartRateArray, timeArray, velocityArray, activityStatsMap) {
 
-        if (_.isEmpty(heartRateArray) || _.isEmpty(timeArray) || _.isEmpty(velocityArray)) {
+        if (_.isEmpty(heartRateArray) || _.isEmpty(timeArray) ) {
             return null;
         }
+
+	if (_.isEmpty(velocityArray)) {  // if no velocity data, compute heartrate stats "the old way" - this is for activities with no GPS data, only sensors
+
+
+
+
+
+        var TRIMP = 0;
+        var TRIMPGenderFactor = (userGender == 'men') ? 1.92 : 1.67;
+        var aRPEeGenderFactor = (userGender == 'men') ? 25 : 20;
+        var hrrSecondsCount = 0;
+        var hrrZonesCount = Object.keys(this.userHrrZones_).length;
+        var hr, heartRateReserveAvg, durationInSeconds, durationInMinutes, zoneId;
+        var hrSum = 0;
+        var hrCount = 0;
+	var maxHeartRate = Math.max.apply(Math, heartRateArray);
+	activityStatsMap.maxHeartRate=maxHeartRate;
+
+        // Find HR for each Hrr of each zones
+        for (var zone in this.userHrrZones_) {
+            this.userHrrZones_[zone]['fromHr'] = parseFloat(Helper.heartrateFromHeartRateReserve(this.userHrrZones_[zone]['fromHrr'], userMaxHr, userRestHr));
+            this.userHrrZones_[zone]['toHr'] = parseFloat(Helper.heartrateFromHeartRateReserve(this.userHrrZones_[zone]['toHrr'], userMaxHr, userRestHr));
+            this.userHrrZones_[zone]['fromHrr'] = parseFloat(this.userHrrZones_[zone]['fromHrr']);
+            this.userHrrZones_[zone]['toHrr'] = parseFloat(this.userHrrZones_[zone]['toHrr']);
+            this.userHrrZones_[zone]['s'] = 0;
+            this.userHrrZones_[zone]['percentDistrib'] = null;
+        }
+
+        for (var i = 0; i < heartRateArray.length; i++) { // Loop on samples
+
+            // Compute heartrate data
+            if (i > 0) {
+
+                hrSum += heartRateArray[i];
+
+                // Compute TRIMP
+                hr = (heartRateArray[i] + heartRateArray[i - 1]) / 2; // Getting HR avg between current sample and previous one.
+                heartRateReserveAvg = Helper.heartRateReserveFromHeartrate(hr, userMaxHr, userRestHr); //(hr - userSettings.userRestHr) / (userSettings.userMaxHr - userSettings.userRestHr);
+                durationInSeconds = (timeArray[i] - timeArray[i - 1]); // Getting deltaTime in seconds (current sample and previous one)
+                durationInMinutes = durationInSeconds / 60;
+
+                // TRIMP += durationInMinutes * heartRateReserveAvg * Math.pow(0.64, TRIMPGenderFactor * heartRateReserveAvg);
+                TRIMP += durationInMinutes * heartRateReserveAvg * 0.64 * Math.exp(TRIMPGenderFactor * heartRateReserveAvg);
+								
+                // Count Heart Rate Reserve distribution
+                zoneId = this.getHrrZoneId(hrrZonesCount, heartRateReserveAvg * 100);
+
+                if (!_.isUndefined(zoneId)) {
+                    this.userHrrZones_[zoneId]['s'] += durationInSeconds;
+                }
+
+                hrrSecondsCount += durationInSeconds;
+                hrCount++;
+            }
+        }
+
+        var heartRateArraySorted = heartRateArray.sort(function(a, b) {
+            return a - b;
+        });
+
+        // Update zone distribution percentage
+        for (var zone in this.userHrrZones_) {
+            this.userHrrZones_[zone]['percentDistrib'] = ((this.userHrrZones_[zone]['s'] / hrrSecondsCount).toFixed(4) * 100);
+        }
+
+        activityStatsMap.averageHeartRate = Math.round((hrSum / hrCount)*10)/10;
+
+	TRIMP = Math.round(TRIMP*10)/10;
+// using of moving time sometimes results in too big TRIMP/hr numbers, but it mostly works OK for biking (Ride)
+// because moving time is detected a lot more reliable than for example in running uphill
+//	if (activityStatsMap.movingTime && (window.activityType == 'Ride')) {
+//		var TRIMP_hr = TRIMP/(activityStatsMap.movingTime/3600);
+//	}else{
+//		var TRIMP_hr = TRIMP/(activityStatsMap.elapsedTime/3600);
+//	}
+//	var TRIMP_hr = Math.round((TRIMP/(activityStatsMap.elapsedTime/3600))*10)/10;
+//
+// when calculating TRIMP, non-movin time HR should count in for TRIMP!
+
+        var TRIMPPerHour = TRIMP / hrrSecondsCount * 60 * 60;
+//        var TRIMP_hr = Math.round(TRIMPPerHour*10)/10;
+//        var percentiles = Helper.weightedPercentiles(heartRateArrayMoving, heartRateArrayMovingDuration, [ 0.25, 0.5, 0.75 ]);
+		var percentiles=[];
+        percentiles[0]=Helper.lowerQuartile(heartRateArraySorted);
+        percentiles[1]=Helper.median(heartRateArraySorted);
+        percentiles[2]=Helper.upperQuartile(heartRateArraySorted);
+
+
+
+
+
+	} else {
 
         var TRIMP = 0;
         var TRIMPGenderFactor = (userGender == 'men') ? 1.92 : 1.67;
@@ -487,6 +581,8 @@ ActivityProcessor.prototype = {
 
         var TRIMPPerHour = TRIMP / hrrSecondsCount * 60 * 60;
         var percentiles = Helper.weightedPercentiles(heartRateArrayMoving, heartRateArrayMovingDuration, [ 0.25, 0.5, 0.75 ]);
+
+	} //if
 
         return {
             'TRIMP': TRIMP,

@@ -832,6 +832,7 @@ ActivityProcessor.prototype = {
         var timeArray = activityStream.time;
         var velocityArray = activityStream.velocity_smooth;
         var altitudeArray = activityStream.altitude_smooth;
+//        var altitudeArray = activityStream.altitude;
 
         if (_.isEmpty(distanceArray) || _.isEmpty(timeArray) || _.isEmpty(velocityArray) || _.isEmpty(altitudeArray)) {
             return null;
@@ -972,6 +973,7 @@ ActivityProcessor.prototype = {
                 }
             }
 
+			if (env.debugMode) console.log("ActivityProcessor: Altitude smoothing factor:" + smoothing + "   Strava Elevation:" + stravaElevation + "   Smoothed Elevation:" + totalElevation);
             if (totalElevation < stravaElevation) {
                 smoothingH = smoothing;
             } else {

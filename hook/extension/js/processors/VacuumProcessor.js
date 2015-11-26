@@ -5,8 +5,8 @@ function VacuumProcessor() {
 
 }
 
-//VacuumProcessor.movingThresholdKph = 3.5; // Kph
-VacuumProcessor.movingThresholdKph = 2.5; // Kph
+VacuumProcessor.movingThresholdKph = 3.5; // Kph
+//VacuumProcessor.movingThresholdKph = 2.5; // Kph
 
 /**
  * Define prototype
@@ -366,7 +366,7 @@ VacuumProcessor.prototype = {
             'averageSpeed': averageSpeed,
 //            'averageHeartRate': averageHeartRate,	// calculated in ActivityProcessor.js
 //            'maxHeartRate': maxHeartRate					// calculated in ActivityProcessor.js
-//            'altitude_smooth': altitude_smooth,
+            'altitude_smooth': altitude_smooth,
         };
     },
 
@@ -407,6 +407,7 @@ VacuumProcessor.prototype = {
                 }
             }
             
+			if (env.debugMode) console.log("VacuumProcessor: Altitude smoothing factor:" + smoothing + "   Strava Elevation:" + stravaElevation + "   Smoothed Elevation:" + totalElevation);
             if (totalElevation < stravaElevation) {
                 smoothingH = smoothing;
             } else {

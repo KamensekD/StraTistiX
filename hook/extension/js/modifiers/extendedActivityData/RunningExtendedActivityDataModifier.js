@@ -94,6 +94,11 @@ var RunningExtendedActivityDataModifier = AbstractExtendedActivityDataModifier.e
                 elevationDataView.setAppResources(this.appResources_);
                 elevationDataView.setIsAuthorOfViewedActivity(this.isAuthorOfViewedActivity);
                 this.dataViews.push(elevationDataView);
+                
+                var ascentSpeedDataView = new AscentSpeedDataView(this.analysisData_.elevationData, 'Vm/h');
+                ascentSpeedDataView.setAppResources(this.appResources_);
+                ascentSpeedDataView.setIsAuthorOfViewedActivity(this.isAuthorOfViewedActivity);
+                this.dataViews.push(ascentSpeedDataView);
             }
         }
     }

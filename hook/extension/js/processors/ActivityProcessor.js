@@ -315,7 +315,8 @@ ActivityProcessor.prototype = {
             'upperQuartileSpeed': percentiles[2],
             'varianceSpeed': varianceSpeed,
             'standardDeviationSpeed': standardDeviationSpeed,
-            'speedZones': speedZones
+            'speedZones': speedZones,
+            'maxSpeed': maxSpeed,
         }, {
             'lowerQuartilePace': this.convertSpeedToPace(percentiles[0]),
             'medianPace': this.convertSpeedToPace(percentiles[1]),
@@ -489,15 +490,17 @@ ActivityProcessor.prototype = {
 
         return {
             'TRIMP': TRIMP,
-		'TRIMP_hr': TRIMP_hr,
-		'aRPEe': Math.round((TRIMP_hr / aRPEeGenderFactor)*10)/10,
+//		'TRIMP_hr': TRIMP_hr,
+//		'aRPEe': Math.round((TRIMP_hr / aRPEeGenderFactor)*10)/10,
+		'aRPEe': Math.round((TRIMPPerHour / aRPEeGenderFactor)*10)/10,
             'TRIMPPerHour': TRIMPPerHour,
             'hrrZones': this.userHrrZones_,
             'lowerQuartileHeartRate': percentiles[0],
             'medianHeartRate': percentiles[1],
             'upperQuartileHeartRate': percentiles[2],
             'averageHeartRate': activityStatsMap.averageHeartRate,
-		'maxHeartRate': maxHeartRate,
+//		'maxHeartRate': maxHeartRate,
+		'maxHeartRate': activityStatsMap.maxHeartRate,
  //          'activityHeartRateReserve': Helper.heartRateReserveFromHeartrate(activityStatsMap.averageHeartRate, userMaxHr, userRestHr) * 100,
              'activityHeartRateReserve': Math.round((100*Helper.heartRateReserveFromHeartrate(activityStatsMap.averageHeartRate, userMaxHr, userRestHr))*10)/10,
             'activityHeartRateReserveMax': Helper.heartRateReserveFromHeartrate(activityStatsMap.maxHeartRate, userMaxHr, userRestHr) * 100,
@@ -843,7 +846,6 @@ ActivityProcessor.prototype = {
             'ascentSpeedZones': ascentSpeedZones, // Only while moving
             'ascentSpeed': {
                 'avg': avgAscentSpeed,
-<<<<<<< HEAD
 // preveri !!! ne dela ok pri vseh hiking	https://www.strava.com/activities/119185669	?
 //											https://www.strava.com/activities/214252443	OK
                 'lowerQuartile': percentilesAscent[0].toFixed(0),

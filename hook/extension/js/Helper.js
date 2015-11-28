@@ -239,13 +239,13 @@ Helper.csv = function(export_array) {
 	index=0;
 	index1=0;
 	for (val of Keys) {
-		if (typeof (StravaStreams[Keys[index]]) !== 'undefined') {
+		if (typeof StravaStreams[Keys[index]] !== 'undefined') {
 			KeysExp[index1++]=Keys[index];
-			Sizes[index]= (typeof (StravaStreams[Keys[index]][0]).length == 'undefined') ? 1 : (StravaStreams[val][0]).length;
+			Sizes[index]= (typeof StravaStreams[Keys[index]][0].length === 'undefined') ? 1 : (StravaStreams[val][0]).length;
 			console.log(index+1+": "+val+" ("+Sizes[index++]+")");
 		} else index++;
 //		console.log(index+1+": "+val+" ("+Sizes[index++]+")");
-//		console.log(index+1+": "+val+" ("+ (typeof Sizes[index++] == 'undefined') ? "-" : Sizes[index++]  +")");
+//		console.log(index+1+": "+val+" ("+ (typeof Sizes[index++] === 'undefined') ? "-" : Sizes[index++]  +")");
 	}
 
 	for (index = 0; index < KeysExp.length; index++) {

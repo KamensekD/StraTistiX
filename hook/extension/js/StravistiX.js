@@ -738,8 +738,8 @@ StravistiX.prototype = {
 		// ** manually refresh activity segment page if you want to move away footer **
 		fh=document.getElementsByClassName("run segments-list")[0].offsetHeight;
 		if (env.debugMode) console.log("Moving footer out of way..."+fh);
-		$('footer')[1].setAttribute("style", "position: relative; top: "+(fh-300)+"px; opacity: 0.33;");
-		$('footer')[2].setAttribute("style", "position: relative; top: "+(300)+"px; opacity: 0.33;");
+		if ( typeof $('footer')[1] !== 'undefined' )   $('footer')[1].setAttribute("style", "position: relative; top: "+(fh-300)+"px; opacity: 0.33;");
+		if ( typeof $('footer')[2] !== 'undefined' )   $('footer')[2].setAttribute("style", "position: relative; top: "+(300)+"px; opacity: 0.33;");
     },
 
 

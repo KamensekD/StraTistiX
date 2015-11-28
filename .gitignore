@@ -4,3 +4,4 @@
 dist/
 builds/
 chrome-win32/
+*.bak

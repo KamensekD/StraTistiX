@@ -72,8 +72,8 @@ Geo.toDMS = function(deg, format, dp) {
   if (isNaN(deg)) return 'NaN';  // give up here if we can't make a number from deg
   
     // default values
-  if (typeof format == 'undefined') format = 'dms';
-  if (typeof dp == 'undefined') {
+  if (typeof format === 'undefined') format = 'dms';
+  if (typeof dp === 'undefined') {
     switch (format) {
       case 'd': dp = 4; break;
       case 'dm': dp = 2; break;

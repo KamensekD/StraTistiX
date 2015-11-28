@@ -17,7 +17,7 @@
  * @param {Number} [rad=6371]: radius of earth if different value is required from standard 6,371km
  */
 function LatLon(lat, lon, rad) {
-  if (typeof rad == 'undefined') rad = 6371;  // earth's mean radius in km
+  if (typeof rad === 'undefined') rad = 6371;  // earth's mean radius in km
   this._lat = lat;
   this._lon = lon;
   this._radius = rad;
@@ -37,7 +37,7 @@ function LatLon(lat, lon, rad) {
  */
 LatLon.prototype.distanceTo = function(point, precision) {
   // default 4 sig figs reflects typical 0.3% accuracy of spherical model
-  if (typeof precision == 'undefined') precision = 4;  
+  if (typeof precision === 'undefined') precision = 4;  
   
   var R = this._radius;
   var lat1 = this._lat.toRad(), lon1 = this._lon.toRad();
@@ -289,7 +289,7 @@ LatLon.prototype.rhumbDestinationPoint = function(brng, dist) {
  * @requires Geo
  */
 LatLon.prototype.lat = function(format, dp) {
-  if (typeof format == 'undefined') return this._lat;
+  if (typeof format === 'undefined') return this._lat;
   
   return Geo.toLat(this._lat, format, dp);
 };
@@ -305,7 +305,7 @@ LatLon.prototype.lat = function(format, dp) {
  * @requires Geo
  */
 LatLon.prototype.lon = function(format, dp) {
-  if (typeof format == 'undefined') return this._lon;
+  if (typeof format === 'undefined') return this._lon;
   
   return Geo.toLon(this._lon, format, dp);
 };
@@ -330,7 +330,7 @@ LatLon.prototype.boundingBox = function (distance)
  * @requires Geo
  */
 LatLon.prototype.toString = function(format, dp) {
-  if (typeof format == 'undefined') format = 'dms';
+  if (typeof format === 'undefined') format = 'dms';
   
   return Geo.toLat(this._lat, format, dp) + ', ' + Geo.toLon(this._lon, format, dp);
 };

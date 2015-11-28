@@ -307,7 +307,7 @@ VacuumProcessor.prototype = {
         break;
 			}
 
-        if (typeof averageSpeed == 'undefined') {
+        if (typeof averageSpeed === 'undefined') {
             averageSpeed = this.formatActivityDataValue_(			// If no average speed availabe, try to get pace instead and transform to speed
                 $('[class*="inline-stats section"]').children().first().next().next().children().text()
 //                $('[data-glossary-term*=definition-moving-time]').parent().parent().first().next().children().text()

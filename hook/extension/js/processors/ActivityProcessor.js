@@ -892,7 +892,7 @@ ActivityProcessor.prototype = {
                     var ascentSpeedMeterPerHour = elevationDiff / ascentDurationInSeconds * 3600; // m climbed / seconds
 
                     // only if grade is > 3%
-                    if (distance > 0 && (elevationDiff / distance) > 0.03) {
+                    if (distance > 0 && (elevationDiff / distance) > 0.01) {
                         accumulatedDistance += distanceArray[i] - distanceArray[i - 1];
                         ascentSpeedMeterPerHourSamples.push(ascentSpeedMeterPerHour);
                         ascentSpeedMeterPerHourDistance.push(accumulatedDistance);

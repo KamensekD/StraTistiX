@@ -482,6 +482,7 @@ var simpl_array=simplify(full_array,0.1,1);
 */
 
 
+	StravaStreams = jsonResponse;	// store original Strava streams JSON response in a global variable
 
 
 

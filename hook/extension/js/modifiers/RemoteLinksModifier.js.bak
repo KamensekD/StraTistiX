@@ -170,10 +170,10 @@ RemoteLinksModifier.prototype = {
 
 
         // Add csv export
-//        if (this.authorOfActivity) {
+        if (this.authorOfActivity) {
             var htmlForCSVExport = "<li onclick='Helper.csv(StravaStreams)'><a>Export CSV</a></li>";
             $(".actions-menu .slide-menu .options").append(htmlForCSVExport);
-//        }
+        }
 
 
 

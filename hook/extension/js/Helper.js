@@ -226,3 +226,46 @@ Helper.guid = function() {
     }
     return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
 };
+
+
+Helper.csv = function(export_array) {
+	// export original Strava streams to csv for easy analysis in Excel
+	var csvContent = "data:text/csv;charset=utf-8,";
+    var Keys = Object.keys(StravaStreams);
+    var KeysExp = [];
+    var Size = StravaStreams[Keys[0]].length;
+    var Sizes = [];
+
+	index=0;
+	index1=0;
+	for (val of Keys) {
+		if (typeof (StravaStreams[Keys[index]]) !== 'undefined') {
+			KeysExp[index1++]=Keys[index];
+			Sizes[index]= (typeof (StravaStreams[Keys[index]][0]).length == 'undefined') ? 1 : (StravaStreams[val][0]).length;
+			console.log(index+1+": "+val+" ("+Sizes[index++]+")");
+		} else index++;
+//		console.log(index+1+": "+val+" ("+Sizes[index++]+")");
+//		console.log(index+1+": "+val+" ("+ (typeof Sizes[index++] == 'undefined') ? "-" : Sizes[index++]  +")");
+	}
+
+	for (index = 0; index < KeysExp.length; index++) {
+	    csvContent+='"'+(KeysExp[index])+'"'; if(index<KeysExp.length-1) csvContent+=";";
+	}
+	csvContent+="\n";
+
+	for (indexn = 0; indexn < Size; indexn++) {				// all rows
+		for (index = 0; index < KeysExp.length; index++) {		// all columns
+	    	csvContent+='"'+(StravaStreams[KeysExp[index]][indexn]).toString().replace(",",";").replace(".",",")+'"'; if(index<KeysExp.length-1) csvContent+=";";
+		}
+		csvContent+="\n";
+	}
+	
+
+	var encodedUri = encodeURI(csvContent);
+	var link = document.createElement("a");
+	link.setAttribute("href", encodedUri);
+	link.setAttribute("download", pageView.activityId()+".csv");
+	link.click(); // This will download the data file named "my_data.csv"
+	//window.open(encodedUri);
+
+};

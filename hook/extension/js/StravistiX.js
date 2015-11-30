@@ -149,12 +149,23 @@ StravistiX.prototype = {
      */
     handleUpdateRibbon_: function() {
 
-//        var title = 'StraTistiX updated/installed to <strong>v' + this.appResources_.extVersion + '</strong>';
-        var title = '<strong>StraTistiX</strong> updated/installed to <strong>v2.0.0.2</strong>';
+        var title = 'StraTistiX updated/installed to <strong>v' + this.appResources_.extVersion + '</strong>';
         var message = '';
-        message += "<br><h4><strong>BIG UPDATE WITH LOTS OF GREAT NEW FEATURES :)";
-        message += "<br>Rebased to StravistiX v2.0 for easier updates</strong></h4><h4>";
-
+        message += "<h4><strong>Important changes:</strong><br>";
+        message += "- statistics now computed on <strong>weighted percentiles</strong><br/>"
+        message += "&nbsp&nbsp(might have big impact for activities with dynamic sampling period!)<br/>"
+        message += "- heart rate extended statistics now computed based on <strong>moving time</strong>, not total time<br/>"
+        message += "&nbsp&nbsp(still not quite sure, which method is better... might decide to include both in future)<br/>"
+        message += "<br/>"
+        message += "- Added CSV export (for easy analysis in spreadsheet software)<br/>"
+        message += "- Added Ascent speed statistics (VAM) for cycling<br/>"
+        message += "- Improved 'Best Splits' - click on them to highlight the part of activity they represent!<br/>"
+        message += "- Improved elevation data accuracy while computing extended statistics.<br/>"
+        message += "&nbsp&nbsp(Elevation data smoothed using low pass filter with gain matched to Strava's)<br/>"
+        message += "- Weather unis preferences<br/>"
+        message += "- Various Fixes, sorry for bigbug in 2.0.0.1 - settings menu not working :/<br/>"
+        message += "<br/>"
+        message += "<h4><strong>From previous update:</strong></h4>";
         message += "- Added year progression (activity count, distance, elevation, time) table and chart<br/>"
 		message += "- Added 'Best Splits' (distance, time, elevation, hr,...) to biking activities<br>"
 		message += "- export of segments as Virtual Partner (cycling: button under segment compare)<br>"

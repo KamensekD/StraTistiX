@@ -136,6 +136,12 @@ var userSettings = {
         }],
         power: [{
             from: 0,
+            to: 0
+        }, {
+            from: 0,
+            to: 25
+        }, {
+            from: 25,
             to: 50
         }, {
             from: 50,
@@ -178,10 +184,13 @@ var userSettings = {
             to: 1000
         }, {
             from: 1000,
-            to: 1200
+            to: 1250
         }, {
-            from: 1200,
+            from: 1250,
             to: 1500
+        }, {
+            from: 1500,
+            to: 2000
         }],
         cyclingCadence: [{
             from: 0,
@@ -288,6 +297,9 @@ var userSettings = {
             to: 120
         }],
         grade: [{
+            from: -100,
+            to: -30
+        }, {
             from: -30,
             to: -20
         }, {
@@ -332,6 +344,9 @@ var userSettings = {
         }, {
             from: 20,
             to: 30
+        }, {
+            from: 30,
+            to: 100
         }],
         elevation: [{
             from: 0,
@@ -369,18 +384,30 @@ var userSettings = {
         }],
         ascent: [{
             from: 0,
+            to: 100
+        }, {
+            from: 100,
+            to: 200
+        }, {
+            from: 200,
             to: 300
         }, {
             from: 300,
-            to: 450
+            to: 400
         }, {
-            from: 450,
+            from: 400,
+            to: 500
+        }, {
+            from: 500,
             to: 600
         }, {
             from: 600,
-            to: 750
+            to: 700
         }, {
-            from: 750,
+            from: 700,
+            to: 800
+        }, {
+            from: 800,
             to: 900
         }, {
             from: 900,
@@ -402,13 +429,16 @@ var userSettings = {
             to: 1500
         }, {
             from: 1500,
-            to: 1700
+            to: 1750
         }, {
-            from: 1700,
+            from: 1750,
             to: 2000
         }, {
             from: 2000,
-            to: 3000
+            to: 2500
+        }, {
+            from: 2500,
+            to: 5000
         }]
     },
     remoteLinks: true,
@@ -440,6 +470,6 @@ var userSettings = {
     reviveGoogleMapsLayerType: 'hybrid',
     displayActivityBestSplits: true,
     bestSplitsConfiguration: null,
-    temperatureUnit: 'F',
-    windUnit: 'mph',
+    temperatureUnit: 'C',
+    windUnit: 'km/h',
 };

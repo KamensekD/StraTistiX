@@ -205,8 +205,9 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 			 html+= '</td>';
 		};
 
-		if (this.analysisData_.gradeData != null && !(this.analysisData_.gradeData.lowerQuartileGrade == 0 && this.analysisData_.gradeData.upperQuartileGrade == 0)) {
-			html += '<tr style="color: rgb(20,120,20)"><td><strong>'+this.analysisData_.gradeData.gradeProfile+'</strong> Grade</td>';
+//		if (this.analysisData_.gradeData != null && !(this.analysisData_.gradeData.lowerQuartileGrade == 0 && this.analysisData_.gradeData.upperQuartileGrade == 0)) {
+		if (this.analysisData_.gradeData != null ) {
+			html += '<tr style="color: rgb(20,120,20)"><td>Grade<br><strong>'+this.analysisData_.gradeData.gradeProfile+'</strong></td>';
 			html += '<td><strong>'+this.analysisData_.gradeData.avgGrade.toFixed(1)+'</strong>%</td>';
 			html += '<td><strong>'+this.analysisData_.gradeData.lowerQuartileGrade.toFixed(1)+'</strong>%</td>';
 			html += '<td><strong>'+this.analysisData_.gradeData.medianGrade.toFixed(1)+'</strong>%</td>';

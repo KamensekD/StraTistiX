@@ -14,7 +14,7 @@ app.controller("XtdZonesSettingsController", function($scope) {
         units: 'Seconds', // s/mi?!
         step: 5,
         min: 0,
-        max: 999
+        max: 3599
     }, {
         name: 'Cycling Power',
         value: 'power',

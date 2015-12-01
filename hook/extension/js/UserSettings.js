@@ -7,6 +7,10 @@ var userSettings = {
     userFTP: 300,
     userHrrZones: [
         {
+            fromHrr: 0,
+            toHrr: 30,
+        },
+        {
             fromHrr: 30,
             toHrr: 50,
         },
@@ -38,6 +42,9 @@ var userSettings = {
     zones: {
         speed: [{
             from: 0,
+            to: 1
+        }, {
+            from: 1,
             to: 6
         }, {
             from: 6,
@@ -86,10 +93,10 @@ var userSettings = {
             to: 75
         }, {
             from: 75,
-            to: 100
+            to: 999
         }],
         pace: [{
-            from: 120,
+            from: 0,
             to: 180
         }, {
             from: 180,
@@ -126,19 +133,25 @@ var userSettings = {
             to: 420
         }, {
             from: 420,
-            to: 540
+            to: 450
         }, {
-            from: 540,
-            to: 720
+            from: 450,
+            to: 480
         }, {
-            from: 720,
+            from: 480,
+            to: 600
+        }, {
+            from: 600,
             to: 900
+        }, {
+            from: 900,
+            to: 3599
         }],
         power: [{
             from: 0,
-            to: 0
+            to: 1
         }, {
-            from: 0,
+            from: 1,
             to: 25
         }, {
             from: 25,
@@ -166,9 +179,6 @@ var userSettings = {
             to: 400
         }, {
             from: 400,
-            to: 450
-        }, {
-            from: 450,
             to: 500
         }, {
             from: 500,
@@ -190,10 +200,13 @@ var userSettings = {
             to: 1500
         }, {
             from: 1500,
-            to: 2000
+            to: 9999
         }],
         cyclingCadence: [{
             from: 0,
+            to: 1
+        }, {
+            from: 1,
             to: 10
         }, {
             from: 10,
@@ -246,6 +259,9 @@ var userSettings = {
         }],
         runningCadence: [{
             from: 0,
+            to: 1
+        }, {
+            from: 1,
             to: 30
         }, {
             from: 30,
@@ -298,6 +314,9 @@ var userSettings = {
         }],
         grade: [{
             from: -100,
+            to: -50
+        }, {
+            from: -50,
             to: -30
         }, {
             from: -30,
@@ -350,18 +369,33 @@ var userSettings = {
         }],
         elevation: [{
             from: 0,
+            to: 50
+        }, {
+            from: 50,
             to: 100
         }, {
             from: 100,
-            to: 250
+            to: 200
         }, {
-            from: 250,
+            from: 200,
+            to: 300
+        }, {
+            from: 300,
+            to: 400
+        }, {
+            from: 400,
             to: 500
         }, {
             from: 500,
-            to: 750
+            to: 600
         }, {
-            from: 750,
+            from: 600,
+            to: 700
+        }, {
+            from: 700,
+            to: 800
+        }, {
+            from: 800,
             to: 1000
         }, {
             from: 1000,
@@ -384,6 +418,9 @@ var userSettings = {
         }],
         ascent: [{
             from: 0,
+            to: 10
+        }, {
+            from: 10,
             to: 100
         }, {
             from: 100,

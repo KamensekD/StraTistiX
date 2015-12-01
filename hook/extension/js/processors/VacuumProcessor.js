@@ -5,7 +5,8 @@ function VacuumProcessor() {
 
 }
 
-VacuumProcessor.movingThresholdKph = 3.5; // Kph
+//VacuumProcessor.movingThresholdKph = 3.5; // Kph
+VacuumProcessor.movingThresholdKph = 3.0; // Kph
 //VacuumProcessor.movingThresholdKph = 2.5; // Kph
 
 /**

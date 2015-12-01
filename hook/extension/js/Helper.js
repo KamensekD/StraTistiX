@@ -269,3 +269,13 @@ Helper.csv = function(export_array) {
 	//window.open(encodedUri);
 
 };
+
+
+Helper.getMaxOfArray = function (numArray) {
+  return Math.max.apply(null, numArray);
+};
+
+
+Helper.getMinOfArray = function (numArray) {
+  return Math.min.apply(null, numArray);
+};

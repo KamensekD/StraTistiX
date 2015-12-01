@@ -7,21 +7,56 @@ function ActivityProcessor(vacuumProcessor, userHrrZones, zones) {
     this.zones = zones;
 }
 
-// *** PUT THIS STUFF IN CONFIGURABLE SETTINGS!
+// *** PUT THIS STUFF IN CONFIGURABLE SETTINGS! ***
 //ActivityProcessor.movingThresholdKph = 3.5; // Kph
-ActivityProcessor.movingThresholdKph = 2.5; // Kph
-ActivityProcessor.cadenceThresholdRpm = 35; // RPMs
-ActivityProcessor.cadenceLimitRpm = 125;
+ActivityProcessor.movingThresholdKph = 3.0; // Kph
+//ActivityProcessor.cadenceThresholdRpm = 35; // RPMs
+ActivityProcessor.cadenceThresholdRpm = 30; // RPMs
+//ActivityProcessor.cadenceLimitRpm = 125;
+ActivityProcessor.cadenceLimitRpm = 150;
 ActivityProcessor.defaultBikeWeight = 10; // KGs
 ActivityProcessor.cachePrefix = 'stravistix_activity_';
-ActivityProcessor.gradeClimbingLimit = 2.5;
-ActivityProcessor.gradeDownHillLimit = -2.5;
+
 //ActivityProcessor.gradeClimbingLimit = 1.6;
 //ActivityProcessor.gradeDownHillLimit = -1.6;
-ActivityProcessor.gradeProfileFlatPercentageDetected = 60;
+ActivityProcessor.gradeClimbingLimit = 3.0;			// thresholds for UP/DOWN vs FLAT
+ActivityProcessor.gradeDownHillLimit = -3.0;
+
+ActivityProcessor.gradeProfileDownhillPercentage = 75;		// if at least 75% of distance is down
+ActivityProcessor.gradeProfileDownhill = 'DOWNHILL';
+
+ActivityProcessor.gradeProfileMostlyDownDownPercentage = 50;// if at least 50% of distance is down
+ActivityProcessor.gradeProfileMostlyDownUpPercentage = 25;	// and at most 25% is up
+ActivityProcessor.gradeProfileMostlyDown = 'MOSTLY DOWN';
+
+ActivityProcessor.gradeProfileFlatPercentage = 75;			// if at least 75% of time is flat
+//ActivityProcessor.gradeProfileFlatAvgGradeEst = 3.3;		// and average (estimated) grade of climbing% is less then 3.3%
+ActivityProcessor.gradeProfileUpDownPercentageD = 10;		// and up/down distance distance percentage is less then 10%
 ActivityProcessor.gradeProfileFlat = 'FLAT';
-ActivityProcessor.gradeProfileHilly = 'HILLY';
-// make also "a bit hilly" and "mountanous"
+
+ActivityProcessor.gradeProfileMostlyFlatPercentage = 40;	// if at least 40% of time is flat
+ActivityProcessor.gradeProfileMostlyFlatAvgGradeEst = 5;	// and average (estimated) grade of climbing% is less then 5%
+ActivityProcessor.gradeProfileMostlyFlatDeltaH = 100;		// and at most 100m difference of highest and lowest altitude
+ActivityProcessor.gradeProfileMostlyFlat = 'MOSTLY FLAT';
+
+ActivityProcessor.gradeProfileVeryHillyPercentage = 50;		// less than 50% of time is flat
+ActivityProcessor.gradeProfileVeryHillyAvgGradeEst = 5;		// and average (estimated) grade of climbing% is more than 5%
+ActivityProcessor.gradeProfileVeryHillyDeltaH = 400;		// and at least 400m difference between highest and lowest altitude
+ActivityProcessor.gradeProfileVeryHillyClimbed = 600;		// and at least 600m vertical meters climbed
+ActivityProcessor.gradeProfileVeryHilly = 'VERY HILLY';
+
+ActivityProcessor.gradeProfileMountainousPercentage = 60;	// less than 60% of time is flat
+ActivityProcessor.gradeProfileMountainousAvgGradeEst = 5;	// and average (estimated) grade of climbing% is more than 5%
+ActivityProcessor.gradeProfileMountainousDeltaH = 600;		// and at least 600m difference between highest and lowest altitude
+ActivityProcessor.gradeProfileMountainousClimbed = 800;		// and at least 800m vertical meters climbed
+ActivityProcessor.gradeProfileMountainous = 'MOUNTAINOUS';
+
+ActivityProcessor.gradeProfileAlpinePercentage = 50;		// less than 50% of time is flat
+ActivityProcessor.gradeProfileAlpineAvgGradeEst = 5;		// and average (estimated) grade of climbing% is more than 5%
+ActivityProcessor.gradeProfileAlpineDeltaH = 1500;			// and at least 1500m difference of highest and lowest altitude
+ActivityProcessor.gradeProfileAlpine = 'ALPINE';
+
+ActivityProcessor.gradeProfileHilly = 'HILLY';				// All other scenarios - hilly
 
 
 /**
@@ -122,7 +157,7 @@ ActivityProcessor.prototype = {
 
         // Avg grade
         // Q1/Q2/Q3 grade
-        var gradeData = this.gradeData_(activityStream.grade_smooth, activityStream.velocity_smooth, activityStream.time, activityStream.distance);
+        var gradeData = this.gradeData_(activityStream.grade_smooth, activityStream.velocity_smooth, activityStream.time, activityStream.distance, activityStream.altitude_smooth);
 
         // Avg grade
         // Q1/Q2/Q3 grade
@@ -703,10 +738,9 @@ ActivityProcessor.prototype = {
         };
     },
 
-    gradeData_: function(gradeArray, velocityArray, timeArray, distanceArray) {
-
+    gradeData_: function(gradeArray, velocityArray, timeArray, distanceArray, altitudeArray) {
 //        if (_.isEmpty(gradeArray) || _.isEmpty(timeArray)) {
-        if (_.isEmpty(gradeArray) || _.isEmpty(velocityArray) || _.isEmpty(timeArray)) {
+        if (_.isEmpty(gradeArray) || _.isEmpty(velocityArray) || _.isEmpty(timeArray) || _.isEmpty(altitudeArray)){
             return null;
         }
 
@@ -726,6 +760,18 @@ ActivityProcessor.prototype = {
             down: 0,
             total: 0
         };
+        var upFlatDownInMeters = {
+            up: 0,
+            flat: 0,
+            down: 0,
+            total: 0
+        };
+        var upFlatDownAltitudeInMeters = {	// altitude meters climbed, lost, altitude ballance
+            climbed: 0,
+            lost: 0,
+            ignore: 0,
+            ballance: 0
+        };
 
 
         var maxGrade = _.max(gradeArray);
@@ -738,8 +784,9 @@ ActivityProcessor.prototype = {
             down: 0
         };
 
-        var durationInSeconds, durationCount = 0;
+        var durationInSeconds = 0;
         var distance = 0;
+        var deltaAltitude = 0;
         var currentSpeed;
 
         var gradeArrayMoving = [];
@@ -753,8 +800,9 @@ ActivityProcessor.prototype = {
                 if (currentSpeed > 0) { // If moving...
                     durationInSeconds = (timeArray[i] - timeArray[i - 1]); // Getting deltaTime in seconds (current sample and previous one)
                     distance = distanceArray[i] - distanceArray[i - 1];
+                    deltaAltitude = altitudeArray[i] - altitudeArray[i - 1];
 
-                    // elevation gain
+                    // elevation? gain
                     gradeSum += this.valueForSum_(gradeArray[i], gradeArray[i - 1], distance);
                     // distance
                     gradeCount += distance;
@@ -768,38 +816,40 @@ ActivityProcessor.prototype = {
                         gradeZones[gradeZoneId]['s'] += durationInSeconds;
                     }
 
-                    durationCount += durationInSeconds;
+                    upFlatDownInSeconds.total 			+= durationInSeconds;
+					upFlatDownInMeters.total  			+= distance;
+                    upFlatDownAltitudeInMeters.ballance += deltaAltitude;
+
 
                     // Compute DOWN/FLAT/UP duration
                     if (gradeArray[i] > ActivityProcessor.gradeClimbingLimit) { // UPHILL
                         // time
                         upFlatDownInSeconds.up += durationInSeconds;
                         // distance
+						upFlatDownInMeters.up += distance;
                         upFlatDownMoveData.up += currentSpeed * durationInSeconds;
+                        // altitude
+                        upFlatDownAltitudeInMeters.climbed += deltaAltitude;
                     } else if (gradeArray[i] < ActivityProcessor.gradeDownHillLimit) { // DOWNHILL
                         // time
                         upFlatDownInSeconds.down += durationInSeconds;
                         // distance
+						upFlatDownInMeters.down += distance;
                         upFlatDownMoveData.down += currentSpeed * durationInSeconds;
+                        // altitude
+                        upFlatDownAltitudeInMeters.lost += deltaAltitude;
                     } else { // FLAT
                         // time
                         upFlatDownInSeconds.flat += durationInSeconds;
                         // distance
+						upFlatDownInMeters.flat += distance;
                         upFlatDownMoveData.flat += currentSpeed * durationInSeconds;
+                        // altitude
+                        upFlatDownAltitudeInMeters.ignore += deltaAltitude;
                     }
                 }
             }
        	}
-
-        upFlatDownInSeconds.total = durationCount;
-
-        // Compute grade profile
-        var gradeProfile;
-        if ((upFlatDownInSeconds.flat / upFlatDownInSeconds.total * 100) >= ActivityProcessor.gradeProfileFlatPercentageDetected) {
-            gradeProfile = ActivityProcessor.gradeProfileFlat;
-        } else {
-            gradeProfile = ActivityProcessor.gradeProfileHilly;
-        }
 
         // Compute speed while up, flat down
         upFlatDownMoveData.up = upFlatDownMoveData.up / upFlatDownInSeconds.up;
@@ -812,6 +862,72 @@ ActivityProcessor.prototype = {
         gradeZones = this.finalizeDistribComputationZones(gradeZones);
 
         var percentiles = Helper.weightedPercentiles(gradeArrayMoving, gradeArrayDistance, [ 0.25, 0.5, 0.75 ]);
+
+
+
+        // "Compute" grade profile word description
+        //
+        // Downhill < Mostly Down < Flat < Mostly Flat <   Hilly   < Very Hilly < Mountanous < Alpine
+        //
+        var gradeProfile;
+		var minAlt				= Helper.getMinOfArray(StravaStreams.altitude);
+		var maxAlt				= Helper.getMaxOfArray(StravaStreams.altitude);
+		var AltRange			= maxAlt-minAlt;
+		var upPercentT			= 100 * upFlatDownInSeconds.up / upFlatDownInSeconds.total;
+		var flatPercentT		= 100 * upFlatDownInSeconds.flat / upFlatDownInSeconds.total;
+		var downPercentT		= 100 * upFlatDownInSeconds.down / upFlatDownInSeconds.total;
+		var upPercentD			= 100 * upFlatDownInMeters.up / upFlatDownInMeters.total;
+		var flatPercentD		= 100 * upFlatDownInMeters.flat / upFlatDownInMeters.total;
+		var downPercentD		= 100 * upFlatDownInMeters.down / upFlatDownInMeters.total;
+		var upAvgGradeEstimate	= 100 * ( upFlatDownAltitudeInMeters.climbed + upFlatDownAltitudeInMeters.ignore ) / upFlatDownInMeters.up;
+		
+        if (		// DOWNHILL
+        		( downPercentD >= ActivityProcessor.gradeProfileDownhillPercentage )
+        )		{ gradeProfile = ActivityProcessor.gradeProfileDownhill; }
+
+        else if ( 	// MOSTLY DOWN
+        		( downPercentD >= ActivityProcessor.gradeProfileMostlyDownDownPercentage )
+			&&	( upPercemtD < ActivityProcessor.gradeProfileMostlyDownUpPercentage )
+		)		{ gradeProfile = ActivityProcessor.gradeProfileMostlyDown; }
+
+        else if ( 	// FLAT
+        		( flatPercentT >= ActivityProcessor.gradeProfileFlatPercentage )
+			&&	( ( upPercentD + downPercentD ) < ActivityProcessor.gradeProfileUpDownPercentageD )
+//			&&	( upAvgGradeEstimate < ActivityProcessor.gradeProfileFlatAvgGradeEst )
+		)		{ gradeProfile = ActivityProcessor.gradeProfileFlat; }
+
+
+        else if (	// MOSTLY FLAT
+        		( flatPercentT >= ActivityProcessor.gradeProfileMostlyFlatPercentage )
+			&&	( upAvgGradeEstimate < ActivityProcessor.gradeProfileMostlyFlatAvgGradeEst )
+			&&	( AltRange < ActivityProcessor.gradeProfileMostlyFlatDeltaH )
+		)		{ gradeProfile = ActivityProcessor.gradeProfileMostlyFlat; }
+
+
+		else if (	// ALPINE
+				( flatPercentT < ActivityProcessor.gradeProfileAlpinePercentage )
+        	&&	( upAvgGradeEstimate > ActivityProcessor.gradeProfileAlpineAvgGradeEst )
+        	&&	( AltRange > ActivityProcessor.gradeProfileAlpineDeltaH )
+        )		{ gradeProfile = ActivityProcessor.gradeProfileAlpine; }
+
+        else if (	// MOUNTAINOUS
+        		( flatPercentT < ActivityProcessor.gradeProfileMountainousPercentage )
+			&&	( upAvgGradeEstimate > ActivityProcessor.gradeProfileMountainousAvgGradeEst )
+			&&	( upFlatDownAltitudeInMeters.climbed > ActivityProcessor.gradeProfileMountainousClimbed )
+			&&	( AltRange > ActivityProcessor.gradeProfileMountainousDeltaH )
+		)		{ gradeProfile = ActivityProcessor.gradeProfileMountainous; }
+
+        else if (	// VERY HILLY
+        		( flatPercentT < ActivityProcessor.gradeProfileVeryHillyPercentage )
+			&&	( upAvgGradeEstimate > ActivityProcessor.gradeProfileVeryHillyAvgGradeEst )
+			&&	( upFlatDownAltitudeInMeters.climbed > ActivityProcessor.gradeProfileVeryHillyClimbed )
+			&&	( AltRange > ActivityProcessor.gradeProfileVeryHillyDeltaH )
+		)		{ gradeProfile = ActivityProcessor.gradeProfileVeryHilly; }
+
+        else		// HILLY
+        		{ gradeProfile = ActivityProcessor.gradeProfileHilly; }
+
+
 
         return {
             'avgGrade': avgGrade,

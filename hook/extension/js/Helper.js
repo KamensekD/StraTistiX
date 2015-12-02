@@ -1,3 +1,5 @@
+var helperDebug=0;
+if (helperDebug) console.warn('Begin     Helper.js');
 /**
  *   Contructor
  */
@@ -12,18 +14,26 @@ Helper.prototype = {
 
 };
 
+
+
 /**
  * Static method call test
  */
 Helper.log = function(tag, object) {
-    if (env.debugMode) {
+    if (helperDebug) {
         console.log('<' + tag + '>');
         console.log(object);
         console.log('</' + tag + '>');
     }
 };
 
-Helper.HHMMSStoSeconds = function(str) {
+
+
+/**
+ *
+ */
+Helper.HHMMSStoSeconds = function HHMMSStoSeconds(str) {
+if (helperDebug) console.log(' > > (f:  Helper.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
     var p = str.split(':'),
         s = 0,
         m = 1;
@@ -35,7 +45,13 @@ Helper.HHMMSStoSeconds = function(str) {
     return s;
 };
 
-Helper.secondsToHHMMSS = function(secondsParam, trimLeadingZeros) {
+
+
+/**
+ *
+ */
+Helper.secondsToHHMMSS = function secondsToHHMMSS(secondsParam, trimLeadingZeros) {
+if (helperDebug) console.log(' > > (f:  Helper.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
     var sec_num = parseInt(secondsParam, 10); // don't forget the second param
     var hours = Math.floor(sec_num / 3600);
     var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
@@ -53,7 +69,13 @@ Helper.secondsToHHMMSS = function(secondsParam, trimLeadingZeros) {
     return trimLeadingZeros ? Helper.trimLeadingZerosHHMMSS(time) : time;
 };
 
-Helper.weightedPercentiles = function(values, weights, percentiles) {
+
+
+/**
+ *
+ */
+Helper.weightedPercentiles = function weightedPercentiles(values, weights, percentiles) {
+if (helperDebug) console.log(' > > (f:  Helper.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
     // inspired from https://en.wikipedia.org/wiki/Weighted_median and https://en.wikipedia.org/wiki/Percentile#Definition_of_the_Weighted_Percentile_method
     var list = [];
     var tot = 0;
@@ -85,9 +107,11 @@ Helper.weightedPercentiles = function(values, weights, percentiles) {
 
 
 
-
-
-Helper.median = function(valuesSorted) {
+/**
+ *
+ */
+Helper.median = function median(valuesSorted) {
+if (helperDebug) console.log(' > > (f:  Helper.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
     var half = Math.floor(valuesSorted.length / 2);
     if (valuesSorted.length % 2)
         return valuesSorted[half];
@@ -96,7 +120,12 @@ Helper.median = function(valuesSorted) {
 };
 
 
-Helper.upperQuartile = function(valuesSorted) {
+
+/**
+ *
+ */
+Helper.upperQuartile = function upperQuartile(valuesSorted) {
+if (helperDebug) console.log(' > > (f:  Helper.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 	if(valuesSorted.length<3) return (0);
 //	if(valuesSorted.length<3) return ("-");
 	if(Helper.isEven(valuesSorted.length)) { 
@@ -109,7 +138,13 @@ Helper.upperQuartile = function(valuesSorted) {
 //    return (valuesSorted[q3]);
 };
 
-Helper.lowerQuartile = function(valuesSorted) {
+
+
+/**
+ *
+ */
+Helper.lowerQuartile = function lowerQuartile(valuesSorted) {
+if (helperDebug) console.log(' > > (f:  Helper.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 	if(valuesSorted.length<3) return (0);
 //	if(valuesSorted.length<3) return ("-");
 	if(Helper.isEven(valuesSorted.length)) {
@@ -124,32 +159,62 @@ Helper.lowerQuartile = function(valuesSorted) {
 
 
 
-
-
+/**
+ *
+ */
 // Use abstract equality == for "is number" test
-Helper.isEven = function(n) {
+Helper.isEven = function isEven(n) {
+if (helperDebug) console.log(' > > (f:  Helper.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
     return n == parseFloat(n) ? !(n % 2) : void 0;
 }
 
 
-Helper.heartrateFromHeartRateReserve = function(hrr, maxHr, restHr) {
+
+/**
+ *
+ */
+Helper.heartrateFromHeartRateReserve = function heartrateFromHeartRateReserve(hrr, maxHr, restHr) {
+if (helperDebug) console.log(' > > (f:  Helper.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
     return (parseFloat(hrr) / 100 * (parseInt(maxHr) - parseInt(restHr)) + parseInt(restHr)).toFixed(0);
 };
 
-Helper.heartRateReserveFromHeartrate = function(hr, maxHr, restHr) {
+
+
+/**
+ *
+ */
+Helper.heartRateReserveFromHeartrate = function heartRateReserveFromHeartrate(hr, maxHr, restHr) {
+if (helperDebug) console.log(' > > (f:  Helper.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
     return (parseFloat(hr) - parseInt(restHr)) / (parseInt(maxHr) - parseInt(restHr));
 };
 
-Helper.hrrPercentFromHeartrate = function(hr, maxHr, restHr) {
+
+
+/**
+ *
+ */
+Helper.hrrPercentFromHeartrate = function hrrPercentFromHeartrate(hr, maxHr, restHr) {
+if (helperDebug) console.log(' > > (f:  Helper.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
     return 100 * (parseFloat(hr) - parseInt(restHr)) / (parseInt(maxHr) - parseInt(restHr));
 };
 
-Helper.hrPercentFromHeartrate = function(hr, maxHr) {
+
+
+/**
+ *
+ */
+Helper.hrPercentFromHeartrate = function hrPercentFromHeartrate(hr, maxHr) {
+if (helperDebug) console.log(' > > (f:  Helper.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
     return 100 * parseFloat(hr) / parseInt(maxHr);
 };
 
-Helper.setToStorage = function(extensionId, storageType, key, value, callback) {
 
+
+/**
+ *
+ */
+Helper.setToStorage = function setToStorage(extensionId, storageType, key, value, callback) {
+if (helperDebug) console.log(' > > (f:  Helper.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
     // Sending message to background page
     chrome.runtime.sendMessage(extensionId, {
             method: StravistiX.setToStorageMethod,
@@ -165,7 +230,13 @@ Helper.setToStorage = function(extensionId, storageType, key, value, callback) {
     );
 };
 
-Helper.getFromStorage = function(extensionId, storageType, key, callback) {
+
+
+/**
+ *
+ */
+Helper.getFromStorage = function getFromStorage(extensionId, storageType, key, callback) {
+if (helperDebug) console.log(' > > (f:  Helper.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
     // Sending message to background page
     chrome.runtime.sendMessage(extensionId, {
             method: StravistiX.getFromStorageMethod,
@@ -180,7 +251,13 @@ Helper.getFromStorage = function(extensionId, storageType, key, callback) {
     );
 };
 
-Helper.includeJs = function(scriptUrl) {
+
+
+/**
+ *
+ */
+Helper.includeJs = function includeJs(scriptUrl) {
+if (helperDebug) console.log(' > > (f:  Helper.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
     var link = document.createElement('link');
     link.href = chrome.extension.getURL(scriptUrl);
     link.type = 'text/css';
@@ -188,7 +265,13 @@ Helper.includeJs = function(scriptUrl) {
     (document.head || document.documentElement).appendChild(link);
 };
 
-Helper.formatNumber = function(n, c, d, t) {
+
+
+/**
+ *
+ */
+Helper.formatNumber = function formatNumber(n, c, d, t) {
+if (helperDebug) console.log(' > > (f:  Helper.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
     var c = isNaN(c = Math.abs(c)) ? 2 : c,
         d = d == undefined ? "." : d,
         t = t == undefined ? "," : t,
@@ -198,7 +281,13 @@ Helper.formatNumber = function(n, c, d, t) {
     return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
 };
 
-Helper.secondsToDHM = function(sec_num, trimZeros) {
+
+
+/**
+ *
+ */
+Helper.secondsToDHM = function secondsToDHM(sec_num, trimZeros) {
+if (helperDebug) console.log(' > > (f:  Helper.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
     var days = Math.floor(sec_num / 86400);
     var hours = Math.floor((sec_num - (days * 86400)) / 3600);
     var minutes = Math.floor((sec_num - (days * 86400) - (hours * 3600)) / 60);
@@ -211,7 +300,13 @@ Helper.secondsToDHM = function(sec_num, trimZeros) {
     return days + 'd ' + hours + 'h ' + minutes + 'm';
 };
 
-Helper.trimLeadingZerosHHMMSS = function(time) {
+
+
+/**
+ *
+ */
+Helper.trimLeadingZerosHHMMSS = function trimLeadingZerosHHMMSS(time) {
+if (helperDebug) console.log(' > > (f:  Helper.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
     var result = time.replace(/^(0*:)*/, '').replace(/^0*/, '') || "0";
     if (result.indexOf(":") < 0) {
         return result + "s";
@@ -219,7 +314,13 @@ Helper.trimLeadingZerosHHMMSS = function(time) {
     return result;
 };
 
-Helper.guid = function() {
+
+
+/**
+ *
+ */
+Helper.guid = function guid() {
+if (helperDebug) console.log(' > > (f:  Helper.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
     // from http://stackoverflow.com/a/105074
     function s4() {
         return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
@@ -228,7 +329,12 @@ Helper.guid = function() {
 };
 
 
-Helper.csv = function(export_array) {
+
+/**
+ *
+ */
+Helper.csv = function csv(export_array) {
+if (helperDebug) console.log(' > > (f:  Helper.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 	// export original Strava streams to csv for easy analysis in Excel
 	var csvContent = "data:text/csv;charset=utf-8,";
     var Keys = Object.keys(StravaStreams);
@@ -264,18 +370,33 @@ Helper.csv = function(export_array) {
 	var encodedUri = encodeURI(csvContent);
 	var link = document.createElement("a");
 	link.setAttribute("href", encodedUri);
+//	link.setAttribute("href", escape(csvContent));
 	link.setAttribute("download", pageView.activityId()+".csv");
 	link.click(); // This will download the data file named "my_data.csv"
-	//window.open(encodedUri);
-
+	window.open(encodedUri);
+	expcsv=window.open("", "", "toolbar=yes, width=600, height=200");
+	expcsv.document.write(csvContent);
+	
+	
 };
 
 
-Helper.getMaxOfArray = function (numArray) {
+
+/**
+ *
+ */
+Helper.getMaxOfArray = function getMaxOfArray(numArray) {
+if (helperDebug) console.log(' > > (f:  Helper.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
   return Math.max.apply(null, numArray);
 };
 
 
-Helper.getMinOfArray = function (numArray) {
+
+/**
+ *
+ */
+Helper.getMinOfArray = function getMinOfArray(numArray) {
+if (helperDebug) console.log(' > > (f:  Helper.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
   return Math.min.apply(null, numArray);
 };
+if (helperDebug) console.warn('End       Helper.js');

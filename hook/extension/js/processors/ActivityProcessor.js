@@ -1,11 +1,19 @@
+if (env.debugMode) console.warn('Begin     ActivityProcessor.js');
 /**
  *   Contructor
  */
+
 function ActivityProcessor(vacuumProcessor, userHrrZones, zones) {
     this.vacuumProcessor_ = vacuumProcessor;
     this.userHrrZones_ = userHrrZones;
     this.zones = zones;
 }
+
+
+
+ActivityProcessor.cachePrefix = 'stravistix_activity_';
+
+
 
 // *** PUT THIS STUFF IN CONFIGURABLE SETTINGS! ***
 //ActivityProcessor.movingThresholdKph = 3.5; // Kph
@@ -15,7 +23,6 @@ ActivityProcessor.cadenceThresholdRpm = 30; // RPMs
 //ActivityProcessor.cadenceLimitRpm = 125;
 ActivityProcessor.cadenceLimitRpm = 150;
 ActivityProcessor.defaultBikeWeight = 10; // KGs
-ActivityProcessor.cachePrefix = 'stravistix_activity_';
 
 //ActivityProcessor.gradeClimbingLimit = 1.6;
 //ActivityProcessor.gradeDownHillLimit = -1.6;
@@ -59,54 +66,85 @@ ActivityProcessor.gradeProfileAlpine = 'ALPINE';
 ActivityProcessor.gradeProfileHilly = 'HILLY';				// All other scenarios - hilly
 
 
+
 /**
  * Define prototype
  */
 ActivityProcessor.prototype = {
 
-    setActivityType: function(activityType) {
-        this.activityType = activityType;
-    },
+
+
+
 
     /**
      *
      */
-    getAnalysisData: function(activityId, userGender, userRestHr, userMaxHr, userFTP, callback) {
+    setActivityType: function setActivityType(activityType) {
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+        this.activityType = activityType;
+    },
+
+
+
+    /**
+     *
+     */
+    getAnalysisData: function getAnalysisData(activityId, userGender, userRestHr, userMaxHr, userFTP, callback) {
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         if (!this.activityType) {
             console.error('No activity type set for ActivityProcessor');
         }
 
         // Find in cache first is data exist
+if (env.debugMode) console.log('--- (f: ActivityProcessor.js) >   Try to read  -Analysis Data-  from cache/localStorage (' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + ')' )
         var cacheResult = JSON.parse(localStorage.getItem(ActivityProcessor.cachePrefix + activityId));
+		if (cacheResult) {
+if (env.debugMode) console.log('...   FOUND in cache - using cached Analysis Data   ...' );
+		} else {
+if (env.debugMode) console.log('...   NOT in cache - calculating Analysis Data   ...' );
+		}
 
+		
         if (!_.isNull(cacheResult) && env.useActivityStreamCache) {
-            if (env.debugMode) console.log("Using existing activity cache in non debug mode: " + JSON.stringify(cacheResult));
+if (env.debugMode) console.log("Using existing activity cache in non debug mode: " + JSON.stringify(cacheResult));
             callback(cacheResult);
             return;
         }
 
         userFTP = parseInt(userFTP);
 
+
+
         // Else no cache... then call VacuumProcessor for getting data, compute them and cache them
-        this.vacuumProcessor_.getActivityStream(function(activityStatsMap, activityStream, athleteWeight, hasPowerMeter) { // Get stream on page
+
+if (env.debugMode) console.warn('Executing   VacuumProcessor_.getActivityStream   from   ActivityProcessor.js');
+        this.vacuumProcessor_.getActivityStream(function getActivityStream(activityStatsMap, activityStream, athleteWeight, hasPowerMeter) { // Get stream on page
 
             // Append altitude_smooth to fetched strava activity stream before compute analysis data on
             if (typeof activityStatsMap.elevation !== 'undefined') {
 	            activityStream.altitude_smooth = this.smoothAltitude_(activityStream, activityStatsMap.elevation);
+//	            activityStream.altitude_smooth = this.vacuumProcessor_.smoothAltitude_(activityStream, activityStatsMap.elevation);
         	}
 
             var result = this.computeAnalysisData_(userGender, userRestHr, userMaxHr, userFTP, athleteWeight, hasPowerMeter, activityStatsMap, activityStream);
 
-            if (env.debugMode) console.log("Creating activity cache: " + JSON.stringify(result));
 
+if (env.debugMode) console.log('--- (f: ActivityProcessor.js) >   Try to write  -Analysis Data-  to cache/localStorage (' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + ')' )
             localStorage.setItem(ActivityProcessor.cachePrefix + activityId, JSON.stringify(result)); // Cache the result to local storage
+if (env.debugMode) console.log("\nWritten to cache/localstorage:\n" + JSON.stringify(result) + "\n\n");
             callback(result);
 
         }.bind(this));
     },
 
-    computeAnalysisData_: function(userGender, userRestHr, userMaxHr, userFTP, athleteWeight, hasPowerMeter, activityStatsMap, activityStream) {
+
+
+    /**
+     *
+     */
+    computeAnalysisData_: function computeAnalysisData_(userGender, userRestHr, userMaxHr, userFTP, athleteWeight, hasPowerMeter, activityStatsMap, activityStream) {
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         // Move ratio
         var moveRatio = this.moveRatio_(activityStatsMap, activityStream);
@@ -115,7 +153,6 @@ ActivityProcessor.prototype = {
         var toughnessScore = this.toughnessScore_(activityStatsMap, activityStream, moveRatio);
 
         // Include speed and pace
-//        var moveData = this.moveData_(activityStatsMap, activityStream.velocity_smooth, activityStream.time);
         var moveData = [null, null];
         if (activityStream.velocity_smooth) {
             moveData = this.moveData_(activityStatsMap, activityStream.velocity_smooth, activityStream.time);
@@ -158,6 +195,7 @@ ActivityProcessor.prototype = {
         // Avg grade
         // Q1/Q2/Q3 grade
         var gradeData = this.gradeData_(activityStream.grade_smooth, activityStream.velocity_smooth, activityStream.time, activityStream.distance, activityStream.altitude_smooth);
+//        var gradeData = this.gradeData_(activityStream.grade_smooth, activityStream.velocity_smooth, activityStream.time, activityStream.distance, activityStream.altitude);
 
         // Avg grade
         // Q1/Q2/Q3 grade
@@ -182,7 +220,8 @@ ActivityProcessor.prototype = {
     /**
      * ...
      */
-    moveRatio_: function(activityStatsMap, activityStream) {
+    moveRatio_: function moveRatio_(activityStatsMap, activityStream) {
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         if (_.isNull(activityStatsMap.movingTime) || _.isNull(activityStatsMap.elapsedTime)) {
             Helper.log('WARN', 'Unable to compute ActivityRatio on this activity with following data: ' + JSON.stringify(activityStatsMap))
@@ -200,7 +239,8 @@ ActivityProcessor.prototype = {
     /**
      * ...
      */
-    toughnessScore_: function(activityStatsMap, activityStream, moveRatio) {
+    toughnessScore_: function toughnessScore_(activityStatsMap, activityStream, moveRatio) {
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         if (_.isNull(activityStatsMap.elevation) || _.isNull(activityStatsMap.avgPower) || _.isNull(activityStatsMap.averageSpeed) || _.isNull(activityStatsMap.distance)) {
             return null;
@@ -219,11 +259,23 @@ ActivityProcessor.prototype = {
         return toughnessScore;
     },
 
-    getZoneFromDistributionStep_: function(value, distributionStep, minValue) {
+
+
+    /**
+     *
+     */
+    getZoneFromDistributionStep_: function getZoneFromDistributionStep_(value, distributionStep, minValue) {
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
         return parseInt((value - minValue) / (distributionStep));
     },
 
-    getZoneId: function(zones, value) {
+
+
+    /**
+     *
+     */
+    getZoneId: function getZoneId(zones, value) {
+//if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
         for (zoneId = 0; zoneId < zones.length; zoneId++) {
             if (value <= zones[zoneId].to) {
                 return zoneId;
@@ -231,10 +283,13 @@ ActivityProcessor.prototype = {
         }
     },
 
+
+
     /**
      *
      */
-    prepareZonesForDistribComputation: function(sourceZones) {
+    prepareZonesForDistribComputation: function prepareZonesForDistribComputation(sourceZones) {
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
         var preparedZones = [];
         for (zone in sourceZones) {
             sourceZones[zone].s = 0;
@@ -244,7 +299,13 @@ ActivityProcessor.prototype = {
         return preparedZones;
     },
 
-    finalizeDistribComputationZones: function(zones) {
+
+
+    /**
+     *
+     */
+    finalizeDistribComputationZones: function finalizeDistribComputationZones(zones) {
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
         var total = 0;
         for (zone of zones) {
             if (zone['s']) {
@@ -262,15 +323,24 @@ ActivityProcessor.prototype = {
         return zones;
     },
 
-    valueForSum_: function(currentValue, previousValue, delta) {
+
+
+    /**
+     *
+     */
+    valueForSum_: function valueForSum_(currentValue, previousValue, delta) {
+//if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
         // discrete integral
         return currentValue * delta - ((currentValue - previousValue) * delta) / 2;
     },
 
+
+
     /**
      * ...
      */
-    moveData_: function(activityStatsMap, velocityArray, timeArray) {
+    moveData_: function moveData_(activityStatsMap, velocityArray, timeArray) {
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
 //        if (!velocityArray) {
         if (_.isEmpty(velocityArray) || _.isEmpty(timeArray)) {
@@ -365,12 +435,12 @@ ActivityProcessor.prototype = {
 
 
 
-
     /**
      * @param speed in kph
      * @return pace in seconds/km
      */
-    convertSpeedToPace: function(speed) {
+    convertSpeedToPace: function convertSpeedToPace(speed) {
+//if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
         return (speed === 0) ? 'infinite' : parseInt((1 / speed) * 60 * 60);
     },
 
@@ -379,7 +449,8 @@ ActivityProcessor.prototype = {
     /**
      * ...
      */
-    powerData_: function(athleteWeight, hasPowerMeter, userFTP, activityStatsMap, powerArray, velocityArray, timeArray) {
+    powerData_: function powerData_(athleteWeight, hasPowerMeter, userFTP, activityStatsMap, powerArray, velocityArray, timeArray) {
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
 //        if (_.isEmpty(powerArray) || _.isEmpty(velocityArray)) {
         if (_.isEmpty(powerArray) || _.isEmpty(velocityArray) || _.isEmpty(timeArray)) {
@@ -459,7 +530,8 @@ ActivityProcessor.prototype = {
     /**
      * ...
      */
-    heartRateData_: function(userGender, userRestHr, userMaxHr, heartRateArray, timeArray, velocityArray, activityStatsMap) {
+    heartRateData_: function heartRateData_(userGender, userRestHr, userMaxHr, heartRateArray, timeArray, velocityArray, activityStatsMap) {
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         if (_.isEmpty(heartRateArray) || _.isEmpty(timeArray) ) {
             return null;
@@ -643,7 +715,11 @@ ActivityProcessor.prototype = {
 
 
 
-    getHrrZoneId: function(hrrZonesCount, hrrValue) {
+    /**
+     *
+     */
+    getHrrZoneId: function getHrrZoneId(hrrZonesCount, hrrValue) {
+//if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
         for (zoneId = 0; zoneId < hrrZonesCount; zoneId++) {
             if (hrrValue <= this.userHrrZones_[zoneId]['toHrr']) {
                 return zoneId;
@@ -651,7 +727,13 @@ ActivityProcessor.prototype = {
         }
     },
 
-    cadenceData_: function(cadenceArray, velocityArray, activityStatsMap, timeArray) { // TODO add cadence type here
+
+
+    /**
+     *
+     */
+    cadenceData_: function cadenceData_(cadenceArray, velocityArray, activityStatsMap, timeArray) { // TODO add cadence type here
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
 //        if (_.isUndefined(cadenceArray) || _.isUndefined(velocityArray)) {
         if (_.isEmpty(cadenceArray) || _.isEmpty(velocityArray) || _.isEmpty(timeArray)) {
@@ -738,7 +820,13 @@ ActivityProcessor.prototype = {
         };
     },
 
-    gradeData_: function(gradeArray, velocityArray, timeArray, distanceArray, altitudeArray) {
+
+
+    /**
+     *
+     */
+    gradeData_: function gradeData_(gradeArray, velocityArray, timeArray, distanceArray, altitudeArray) {
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 //        if (_.isEmpty(gradeArray) || _.isEmpty(timeArray)) {
         if (_.isEmpty(gradeArray) || _.isEmpty(velocityArray) || _.isEmpty(timeArray) || _.isEmpty(altitudeArray)){
             return null;
@@ -943,7 +1031,13 @@ ActivityProcessor.prototype = {
 
     },
 
-    elevationData_: function(activityStream, activityStatsMap) {
+
+
+    /**
+     *
+     */
+    elevationData_: function elevationData_(activityStream, activityStatsMap) {
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
         var distanceArray = activityStream.distance;
         var timeArray = activityStream.time;
         var velocityArray = activityStream.velocity_smooth;
@@ -1068,7 +1162,13 @@ ActivityProcessor.prototype = {
         };
     },
 
+
+
+    /**
+     *
+     */
     smoothAltitude_: function smoothAltitude(activityStream, stravaElevation) {
+if (env.debugMode) console.warn(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
         var activityAltitudeArray = activityStream.altitude;
         var distanceArray = activityStream.distance;
         var velocityArray = activityStream.velocity_smooth;
@@ -1089,7 +1189,7 @@ ActivityProcessor.prototype = {
                 }
             }
 
-			if (env.debugMode) console.log("ActivityProcessor: Altitude smoothing factor:" + smoothing + "   Strava Elevation:" + stravaElevation + "   Smoothed Elevation:" + totalElevation);
+if (env.debugMode) console.log("          ...Altitude smoothing factor:" + smoothing.toFixed(2) + "   Strava Elev.: " + stravaElevation + "   Smoothed: " + totalElevation.toFixed(2) );
             if (totalElevation < stravaElevation) {
                 smoothingH = smoothing;
             } else {
@@ -1099,7 +1199,13 @@ ActivityProcessor.prototype = {
         return altitudeArray;
     },
 
-    lowPassDataSmoothing_: function(data, distance, smoothing) {
+
+
+    /**
+     *
+     */
+    lowPassDataSmoothing_: function lowPassDataSmoothing_(data, distance, smoothing) {
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
         // Below algorithm is applied in this method
         // http://phrogz.net/js/framerate-independent-low-pass-filter.html
         if (data && distance) {
@@ -1115,4 +1221,13 @@ ActivityProcessor.prototype = {
             return result;
         }
     }
-};
+
+
+
+
+
+}; // prototype
+
+
+
+if (env.debugMode) console.warn('End       ActivityProcessor.js');

@@ -184,7 +184,8 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
         message += "- Various Fixes, sorry for bigbug in 2.0.0.1 - settings menu not working :/<br/>"
         message += "<br/>"
         message += "<h4><strong>From previous update:</strong></h4>";
-        message += "- Added year progression (activity count, distance, elevation, time) table and chart<br/>"
+        message += "- improved grade profile word description<br>"
+        message += "- Added year progression (activity count, distance, elevation, time) table and chart<br>"
 		message += "- Added 'Best Splits' (distance, time, elevation, hr,...) to biking activities<br>"
 		message += "- export of segments as Virtual Partner (cycling: button under segment compare)<br>"
 		message += "- Added segment builder link to segments page<br>"

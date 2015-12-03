@@ -174,6 +174,7 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 		if (this.analysisData_.moveRatio != null) {html+=this.analysisData_.moveRatio.toFixed(2)} else {html+="-"};
 		html +=	'</strong></td>';
 		html += '<td><strong>Average</strong></td><td>Q1<br><font style="font-size:9px">low 25%</font></td><td>Q2 (Median)<br><font style="font-size:9px">50th percentile</font></td><td>Q3<br><font style="font-size:9px">high 75%</font></td><td><strong>Max</strong></td></tr>';
+
 		if (this.analysisData_.heartRateData != null) {
 			html += '<tr style="color: rgb(240, 40, 60)"><td style="line-height: 0.8">';
 			 html += '<img src="' + this.appResources_.heartbeatIcon + '"height=18 style="padding:3px"><br>';
@@ -205,8 +206,19 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 			 html+= '</td>';
 		};
 
-//		if (this.analysisData_.gradeData != null && !(this.analysisData_.gradeData.lowerQuartileGrade == 0 && this.analysisData_.gradeData.upperQuartileGrade == 0)) {
+		if (this.analysisData_.powerData != null ) {
+			html += '<tr style="color: rgb(173,173,173)"><td>Power';
+			if (!this.analysisData_.powerData.hasPowerMeter) html+= '<font style="font-size:10px"> (Estimate)</font>';
+			html += '</td>';
+			html += '<td><strong>'+this.analysisData_.powerData.avgWatts.toFixed(1)+'</strong> W</td>';
+			html += '<td><strong>'+this.analysisData_.powerData.lowerQuartileWatts.toFixed(1)+'</strong> W</td>';
+			html += '<td><strong>'+this.analysisData_.powerData.medianWatts.toFixed(1)+'</strong> W</td>';
+			html += '<td><strong>'+this.analysisData_.powerData.upperQuartileWatts.toFixed(1)+'</strong> W</td>';
+			html += '<td><strong>'+this.analysisData_.powerData.maxWatts.toFixed(1)+'</strong> W</td></tr>';
+		};
+
 		if (this.analysisData_.gradeData != null ) {
+//		if (this.analysisData_.gradeData != null && !(this.analysisData_.gradeData.lowerQuartileGrade == 0 && this.analysisData_.gradeData.upperQuartileGrade == 0)) {
 			html += '<tr style="color: rgb(20,120,20)"><td>Grade<br><strong>'+this.analysisData_.gradeData.gradeProfile+'</strong></td>';
 			html += '<td><strong>'+this.analysisData_.gradeData.avgGrade.toFixed(1)+'</strong>%</td>';
 			html += '<td><strong>'+this.analysisData_.gradeData.lowerQuartileGrade.toFixed(1)+'</strong>%</td>';
@@ -214,6 +226,7 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 			html += '<td><strong>'+this.analysisData_.gradeData.upperQuartileGrade.toFixed(1)+'</strong>%</td>';
 			html += '<td><strong>'+this.analysisData_.gradeData.maxGrade.toFixed(1)+'</strong>%</td></tr>';
 		};
+
 		if (this.analysisData_.speedData != null) {
 			html += '<tr style="color: rgb(60,155, 200)"><td>Speed [km/h]</td>';
 //			html += '<td><strong>'+(3600*window.distance/window.elapsedTime).toFixed(1)+'</strong></td>';
@@ -230,6 +243,16 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 			html += '<td><strong>'+Helper.secondsToHHMMSS((3600/this.analysisData_.speedData.upperQuartileSpeed).toFixed(0)).replace('00:','')+'</strong></td>';
 			html += '<td><strong>'+Helper.secondsToHHMMSS((3600/this.analysisData_.speedData.maxSpeed).toFixed(0)).replace('00:','')+'</strong></td></tr>';
 		};
+
+		if (this.analysisData_.cadenceData != null ) {
+			html += '<tr style="color: rgb(231,125,222)"><td>Cadence</td>';
+			html += '<td><strong>'+this.analysisData_.cadenceData.averageCadenceMoving.toFixed(1)+'</strong> rpm</td>';
+			html += '<td><strong>'+this.analysisData_.cadenceData.lowerQuartileCadence.toFixed(1)+'</strong> rpm</td>';
+			html += '<td><strong>'+this.analysisData_.cadenceData.medianCadence.toFixed(1)+'</strong> rpm</td>';
+			html += '<td><strong>'+this.analysisData_.cadenceData.upperQuartileCadence.toFixed(1)+'</strong> rpm</td>';
+			html += '<td><strong>'+this.analysisData_.cadenceData.maxCadence.toFixed(1)+'</strong> rpm</td></tr>';
+		};
+
 		html += '</table></a></div>';
 
 

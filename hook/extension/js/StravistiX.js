@@ -5,30 +5,67 @@ if (env.debugMode) console.warn('Begin     StravistiX.js');
 function StravistiX(userSettings, appResources) {
 if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
-    this.userSettings_ = userSettings;
-    this.appResources_ = appResources;
-    this.extensionId_ = this.appResources_.extensionId;
+    this.userSettings_ 					= userSettings;
+    this.appResources_ 					= appResources;
+    this.extensionId_ 					= this.appResources_.extensionId;
 
-    this.vacuumProcessor_ = new VacuumProcessor();
-    this.activityProcessor_ = new ActivityProcessor(this.vacuumProcessor_, this.userSettings_.userHrrZones, this.userSettings_.zones);
+    this.vacuumProcessor_ 				= new VacuumProcessor();
+    this.activityProcessor_ 			= new ActivityProcessor(this.vacuumProcessor_, this.userSettings_.userHrrZones, this.userSettings_.zones);
 
-    this.athleteId_ = this.vacuumProcessor_.getAthleteId();
-    this.athleteName_ = this.vacuumProcessor_.getAthleteName();
-    this.athleteIdAuthorOfActivity_ = this.vacuumProcessor_.getAthleteIdAuthorOfActivity();
-    this.isPremium_ = this.vacuumProcessor_.getPremiumStatus();
-    this.isPro_ = this.vacuumProcessor_.getProStatus();
-    this.activityId_ = this.vacuumProcessor_.getActivityId();
-    this.activityName_ = this.vacuumProcessor_.getActivityName();
-    this.activityTime_ = this.vacuumProcessor_.getActivityTime();
+    this.athleteId_ 					= this.vacuumProcessor_.getAthleteId();
+    this.athleteName_ 					= this.vacuumProcessor_.getAthleteName();
+    this.athleteIdAuthorOfActivity_ 	= this.vacuumProcessor_.getAthleteIdAuthorOfActivity();
+    this.isPremium_ 					= this.vacuumProcessor_.getPremiumStatus();
+    this.isPro_ 						= this.vacuumProcessor_.getProStatus();
+    this.activityId_ 					= this.vacuumProcessor_.getActivityId();
+    this.activityName_ 					= this.vacuumProcessor_.getActivityName();
+    this.activityTime_ 					= this.vacuumProcessor_.getActivityTime();
 
 
 
     // Make the work...
     this.init_();
-    if (env.debugMode && (typeof pageView !== 'undefined')) console.log("Activity:" + pageView.activity().get('type')+" ("+pageView.activity().get('id')+")");
-    if (env.debugMode && (typeof pageView !== 'undefined')) if(pageView.activityAthlete()!=null) console.log("Athlete: "+pageView.activityAthlete().get('display_name')+" ("+pageView.activityAthlete().get('id')+")");
-	if (env.debugMode) console.log("--------------------");
-}
+    
+
+
+if (env.debugMode) console.log("--------------------");
+if (env.debugMode && (typeof pageView !== 'undefined')) console.warn( "Activity: " + pageView.activity().get('type') + " (" + pageView.activity().get('id') + ")" );
+if (env.debugMode && (typeof pageView !== 'undefined')) if( pageView.activityAthlete() != null ) console.warn( "Athlete:  " + pageView.activityAthlete().get('display_name') + " (" + pageView.activityAthlete().get('id') + ")" );
+if (env.debugMode) console.log("--------------------");
+} // StravistiX
+
+
+
+/*    check for correct working with following acitivities:
+
+
+https://www.strava.com/activities/443325145		Biking	stationary, but with GPS data (*speed*, power, HR, cadence, T)
+
+
+https://www.strava.com/activities/442775904		Biking 	on trainer - no gps, (speed, power, HR, cadence)
+https://www.strava.com/activities/442206536		Biking 	on trainer - no gps, no speed (power, HR, cadence)
+
+https://www.strava.com/activities/214252443		hiking	slow -> ne dela !grade!
+https://www.strava.com/activities/119185669		hiking	dowhnill (speed, HR, cadence)
+https://www.strava.com/activities/442681892		run		elevation stats problem because of filtering!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*/
+
 
 
 /**
@@ -39,6 +76,7 @@ StravistiX.setToStorageMethod = 'setToStorage';
 StravistiX.defaultIntervalTimeMillis = 750;
 
 
+
 /**
  * Define prototype
  */
@@ -46,25 +84,34 @@ StravistiX.prototype = {
 
 
 
+//  --------------------------------------------------------------------------------------------------------------------
     /**
      *
      */
     init_: function init_() {
 if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
+
+
         // Redirect app.strava.com/* to www.strava.com/*
         if (this.handleForwardToWWW_()) {
             return; // Skip rest of init to be compliant with www.strava.com/* on next reload
         }
+
+
 
         // Handle some tasks to od when update occurs
         if (this.userSettings_.extensionHasJustUpdated || env.forceUpdated) {
             this.handleExtensionHasJustUpdated_();
         }
 
+
+
         if (env.preview) {
             this.handlePreviewRibbon_();
         }
+
+
 
         if (this.userSettings_.localStorageMustBeCleared) {
             localStorage.clear();
@@ -73,7 +120,10 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
             });
         }
 
+
+
         // Common
+if (env.debugMode) console.warn('\n > (f: StravistiX.js) >   COMMON   < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + '\n\n')
         this.handleMenu_();
         this.handleRemoteLinks_();
         this.handleWindyTyModifier_();
@@ -86,28 +136,53 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
         this.handleHideFeed_();
         this.handleDisplayFlyByFeedModifier_();
 
-        // Bike
+
+
+		//
         this.handleExtendedActivityData_();
+		//
+
+
+
+        // Bike
+if (env.debugMode) console.warn(' > (f: StravistiX.js) >   BIKE   < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
         this.handleNearbySegments_();
         this.handleActivityBikeOdo_();
         this.handleActivitySegmentTimeComparison_();
         this.handleActivityBestSplits_();
 
+
+
         // Run
+if (env.debugMode) console.warn(' > (f: StravistiX.js) >   RUN   < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
         this.handleRunningGradeAdjustedPace_();
         this.handleRunningHeartRate_();
         this.handleMoveFooterOutofWay_();
 
+
+
         // All activities
+if (env.debugMode) console.warn(' > (f: StravistiX.js) >   ALL   < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
         this.handleActivityQRCodeDisplay_();
         this.handleVirtualPartner_();
         this.handleAthletesStats();
 
+
+
         // Must be done at the end
+if (env.debugMode) console.warn(' > (f: StravistiX.js) >   FINAL   < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
         this.handleTrackTodayIncommingConnection_();
         this.handleGoogleMapsComeBackModifier();
 
-    },
+
+
+    }, //_init
+    /**
+     *
+     */
+//  --------------------------------------------------------------------------------------------------------------------
+
+
 
 
 
@@ -133,17 +208,21 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
     handleExtensionHasJustUpdated_: function handleExtensionHasJustUpdated_() {
 if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
+
         // Clear localstorage
         // Especially for activies data stored in cache
-        console.log("ExtensionHasJustUpdated, localstorage clear");
+        console.log("Extension Has Updated -> localstorage clear");
         localStorage.clear();
+
 
         if (!window.location.pathname.match(/^\/dashboard/)) {
             return;
         }
 
+
         // Display ribbon update message
         this.handleUpdateRibbon_();
+
 
         // Send update info to ga
         var updatedToEvent = {
@@ -154,6 +233,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
 
         _spTrack('send', 'event', updatedToEvent.categorie, updatedToEvent.action, updatedToEvent.name);
         _spTrack('send', 'event', updatedToEvent.categorie, updatedToEvent.action, updatedToEvent.name+'_'+this.athleteName_+ ' #' + this.athleteId_,1);
+
 
         // Now mark extension "just updated" to false...
         Helper.setToStorage(this.extensionId_, StorageManager.storageSyncType, 'extensionHasJustUpdated', false, function(response) {});
@@ -464,11 +544,14 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
 
 
 
+
+
+//  --------------------------------------------------------------------------------------------------------------------
     /**
      *
      */
     handleExtendedActivityData_: function handleExtendedActivityData_() {
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.warn(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         if (_.isUndefined(window.pageView)) {
             return;
@@ -480,12 +563,20 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
 
         // Skip manual activities
         if (activityType === 'Manual') {
-            if (env.debugMode) console.log("--- StravistiX.js skip Manual activity: " + activityType);
+if (env.debugMode) console.log("--- StravistiX.js skip Manual activity: " + activityType);
             return;
         }
 
-        this.activityProcessor_.setActivityType(activityType);
 
+
+
+
+        this.activityProcessor_.setActivityType(activityType);
+if (env.debugMode) console.warn("--- StravistiX.js Getting activity data and analysing... ");
+
+
+
+//  ------------------------------------
         this.activityProcessor_.getAnalysisData(
             this.activityId_,
             this.userSettings_.userGender,
@@ -493,26 +584,33 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
             this.userSettings_.userMaxHr,
             this.userSettings_.userFTP,
 
-            function(analysisData) { // Callback when analysis data has been computed
-//console.log("Analysis done; TRIMP:"+analysisData.heartRateData.TRIMP.toFixed(0));
-                var extendedActivityDataModifier = null;
+            function getAnalysisData (analysisData) { // Callback when analysis data has been computed
+if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
+                var extendedActivityDataModifier = null;
                 var basicInfos = {
                     activityName: this.vacuumProcessor_.getActivityName(),
                     activityTime: this.vacuumProcessor_.getActivityTime()
                 }
 
-                // tell activity type for other than Ride/Run activities
+
+                // write activity type on page for all except Ride/Run activities
 				if ( (activityType !== "Ride") && (activityType !== "Run") ) {
                     var html = '<div  style="padding: 0px 0px 0px 0px;background: #FFFFFF;font-size: 9px;color: rgb(103, 103, 103);">&nbsp&nbsp&nbspActivity type: '+window.pageView.activity().attributes.type+'</div>';
                     $('.inset').parent().children().first().before(html);
 				}
 
-	            if (env.debugMode) console.log("--- StravistiX.js switch (activityType): " + activityType);
+
+if (env.debugMode) console.log("--- StravistiX.js switch (activityType): " + activityType);
                 switch (activityType) {
+
+
+
                     case 'Ride':
                         extendedActivityDataModifier = new CyclingExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_, basicInfos);
                         break;
+
+
                     case 'Run':
                         extendedActivityDataModifier = new RunningExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_, basicInfos);
                         break;
@@ -520,13 +618,16 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
 //										https://www.strava.com/activities/83623294	?
 //										https://www.strava.com/activities/214252443	OK
 
-                    // for Workout, Rowing,...
+
+
                     case 'StationaryOther':
+                    // for Workout, Rowing,...
                         extendedActivityDataModifier = new GenericExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_, basicInfos);
                         break;
 
-                    // for Swimming,...
+
                     case 'Swim':
+                    // for Swimming,...
                         extendedActivityDataModifier = new GenericExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_, basicInfos);
                         break;
 
@@ -536,15 +637,18 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
                         var html = '<p style="padding: 10px;background: #FFF0A0;font-size: 12px;color: rgb(103, 103, 103);">StraTistiX don\'t support <strong>Extended Data Features</strong> for this type of activity at the moment.</br></p>';
                         $('.inline-stats.section').parent().children().last().after(html);
                         break;
-                }
+                }// switch
 
                 if (extendedActivityDataModifier) {
                     extendedActivityDataModifier.modify();
 							
                 }
 
-            }.bind(this)
-        );
+            }.bind(this)  // getAnalysisData			//!?!? check !?!?
+        );// this.activityProcessor_.getAnalysisData    //!?!? check !?!?
+//  ------------------------------------
+
+
 
         // Send opened activity type to ga for stats
         var updatedToEvent = {
@@ -553,7 +657,12 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
             name: activityType
         };
         _spTrack('send', 'event', updatedToEvent.categorie, updatedToEvent.action, updatedToEvent.name);
-    },
+    },// handleExtendedActivityData
+    /**
+     *
+     */
+//  --------------------------------------------------------------------------------------------------------------------
+
 
 
 
@@ -896,5 +1005,11 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
 
         }
     }
-};
+
+
+
+};// prototype
+
+
+
 if (env.debugMode) console.warn('End       StravistiX.js');

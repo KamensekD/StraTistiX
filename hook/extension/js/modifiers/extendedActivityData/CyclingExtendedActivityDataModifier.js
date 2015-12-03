@@ -62,9 +62,16 @@ var CyclingExtendedActivityDataModifier = AbstractExtendedActivityDataModifier.e
             }
         },
 
-        setDataViewsNeeded: function() {
+        setDataViewsNeeded: function() {	// extended data views order
 
             base.setDataViewsNeeded.call(this);
+
+            if (this.analysisData_.powerData && this.userSettings_.displayAdvancedPowerData) {
+                var powerDataView = new PowerDataView(this.analysisData_.powerData, 'w');
+                powerDataView.setAppResources(this.appResources_);
+                powerDataView.setIsAuthorOfViewedActivity(this.isAuthorOfViewedActivity);
+                this.dataViews.push(powerDataView);
+            }
 
             // Speed view
             if (this.analysisData_.speedData && this.userSettings_.displayAdvancedSpeedData) {
@@ -76,13 +83,6 @@ var CyclingExtendedActivityDataModifier = AbstractExtendedActivityDataModifier.e
                 speedDataView.setAppResources(this.appResources_);
                 speedDataView.setIsAuthorOfViewedActivity(this.isAuthorOfViewedActivity);
                 this.dataViews.push(speedDataView);
-            }
-
-            if (this.analysisData_.powerData && this.userSettings_.displayAdvancedPowerData) {
-                var powerDataView = new PowerDataView(this.analysisData_.powerData, 'w');
-                powerDataView.setAppResources(this.appResources_);
-                powerDataView.setIsAuthorOfViewedActivity(this.isAuthorOfViewedActivity);
-                this.dataViews.push(powerDataView);
             }
 
             if (this.analysisData_.cadenceData && this.userSettings_.displayCadenceData) {

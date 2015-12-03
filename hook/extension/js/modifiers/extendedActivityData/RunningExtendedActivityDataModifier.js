@@ -53,7 +53,7 @@ var RunningExtendedActivityDataModifier = AbstractExtendedActivityDataModifier.e
             }
         },
 
-        setDataViewsNeeded: function() {
+        setDataViewsNeeded: function() {	// extended data views order
 
             base.setDataViewsNeeded.call(this);
 

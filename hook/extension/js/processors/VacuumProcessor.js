@@ -245,8 +245,8 @@ if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.cal
             , true, false, false, false);
 
         if (isNaN(elapsedTime)) {
-//					console.warn("Can't get elapsed time - probably 'race'");
-				// if 'race' elapsed and moving time are swapped on Strava overview screen
+if (env.debugMode) console.warn("Can't get elapsed time - probably 'race'");
+		// if 'race' elapsed and moving time are swapped on Strava overview screen
         // Get Elapsed Time
 // without var -> global scope (window.elapsedTime)
         elapsedTime = this.formatActivityDataValue_(
@@ -343,6 +343,7 @@ if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.cal
 			}
 
         if (typeof averageSpeed === 'undefined') {
+if (env.debugMode) console.warn("Can't get average speed... tryin' to get pace");
             averageSpeed = this.formatActivityDataValue_(			// If no average speed availabe, try to get pace instead and transform to speed
                 $('[class*="inline-stats section"]').children().first().next().next().children().text()
 //                $('[data-glossary-term*=definition-moving-time]').parent().parent().first().next().children().text()
@@ -385,7 +386,7 @@ if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.cal
 
 
 
-        // Create activityData Map
+        // Create activityData Map ( ActivityStatsMap )
         return {
             'distance': distance,
             'movingTime': movingTime,
@@ -493,14 +494,26 @@ if (env.debugMode) console.log('...   NOT in cache - getting Activity Streams fr
 
             try {
                 // Save result to cache
-if (env.debugMode) console.log('--- (f: VacuumProcessor.js) >   Try to write  -Activity '+this.getActivityId()+' Streams-  to cache/localStorage (' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + ')' )
-                localStorage.setItem(VacuumProcessor.cachePrefix + this.getActivityId(), JSON.stringify({
+if (env.debugMode) console.log('--- (f: VacuumProcessor.js) >   Try to write  -Activity '+this.getActivityId()+' Streams-  to cache/localStorage < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+
+            	var result = {
                     activityCommonStats: this.getActivityCommonStats(),
                     stream: jsonResponse,
                     athleteWeight: this.getAthleteWeight(),
                     hasPowerMeter: hasPowerMeter
-                }));
+                };
+
+            	var result1 = {
+                    activityCommonStats: this.getActivityCommonStats(),
+                    stream: "...Activity Streams...",
+                    athleteWeight: this.getAthleteWeight(),
+                    hasPowerMeter: hasPowerMeter
+                };
+
+                localStorage.setItem(VacuumProcessor.cachePrefix + this.getActivityId(), JSON.stringify(result));
 if (env.debugMode) console.log('   > Written to cache/localstorage' );
+if (env.debugMode) console.log("\nWritten to cache/localstorage: " + VacuumProcessor.cachePrefix + this.getActivityId() + "\n\n" + JSON.stringify(result1) + "\n\n\n");
+				result=null; result1=null// Memory clean
             } catch (err) {
                 console.warn(err);
             }

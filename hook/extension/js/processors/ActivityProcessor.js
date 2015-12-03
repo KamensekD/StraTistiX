@@ -28,7 +28,7 @@ ActivityProcessor.defaultBikeWeight = 10;		// KGs
 ActivityProcessor.gradeClimbingLimit = 2.5;		// thresholds for UP/DOWN vs FLAT
 ActivityProcessor.gradeDownHillLimit = -2.5;
 
-velocity_avgThreshold = 1;						// Kph - threshold of average velocity to consider activity "stationary"
+velocity_avgThreshold = 0.5;						// Kph - threshold of average velocity to consider activity "stationary"
 
 ActivityProcessor.gradeProfileDownhillPercentage = 75;		// if at least 75% of distance is down
 ActivityProcessor.gradeProfileDownhill = 'DOWNHILL';
@@ -479,7 +479,8 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
 //        if (_.isEmpty(powerArray) || _.isEmpty(velocityArray)) {
-        if (_.isEmpty(powerArray) || _.isEmpty(velocityArray) || _.isEmpty(timeArray)) {
+//        if (_.isEmpty(powerArray) || _.isEmpty(velocityArray) || _.isEmpty(timeArray)) {
+        if (_.isEmpty(powerArray) || _.isEmpty(timeArray)) {
             return null;
         }
 
@@ -495,7 +496,13 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 
         for (var i = 0; i < powerArray.length; i++) { // Loop on samples
 
-            if ( ( ( velocityArray[i] * 3.6 > ActivityProcessor.movingThresholdKph ) || ( velocity_avg < velocity_avgThreshold ) )  && i > 0) {
+          if (i > 0) {
+
+//            if ( ( ( velocityArray[i] * 3.6 > ActivityProcessor.movingThresholdKph ) || ( velocity_avg < velocity_avgThreshold ) )  && i > 0) {
+	        if ( // if moving or if avg. speed < threshold
+				!_.isEmpty(velocityArray) && ( ( currentSpeed = velocityArray[i] * 3.6 ) > ActivityProcessor.movingThresholdKph )
+	           	|| ( velocity_avg < velocity_avgThreshold ) || (_.isEmpty(velocityArray)) )
+	           	{// Multiply by 3.6 to convert to kph; 
                 // Compute average and normalized power
                 accumulatedWattsOnMoveFourRoot += Math.pow(powerArray[i], 3.925);
                 // Compute distribution for graph/table
@@ -514,6 +521,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
                     powerZones[powerZoneId]['s'] += durationInSeconds;
                 }
             }
+          }
         }
 
         // Finalize compute of Power
@@ -773,7 +781,8 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
 //        if (_.isUndefined(cadenceArray) || _.isUndefined(velocityArray)) {
-        if (_.isEmpty(cadenceArray) || _.isEmpty(velocityArray) || _.isEmpty(timeArray)) {
+//        if (_.isEmpty(cadenceArray) || _.isEmpty(velocityArray) || _.isEmpty(timeArray)) {
+        if (_.isEmpty(cadenceArray) || _.isEmpty(timeArray)) {
           return null;
         }
 
@@ -801,15 +810,17 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         var cadenceArrayMoving = [];
         var cadenceArrayDuration = [];
 
-        for (var i = 0; i < velocityArray.length; i++) {
+        for (var i = 0; i < cadenceArray.length; i++) {
 
             if (i > 0) {
                 durationInSeconds = (timeArray[i] - timeArray[i - 1]); // Getting deltaTime in seconds (current sample and previous one)
                 // recomputing crank revolutions using cadence data
                 crankRevolutions += this.valueForSum_(cadenceArray[i], cadenceArray[i - 1], durationInSeconds / 60);
 
-//                if (velocityArray[i] * 3.6 > ActivityProcessor.movingThresholdKph) {
-	            if ( ( velocityArray[i] * 3.6 > ActivityProcessor.movingThresholdKph ) || ( velocity_avg < velocity_avgThreshold ) ) {
+	            if ( 
+	            	   !_.isEmpty(velocityArray) && ( velocityArray[i] * 3.6 > ActivityProcessor.movingThresholdKph )
+	            	|| ( velocity_avg < velocity_avgThreshold ) || (_.isEmpty(velocityArray)) )
+	            	{
 
                     movingSampleCount++;
 
@@ -867,7 +878,8 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
     gradeData_: function gradeData_(gradeArray, velocityArray, timeArray, distanceArray, altitudeArray) {
 if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 //        if (_.isEmpty(gradeArray) || _.isEmpty(timeArray)) {
-        if (_.isEmpty(gradeArray) || _.isEmpty(velocityArray) || _.isEmpty(timeArray) || _.isEmpty(altitudeArray) || ( velocity_avg < velocity_avgThreshold ) ){
+//        if (_.isEmpty(gradeArray) || _.isEmpty(velocityArray) || _.isEmpty(timeArray) || _.isEmpty(altitudeArray) || ( velocity_avg < velocity_avgThreshold ) ){
+        if ( _.isEmpty(gradeArray) || _.isEmpty(timeArray) || ( velocity_avg < velocity_avgThreshold ) ) {
             return null;
         }
 
@@ -914,7 +926,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         var durationInSeconds = 0;
         var distance = 0;
         var deltaAltitude = 0;
-        var currentSpeed;
+        var currentSpeed = 0;
 
         var gradeArrayMoving = [];
         var gradeArrayDistance = [];
@@ -922,10 +934,16 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         for (var i = 0; i < gradeArray.length; i++) { // Loop on samples
 
             if (i > 0) {
-                currentSpeed = velocityArray[i] * 3.6; // Multiply by 3.6 to convert to kph; 
+
                 // Compute distribution for graph/table
 //                if (currentSpeed > 0) { // If moving...
-	            if ( ( currentSpeed > 0 ) || ( velocity_avg < velocity_avgThreshold ) ) { // if moving or avg. speed < threshold
+//	              if ( ( currentSpeed > 0 ) || ( velocity_avg < velocity_avgThreshold ) ) { 
+	            if ( // if moving or if avg. speed < threshold
+	            	   !_.isEmpty(velocityArray) && ( ( currentSpeed = velocityArray[i] * 3.6 ) > ActivityProcessor.movingThresholdKph )
+	            	|| ( velocity_avg < velocity_avgThreshold ) || (_.isEmpty(velocityArray)) )
+	            	{// Multiply by 3.6 to convert to kph; 
+
+
                     durationInSeconds = (timeArray[i] - timeArray[i - 1]); // Getting deltaTime in seconds (current sample and previous one)
                     distance = distanceArray[i] - distanceArray[i - 1];
                     deltaAltitude = altitudeArray[i] - altitudeArray[i - 1];
@@ -975,9 +993,9 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
                         // altitude
                         upFlatDownAltitudeInMeters.ignore += deltaAltitude;
                     }
-                }
-            }
-       	}
+                }// if
+        	}// if
+       	}// for
 
         // Compute speed while up, flat down
         upFlatDownMoveData.up = upFlatDownMoveData.up / upFlatDownInSeconds.up;
@@ -1113,7 +1131,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 
             // Compute distribution for graph/table
 //            if (i > 0 && velocityArray[i] * 3.6 > ActivityProcessor.movingThresholdKph) {
-            if ( ( i > 0 ) && ( ( velocityArray[i] * 3.6 > ActivityProcessor.movingThresholdKph ) || ( velocity_avg < velocity_avgThreshold ) ) ) { // if moving or avg. speed < threshold
+            if ( ( i > 0 ) && ( ( velocityArray[i] * 3.6 > ActivityProcessor.movingThresholdKph ) || ( velocity_avg < velocity_avgThreshold ) ) ) { // if moving or if avg. speed < threshold
 
                 durationInSeconds = (timeArray[i] - timeArray[i - 1]); // Getting deltaTime in seconds (current sample and previous one)
                 distance = distanceArray[i] - distanceArray[i - 1];

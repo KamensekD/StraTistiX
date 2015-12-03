@@ -39,13 +39,12 @@ if (env.debugMode) console.log("--------------------");
 /*    check for correct working with following acitivities:
 
 
-https://www.strava.com/activities/443325145		Biking	stationary, but with GPS data (*speed*, power, HR, cadence, T)
-
+https://www.strava.com/activities/443325145		Biking	stationary, but with GPS data (*speed*, power, HR, cadence, T) -> avg_velocity << 1 (velocity_avgThreshold ~ 0.5)
 
 https://www.strava.com/activities/442775904		Biking 	on trainer - no gps, (speed, power, HR, cadence)
 https://www.strava.com/activities/442206536		Biking 	on trainer - no gps, no speed (power, HR, cadence)
 
-https://www.strava.com/activities/214252443		hiking	slow -> ne dela !grade!
+https://www.strava.com/activities/214252443		hiking	slow ->  avg_velocity < 1 (velocity_avgThreshold ~ 0.5)
 https://www.strava.com/activities/119185669		hiking	dowhnill (speed, HR, cadence)
 https://www.strava.com/activities/442681892		run		elevation stats problem because of filtering!
 

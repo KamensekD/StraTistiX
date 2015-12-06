@@ -173,7 +173,7 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 		html += '<tr style="color: rgb(30, 30, 30)"><td>Move Ratio<br><strong>';
 		if (this.analysisData_.moveRatio != null) {html+=this.analysisData_.moveRatio.toFixed(2)} else {html+="-"};
 		html +=	'</strong></td>';
-		html += '<td><strong>Average</strong></td><td>Q1<br><font style="font-size:9px">low 25%</font></td><td>Q2 (Median)<br><font style="font-size:9px">50th percentile</font></td><td>Q3<br><font style="font-size:9px">high 75%</font></td><td><strong>Max</strong></td></tr>';
+		html += '<td><strong>Average</strong></td><td>Q1<br><font style="font-size:9px">low 25%</font></td><td>Median<br><font style="font-size:9px">50th percentile</font></td><td>Q3<br><font style="font-size:9px">high 75%</font></td><td><strong>Max</strong></td></tr>';
 
 		if (this.analysisData_.heartRateData != null) {
 			html += '<tr style="color: rgb(240, 40, 60)"><td style="line-height: 0.8">';
@@ -219,12 +219,25 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 
 		if (this.analysisData_.gradeData != null ) {
 //		if (this.analysisData_.gradeData != null && !(this.analysisData_.gradeData.lowerQuartileGrade == 0 && this.analysisData_.gradeData.upperQuartileGrade == 0)) {
-			html += '<tr style="color: rgb(20,120,20)"><td>Grade<br><strong>'+this.analysisData_.gradeData.gradeProfile+'</strong></td>';
-			html += '<td><strong>'+this.analysisData_.gradeData.avgGrade.toFixed(1)+'</strong>%</td>';
+			html += '<tr style="color: rgb(20,120,20)"><td>Grade<strong></td>';
+			html += '<td><strong>'+this.analysisData_.gradeData.avgGrade.toFixed(1);
 			html += '<td><strong>'+this.analysisData_.gradeData.lowerQuartileGrade.toFixed(1)+'</strong>%</td>';
 			html += '<td><strong>'+this.analysisData_.gradeData.medianGrade.toFixed(1)+'</strong>%</td>';
 			html += '<td><strong>'+this.analysisData_.gradeData.upperQuartileGrade.toFixed(1)+'</strong>%</td>';
 			html += '<td><strong>'+this.analysisData_.gradeData.maxGrade.toFixed(1)+'</strong>%</td></tr>';
+
+			html += '<tr style="color: rgb(20,120,20)"><td>Profile<br><strong>'+this.analysisData_.gradeData.gradeProfile+'</strong></td>';
+			html += '<td>% moving<br>Dst / Time</td>';
+			html += '<td>DH<br>'
+				+(this.analysisData_.gradeData.upFlatDownInMeters.down / this.analysisData_.gradeData.upFlatDownInMeters.total * 100).toFixed(0)
+				+' / '+(this.analysisData_.gradeData.upFlatDownInSeconds.down / this.analysisData_.gradeData.upFlatDownInSeconds.total * 100).toFixed(0)+'</td>';
+			html += '<td>FLAT<br>'
+				+(this.analysisData_.gradeData.upFlatDownInMeters.flat / this.analysisData_.gradeData.upFlatDownInMeters.total * 100).toFixed(0)
+				+' / '+(this.analysisData_.gradeData.upFlatDownInSeconds.flat / this.analysisData_.gradeData.upFlatDownInSeconds.total * 100).toFixed(0)+'</td>';
+			html += '<td>UP<br>'
+				+(this.analysisData_.gradeData.upFlatDownInMeters.up / this.analysisData_.gradeData.upFlatDownInMeters.total * 100).toFixed(0)
+				+' / '+(this.analysisData_.gradeData.upFlatDownInSeconds.up / this.analysisData_.gradeData.upFlatDownInSeconds.total * 100).toFixed(0)+'</td>';
+			html += '<td>UP grade%<br>'+this.analysisData_.gradeData.upAvgGradeEstimate.toFixed(1)+'% (est.)</td></tr>';
 		};
 
 		if (this.analysisData_.speedData != null) {

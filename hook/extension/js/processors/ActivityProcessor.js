@@ -16,55 +16,54 @@ ActivityProcessor.cachePrefix = 'stravistix_activity_';
 
 
 // *** PUT THIS STUFF IN CONFIGURABLE SETTINGS! ***
-//ActivityProcessor.movingThresholdKph = 3.5; 	// Kph
-ActivityProcessor.movingThresholdKph = 3.0;		// Kph
-//ActivityProcessor.cadenceThresholdRpm = 35;	// RPMs
-ActivityProcessor.cadenceThresholdRpm = 30;		// RPMs
-//ActivityProcessor.cadenceLimitRpm = 125;
-ActivityProcessor.cadenceLimitRpm = 150;
-ActivityProcessor.defaultBikeWeight = 10;		// KGs
-//ActivityProcessor.gradeClimbingLimit = 1.6;
-//ActivityProcessor.gradeDownHillLimit = -1.6;
-ActivityProcessor.gradeClimbingLimit = 2.5;		// thresholds for UP/DOWN vs FLAT
-ActivityProcessor.gradeDownHillLimit = -2.5;
+ActivityProcessor.movingThresholdKph    = 2.0;  // Kph          !!!   make this separate for biking and other activities   !!!
+                                                // it has very BIG impact on calculation of flat/up/down times and because of that also on "word gradeProfile estimate"
+                                                // since using altitude filtering, it is better, though
+                                                // should use bigger threshold for worse GPS devices and could use lesser for best GPS devices
+ActivityProcessor.cadenceThresholdRpm   = 30;   // RPMs
+ActivityProcessor.cadenceLimitRpm       = 150;
+ActivityProcessor.defaultBikeWeight     = 10;   // KGs
+ActivityProcessor.gradeClimbingLimit    =  2.0; // thresholds for UP/DOWN vs FLAT   *** also used as treshold for VAM calculations
+ActivityProcessor.gradeDownHillLimit    = -2.0; // for not very good GPS data, flat time can be underestimated if this setting too low
 
-velocity_avgThreshold = 0.5;						// Kph - threshold of average velocity to consider activity "stationary"
+velocity_avgThreshold                   = 0.5;  // Kph - average velocity threshold to consider activity "stationary" aka "on trainer"
 
-ActivityProcessor.gradeProfileDownhillPercentage = 75;		// if at least 75% of distance is down
+ActivityProcessor.gradeProfileDownhill_MinDownPercentD = 75;    // if at least 75% of distance is down
 ActivityProcessor.gradeProfileDownhill = 'DOWNHILL';
 
-ActivityProcessor.gradeProfileMostlyDownDownPercentage = 50;// if at least 50% of distance is down
-ActivityProcessor.gradeProfileMostlyDownUpPercentage = 25;	// and at most 25% is up
+ActivityProcessor.gradeProfileMostlyDown_MinDownPercentD = 50;  // if at least 50% of distance is down
+ActivityProcessor.gradeProfileMostlyDown_MaxUpPercentD = 25;    // and at most 25% of distance is up
 ActivityProcessor.gradeProfileMostlyDown = 'MOSTLY DOWN';
 
-ActivityProcessor.gradeProfileFlatPercentage = 75;			// if at least 75% of time is flat
-//ActivityProcessor.gradeProfileFlatAvgGradeEst = 3.3;		// and average (estimated) grade of climbing% is less then 3.3%
-ActivityProcessor.gradeProfileUpDownPercentageD = 10;		// and up/down distance distance percentage is less then 10%
+ActivityProcessor.gradeProfileFlat_MinFlatPercentT = 75;        // if at least 75% of time is flat
+ActivityProcessor.gradeProfileFlat_MaxUpDownPercentD = 20;      // and up/down distance distance percentage is less then 20%
+ActivityProcessor.gradeProfileFlat_MaxAvgGradeEst = 1.5;        // or average (estimated) grade of climbing% is less then 1.5%
 ActivityProcessor.gradeProfileFlat = 'FLAT';
 
-ActivityProcessor.gradeProfileMostlyFlatPercentage = 40;	// if at least 40% of time is flat
-ActivityProcessor.gradeProfileMostlyFlatAvgGradeEst = 5;	// and average (estimated) grade of climbing% is less then 5%
-ActivityProcessor.gradeProfileMostlyFlatDeltaH = 100;		// and at most 100m difference of highest and lowest altitude
+ActivityProcessor.gradeProfileMostlyFlat_MinFlatPercentT = 50;  // if at least 50% of time is flat
+ActivityProcessor.gradeProfileMostlyFlat_MaxAvgGradeEst = 5;    // and average (estimated) grade of climbing% is less then 5%
+ActivityProcessor.gradeProfileMostlyFlat_MaxDeltaH = 200;       // and at most 200m difference of highest and lowest altitude
 ActivityProcessor.gradeProfileMostlyFlat = 'MOSTLY FLAT';
 
-ActivityProcessor.gradeProfileVeryHillyPercentage = 50;		// less than 50% of time is flat
-ActivityProcessor.gradeProfileVeryHillyAvgGradeEst = 5;		// and average (estimated) grade of climbing% is more than 5%
-ActivityProcessor.gradeProfileVeryHillyDeltaH = 400;		// and at least 400m difference between highest and lowest altitude
-ActivityProcessor.gradeProfileVeryHillyClimbed = 600;		// and at least 600m vertical meters climbed
+
+ActivityProcessor.gradeProfileVeryHilly_MaxFlatPercentT = 50;   // less than 50% of time is flat
+ActivityProcessor.gradeProfileVeryHilly_MinAvgGradeEst = 5;     // and average (estimated) grade of climbing% is more than 5%
+ActivityProcessor.gradeProfileVeryHilly_MinDeltaH = 400;        // and at least 400m difference between highest and lowest altitude
+ActivityProcessor.gradeProfileVeryHilly_MinClimbed = 600;       // and at least 600m vertical meters climbed
 ActivityProcessor.gradeProfileVeryHilly = 'VERY HILLY';
 
-ActivityProcessor.gradeProfileMountainousPercentage = 60;	// less than 60% of time is flat
-ActivityProcessor.gradeProfileMountainousAvgGradeEst = 5;	// and average (estimated) grade of climbing% is more than 5%
-ActivityProcessor.gradeProfileMountainousDeltaH = 600;		// and at least 600m difference between highest and lowest altitude
-ActivityProcessor.gradeProfileMountainousClimbed = 800;		// and at least 800m vertical meters climbed
+ActivityProcessor.gradeProfileMountainous_MaxFlatPercentT = 60; // less than 60% of time is flat
+ActivityProcessor.gradeProfileMountainous_MinAvgGradeEst = 5;   // and average (estimated) grade of climbing% is more than 5%
+ActivityProcessor.gradeProfileMountainous_MinDeltaH = 600;      // and at least 600m difference between highest and lowest altitude
+ActivityProcessor.gradeProfileMountainous_MinClimbed = 800;     // and at least 800m vertical meters climbed
 ActivityProcessor.gradeProfileMountainous = 'MOUNTAINOUS';
 
-ActivityProcessor.gradeProfileAlpinePercentage = 50;		// less than 50% of time is flat
-ActivityProcessor.gradeProfileAlpineAvgGradeEst = 5;		// and average (estimated) grade of climbing% is more than 5%
-ActivityProcessor.gradeProfileAlpineDeltaH = 1500;			// and at least 1500m difference of highest and lowest altitude
+ActivityProcessor.gradeProfileAlpine_MaxFlatPercentT = 50;      // less than 50% of time is flat
+ActivityProcessor.gradeProfileAlpine_MInAvgGradeEst = 5;        // and average (estimated) grade of climbing% is more than 5%
+ActivityProcessor.gradeProfileAlpine_MinDeltaH = 1500;          // and at least 1500m difference of highest and lowest altitude
 ActivityProcessor.gradeProfileAlpine = 'ALPINE';
 
-ActivityProcessor.gradeProfileHilly = 'HILLY';				// All other scenarios - hilly
+ActivityProcessor.gradeProfileHilly = 'HILLY';                  // All other scenarios - hilly
 
 
 
@@ -100,13 +99,13 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         // Find in cache first is data exist
 if (env.debugMode) console.log('--- (f: ActivityProcessor.js) >   Try to read  -Analysis Data-  from cache/localStorage (' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + ')' )
         var cacheResult = JSON.parse(localStorage.getItem(ActivityProcessor.cachePrefix + activityId));
-		if (cacheResult) {
+                if (cacheResult) {
 if (env.debugMode) console.log('...   FOUND in cache - using cached Analysis Data   ...' );
-		} else {
+                } else {
 if (env.debugMode) console.log('...   NOT in cache - calculating Analysis Data   ...' );
-		}
+                }
 
-		
+                
         if (!_.isNull(cacheResult) && env.useActivityStreamCache) {
 if (env.debugMode) console.log("Using existing activity cache in non debug mode: " + JSON.stringify(cacheResult));
             callback(cacheResult);
@@ -124,9 +123,8 @@ if (env.debugMode) console.warn('Executing   VacuumProcessor_.getActivityStream 
 
             // Append altitude_smooth to fetched strava activity stream before compute analysis data on
             if (typeof activityStream.altitude !== 'undefined') {
-	            activityStream.altitude_smooth = this.smoothAltitude_(activityStream, activityStatsMap.elevation);
-//	            activityStream.altitude_smooth = this.vacuumProcessor_.smoothAltitude_(activityStream, activityStatsMap.elevation);
-        	}
+                    activityStream.altitude_smooth = this.smoothAltitude_(activityStream, activityStatsMap.elevation);
+                }
 
             var result = this.computeAnalysisData_(userGender, userRestHr, userMaxHr, userFTP, athleteWeight, hasPowerMeter, activityStatsMap, activityStream);
 
@@ -156,18 +154,18 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
     /**
      * calculate average velocity if whole activity, or set it to zero if no velocityArray
      */
-	velocity_avg=0;
-	if (!_.isEmpty(activityStream.velocity_smooth)) {
-		var velocity_sum = 0;
-		for( var i = 0; i < activityStream.velocity_smooth.length; i++ ) {
-    		velocity_sum += activityStream.velocity_smooth[i];
-		}
-	}// if we got velocity_sum, calculate velocity_avg, else set it to zero
-	try {
-		if (!_.isUndefined(velocity_sum) ) {
-			velocity_avg = velocity_sum/activityStream.velocity_smooth.length;
-		}
-	} catch (err) { }
+        velocity_avg=0;
+        if (!_.isEmpty(activityStream.velocity_smooth)) {
+                var velocity_sum = 0;
+                for( var i = 0; i < activityStream.velocity_smooth.length; i++ ) {
+                velocity_sum += activityStream.velocity_smooth[i];
+                }
+        }// if we got velocity_sum, calculate velocity_avg, else set it to zero
+        try {
+                if (!_.isUndefined(velocity_sum) ) {
+                        velocity_avg = velocity_sum/activityStream.velocity_smooth.length;
+                }
+        } catch (err) { }
 
 
 
@@ -252,11 +250,11 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         if (_.isNull(activityStatsMap.movingTime) || _.isNull(activityStatsMap.elapsedTime)) {
             Helper.log('WARN', 'Unable to compute ActivityRatio on this activity with following data: ' + JSON.stringify(activityStatsMap))
             return null;
-//						return 1;
+//                                              return 1;
         }
-				if (activityStatsMap.movingTime) {
-	        var ratio = activityStatsMap.movingTime / activityStatsMap.elapsedTime;
-      	}
+                                if (activityStatsMap.movingTime) {
+                var ratio = activityStatsMap.movingTime / activityStatsMap.elapsedTime;
+        }
         return ratio;
     },
 
@@ -380,7 +378,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         var speedVarianceSum = 0;
         var currentSpeed;
 
-		var realAvgSpeed = 3600 * activityStatsMap.distance / activityStatsMap.elapsedTime;
+                var realAvgSpeed = 3600 * activityStatsMap.distance / activityStatsMap.elapsedTime;
         var maxSpeed = _.max(velocityArray) * 3.6;
         var minSpeed = _.min(velocityArray) * 3.6;
 
@@ -499,10 +497,10 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
           if (i > 0) {
 
 //            if ( ( ( velocityArray[i] * 3.6 > ActivityProcessor.movingThresholdKph ) || ( velocity_avg < velocity_avgThreshold ) )  && i > 0) {
-	        if ( // if moving or if avg. speed < threshold
-				!_.isEmpty(velocityArray) && ( ( currentSpeed = velocityArray[i] * 3.6 ) > ActivityProcessor.movingThresholdKph )
-	           	|| ( velocity_avg < velocity_avgThreshold ) || (_.isEmpty(velocityArray)) )
-	           	{// Multiply by 3.6 to convert to kph; 
+                if ( // if moving or if avg. speed < threshold
+                                !_.isEmpty(velocityArray) && ( ( currentSpeed = velocityArray[i] * 3.6 ) > ActivityProcessor.movingThresholdKph )
+                        || ( velocity_avg < velocity_avgThreshold ) || (_.isEmpty(velocityArray)) )
+                        {// Multiply by 3.6 to convert to kph; 
                 // Compute average and normalized power
                 accumulatedWattsOnMoveFourRoot += Math.pow(powerArray[i], 3.925);
                 // Compute distribution for graph/table
@@ -574,11 +572,11 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 
 
 
-	// if no velocity data, or very low average velocity
-	// compute heartrate stats "the old way" - this is for activities either without GPS data or with GPS data, but done on (more or less) same spot
-	if ( _.isEmpty(velocityArray) || ( velocity_avg < velocity_avgThreshold ) ) {
-	//
-	// "OLD" WAY of calculating HR stats - not only for "moving" part of activity
+        // if no velocity data, or very low average velocity
+        // compute heartrate stats "the old way" - this is for activities either without GPS data or with GPS data, but done on (more or less) same spot
+        if ( _.isEmpty(velocityArray) || ( velocity_avg < velocity_avgThreshold ) ) {
+        //
+        // "OLD" WAY of calculating HR stats - not only for "moving" part of activity
 
 
 
@@ -591,8 +589,8 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         var hrSum = 0;
         var hrCount = 0;
 // check VacuumProcessor
-	var maxHeartRate = Math.max.apply(Math, heartRateArray);
-	activityStatsMap.maxHeartRate=maxHeartRate;
+        var maxHeartRate = Math.max.apply(Math, heartRateArray);
+        activityStatsMap.maxHeartRate=maxHeartRate;
 
         // Find HR for each Hrr of each zones
         for (var zone in this.userHrrZones_) {
@@ -619,7 +617,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 
                 // TRIMP += durationInMinutes * heartRateReserveAvg * Math.pow(0.64, TRIMPGenderFactor * heartRateReserveAvg);
                 TRIMP += durationInMinutes * heartRateReserveAvg * 0.64 * Math.exp(TRIMPGenderFactor * heartRateReserveAvg);
-								
+                                                                
                 // Count Heart Rate Reserve distribution
                 zoneId = this.getHrrZoneId(hrrZonesCount, heartRateReserveAvg * 100);
 
@@ -644,31 +642,31 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 // check VacuumProcessor
         activityStatsMap.averageHeartRate = Math.round((hrSum / hrCount)*10)/10;
 
-	TRIMP = Math.round(TRIMP*10)/10;
+        TRIMP = Math.round(TRIMP*10)/10;
 // using of moving time sometimes results in too big TRIMP/hr numbers, but it mostly works OK for biking (Ride)
 // because moving time is detected a lot more reliable than for example in running uphill
-//	if (activityStatsMap.movingTime && (window.activityType == 'Ride')) {
-//		var TRIMP_hr = TRIMP/(activityStatsMap.movingTime/3600);
-//	}else{
-//		var TRIMP_hr = TRIMP/(activityStatsMap.elapsedTime/3600);
-//	}
-//	var TRIMP_hr = Math.round((TRIMP/(activityStatsMap.elapsedTime/3600))*10)/10;
+//      if (activityStatsMap.movingTime && (window.activityType == 'Ride')) {
+//              var TRIMP_hr = TRIMP/(activityStatsMap.movingTime/3600);
+//      }else{
+//              var TRIMP_hr = TRIMP/(activityStatsMap.elapsedTime/3600);
+//      }
+//      var TRIMP_hr = Math.round((TRIMP/(activityStatsMap.elapsedTime/3600))*10)/10;
 //
 // when calculating TRIMP, non-movin time HR should count in for TRIMP!
 
         var TRIMPPerHour = TRIMP / hrrSecondsCount * 60 * 60;
 //        var TRIMP_hr = Math.round(TRIMPPerHour*10)/10;
 //        var percentiles = Helper.weightedPercentiles(heartRateArrayMoving, heartRateArrayMovingDuration, [ 0.25, 0.5, 0.75 ]);
-		var percentiles=[];
+                var percentiles=[];
         percentiles[0]=Helper.lowerQuartile(heartRateArraySorted);
         percentiles[1]=Helper.median(heartRateArraySorted);
         percentiles[2]=Helper.upperQuartile(heartRateArraySorted);
 
 
 
-	} else {
-	//
-	// "NEW" WAY of calculating HR stats - only for "moving" part of activity
+        } else {
+        //
+        // "NEW" WAY of calculating HR stats - only for "moving" part of activity
 
 
 
@@ -733,13 +731,13 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         var TRIMPPerHour = TRIMP / hrrSecondsCount * 60 * 60;
         var percentiles = Helper.weightedPercentiles(heartRateArrayMoving, heartRateArrayMovingDuration, [ 0.25, 0.5, 0.75 ]);
 
-	} //if
+        } //if
 
         return {
             'TRIMP': TRIMP,
-//		'TRIMP_hr': TRIMP_hr,
-//		'aRPEe': Math.round((TRIMP_hr / aRPEeGenderFactor)*10)/10,
-		'aRPEe': Math.round((TRIMPPerHour / aRPEeGenderFactor)*10)/10,
+//              'TRIMP_hr': TRIMP_hr,
+//              'aRPEe': Math.round((TRIMP_hr / aRPEeGenderFactor)*10)/10,
+                'aRPEe': Math.round((TRIMPPerHour / aRPEeGenderFactor)*10)/10,
             'TRIMPPerHour': TRIMPPerHour,
             'hrrZones': this.userHrrZones_,
             'lowerQuartileHeartRate': percentiles[0],
@@ -747,13 +745,13 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
             'upperQuartileHeartRate': percentiles[2],
 // check VacuumProcessor
             'averageHeartRate': activityStatsMap.averageHeartRate,
-//		'maxHeartRate': maxHeartRate,
-		'maxHeartRate': activityStatsMap.maxHeartRate,
+//              'maxHeartRate': maxHeartRate,
+                'maxHeartRate': activityStatsMap.maxHeartRate,
  //          'activityHeartRateReserve': Helper.heartRateReserveFromHeartrate(activityStatsMap.averageHeartRate, userMaxHr, userRestHr) * 100,
              'activityHeartRateReserve': Math.round((100*Helper.heartRateReserveFromHeartrate(activityStatsMap.averageHeartRate, userMaxHr, userRestHr))*10)/10,
             'activityHeartRateReserveMax': Helper.heartRateReserveFromHeartrate(activityStatsMap.maxHeartRate, userMaxHr, userRestHr) * 100,
-            	'MaxHr':userMaxHr,
-		'RestHr':userRestHr
+                'MaxHr':userMaxHr,
+                'RestHr':userRestHr
         };
 
     },
@@ -795,13 +793,17 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         var cadenceOnMoveSampleCount = 0;
         var movingSampleCount = 0;
 
+
+
         var cadenceZoneTyped;
         if (this.activityType === 'Ride') {
             cadenceZoneTyped = this.zones.cyclingCadence;
         } else if (this.activityType === 'Run') {
             cadenceZoneTyped = this.zones.runningCadence;
         } else {
-            return null;
+        // !!!   cadence for other that Ride or Run -> use Ride cadence for now, in future make own zones   !!!
+            cadenceZoneTyped = this.zones.cyclingCadence;
+//            return null;
         }
 
         var cadenceZones = this.prepareZonesForDistribComputation(cadenceZoneTyped);
@@ -816,11 +818,12 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
                 durationInSeconds = (timeArray[i] - timeArray[i - 1]); // Getting deltaTime in seconds (current sample and previous one)
                 // recomputing crank revolutions using cadence data
                 crankRevolutions += this.valueForSum_(cadenceArray[i], cadenceArray[i - 1], durationInSeconds / 60);
+//   !!!   check if this really makes sense   !!!
 
-	            if ( 
-	            	   !_.isEmpty(velocityArray) && ( velocityArray[i] * 3.6 > ActivityProcessor.movingThresholdKph )
-	            	|| ( velocity_avg < velocity_avgThreshold ) || (_.isEmpty(velocityArray)) )
-	            	{
+                    if ( 
+                           !_.isEmpty(velocityArray) && ( velocityArray[i] * 3.6 > ActivityProcessor.movingThresholdKph )
+                        || ( velocity_avg < velocity_avgThreshold ) || (_.isEmpty(velocityArray)) )
+                        {
 
                     movingSampleCount++;
 
@@ -859,6 +862,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         return {
             'cadencePercentageMoving': cadenceRatioOnMovingTime * 100,
             'cadenceTimeMoving': (cadenceRatioOnMovingTime * activityStatsMap.movingTime),
+//            'pedalingTime': (cadenceRatioOnMovingTime * activityStatsMap.movingTime),
             'averageCadenceMoving': averageCadenceOnMovingTime,
             'standardDeviationCadence': standardDeviationCadence.toFixed(1),
             'crankRevolutions': crankRevolutions,
@@ -905,7 +909,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
             down: 0,
             total: 0
         };
-        var upFlatDownAltitudeInMeters = {	// altitude meters climbed, lost, altitude ballance
+        var upFlatDownAltitudeInMeters = {      // altitude meters climbed, lost, altitude ballance
             climbed: 0,
             lost: 0,
             ignore: 0,
@@ -937,11 +941,11 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 
                 // Compute distribution for graph/table
 //                if (currentSpeed > 0) { // If moving...
-//	              if ( ( currentSpeed > 0 ) || ( velocity_avg < velocity_avgThreshold ) ) { 
-	            if ( // if moving or if avg. speed < threshold
-	            	   !_.isEmpty(velocityArray) && ( ( currentSpeed = velocityArray[i] * 3.6 ) > ActivityProcessor.movingThresholdKph )
-	            	|| ( velocity_avg < velocity_avgThreshold ) || (_.isEmpty(velocityArray)) )
-	            	{// Multiply by 3.6 to convert to kph; 
+//                    if ( ( currentSpeed > 0 ) || ( velocity_avg < velocity_avgThreshold ) ) { 
+                    if ( // if moving or if avg. speed < threshold
+                           !_.isEmpty(velocityArray) && ( ( currentSpeed = velocityArray[i] * 3.6 ) > ActivityProcessor.movingThresholdKph )
+                        || ( velocity_avg < velocity_avgThreshold ) || (_.isEmpty(velocityArray)) )
+                        {// Multiply by 3.6 to convert to kph; 
 
 
                     durationInSeconds = (timeArray[i] - timeArray[i - 1]); // Getting deltaTime in seconds (current sample and previous one)
@@ -962,40 +966,43 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
                         gradeZones[gradeZoneId]['s'] += durationInSeconds;
                     }
 
-                    upFlatDownInSeconds.total 			+= durationInSeconds;
-					upFlatDownInMeters.total  			+= distance;
+                    upFlatDownInSeconds.total += durationInSeconds;
+                    upFlatDownInMeters.total += distance;
                     upFlatDownAltitudeInMeters.ballance += deltaAltitude;
 
 
                     // Compute DOWN/FLAT/UP duration
-                    if (gradeArray[i] > ActivityProcessor.gradeClimbingLimit) { // UPHILL
+                    if (gradeArray[i] > ActivityProcessor.gradeClimbingLimit) {
+                    // UPHILL
                         // time
                         upFlatDownInSeconds.up += durationInSeconds;
                         // distance
-						upFlatDownInMeters.up += distance;
+                        upFlatDownInMeters.up += distance;
                         upFlatDownMoveData.up += currentSpeed * durationInSeconds;
                         // altitude
                         upFlatDownAltitudeInMeters.climbed += deltaAltitude;
-                    } else if (gradeArray[i] < ActivityProcessor.gradeDownHillLimit) { // DOWNHILL
+                    } else if (gradeArray[i] < ActivityProcessor.gradeDownHillLimit) {
+                    // DOWNHILL
                         // time
                         upFlatDownInSeconds.down += durationInSeconds;
                         // distance
-						upFlatDownInMeters.down += distance;
+                        upFlatDownInMeters.down += distance;
                         upFlatDownMoveData.down += currentSpeed * durationInSeconds;
                         // altitude
                         upFlatDownAltitudeInMeters.lost += deltaAltitude;
-                    } else { // FLAT
+                    } else {
+                    // FLAT
                         // time
                         upFlatDownInSeconds.flat += durationInSeconds;
                         // distance
-						upFlatDownInMeters.flat += distance;
+                        upFlatDownInMeters.flat += distance;
                         upFlatDownMoveData.flat += currentSpeed * durationInSeconds;
                         // altitude
                         upFlatDownAltitudeInMeters.ignore += deltaAltitude;
                     }
                 }// if
-        	}// if
-       	}// for
+                }// if
+        }// for
 
         // Compute speed while up, flat down
         upFlatDownMoveData.up = upFlatDownMoveData.up / upFlatDownInSeconds.up;
@@ -1016,62 +1023,65 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         // Downhill < Mostly Down < Flat < Mostly Flat <   Hilly   < Very Hilly < Mountanous < Alpine
         //
         var gradeProfile;
-		var minAlt				= Helper.getMinOfArray(StravaStreams.altitude);
-		var maxAlt				= Helper.getMaxOfArray(StravaStreams.altitude);
-		var AltRange			= maxAlt-minAlt;
-		var upPercentT			= 100 * upFlatDownInSeconds.up / upFlatDownInSeconds.total;
-		var flatPercentT		= 100 * upFlatDownInSeconds.flat / upFlatDownInSeconds.total;
-		var downPercentT		= 100 * upFlatDownInSeconds.down / upFlatDownInSeconds.total;
-		var upPercentD			= 100 * upFlatDownInMeters.up / upFlatDownInMeters.total;
-		var flatPercentD		= 100 * upFlatDownInMeters.flat / upFlatDownInMeters.total;
-		var downPercentD		= 100 * upFlatDownInMeters.down / upFlatDownInMeters.total;
-		var upAvgGradeEstimate	= 100 * ( upFlatDownAltitudeInMeters.climbed + upFlatDownAltitudeInMeters.ignore ) / upFlatDownInMeters.up;
-		
-        if (		// DOWNHILL
-        		( downPercentD >= ActivityProcessor.gradeProfileDownhillPercentage )
-        )		{ gradeProfile = ActivityProcessor.gradeProfileDownhill; }
+                var minAlt              = Helper.getMinOfArray(StravaStreams.altitude);
+                var maxAlt              = Helper.getMaxOfArray(StravaStreams.altitude);
+                var AltRange            = maxAlt-minAlt;
+                var upPercentT          = 100 * upFlatDownInSeconds.up / upFlatDownInSeconds.total;
+                var flatPercentT        = 100 * upFlatDownInSeconds.flat / upFlatDownInSeconds.total;
+                var downPercentT        = 100 * upFlatDownInSeconds.down / upFlatDownInSeconds.total;
+                var upPercentD          = 100 * upFlatDownInMeters.up / upFlatDownInMeters.total;
+                var flatPercentD        = 100 * upFlatDownInMeters.flat / upFlatDownInMeters.total;
+                var downPercentD        = 100 * upFlatDownInMeters.down / upFlatDownInMeters.total;
+                var upAvgGradeEstimate  = 100 * ( upFlatDownAltitudeInMeters.climbed + upFlatDownAltitudeInMeters.ignore ) / upFlatDownInMeters.up;
+                
+        if (            // DOWNHILL
+                        ( downPercentD >= ActivityProcessor.gradeProfileDownhill_MinDownPercentD )
+        )               { gradeProfile = ActivityProcessor.gradeProfileDownhill; }
 
-        else if ( 	// MOSTLY DOWN
-        		( downPercentD >= ActivityProcessor.gradeProfileMostlyDownDownPercentage )
-			&&	( upPercentD < ActivityProcessor.gradeProfileMostlyDownUpPercentage )
-		)		{ gradeProfile = ActivityProcessor.gradeProfileMostlyDown; }
+        else if (       // MOSTLY DOWN
+                        ( downPercentD >= ActivityProcessor.gradeProfileMostlyDown_MinDownPercentD )
+                        &&      ( upPercentD < ActivityProcessor.gradeProfileMostlyDown_MaxUpPercentD )
+                )               { gradeProfile = ActivityProcessor.gradeProfileMostlyDown; }
 
-        else if ( 	// FLAT
-        		( flatPercentT >= ActivityProcessor.gradeProfileFlatPercentage )
-			&&	( ( upPercentD + downPercentD ) < ActivityProcessor.gradeProfileUpDownPercentageD )
-//			&&	( upAvgGradeEstimate < ActivityProcessor.gradeProfileFlatAvgGradeEst )
-		)		{ gradeProfile = ActivityProcessor.gradeProfileFlat; }
-
-
-        else if (	// MOSTLY FLAT
-        		( flatPercentT >= ActivityProcessor.gradeProfileMostlyFlatPercentage )
-			&&	( upAvgGradeEstimate < ActivityProcessor.gradeProfileMostlyFlatAvgGradeEst )
-			&&	( AltRange < ActivityProcessor.gradeProfileMostlyFlatDeltaH )
-		)		{ gradeProfile = ActivityProcessor.gradeProfileMostlyFlat; }
+        else if (       // FLAT
+                        (
+                        ( flatPercentT >= ActivityProcessor.gradeProfileFlat_MinFlatPercentT )
+                        &&      ( ( upPercentD + downPercentD ) < ActivityProcessor.gradeProfileFlat_MaxUpDownPercentD )
+                        ) || (
+                                ( upAvgGradeEstimate < ActivityProcessor.gradeProfileFlat_MaxAvgGradeEst )
+                        )
+                )               { gradeProfile = ActivityProcessor.gradeProfileFlat; }
 
 
-		else if (	// ALPINE
-				( flatPercentT < ActivityProcessor.gradeProfileAlpinePercentage )
-        	&&	( upAvgGradeEstimate > ActivityProcessor.gradeProfileAlpineAvgGradeEst )
-        	&&	( AltRange > ActivityProcessor.gradeProfileAlpineDeltaH )
-        )		{ gradeProfile = ActivityProcessor.gradeProfileAlpine; }
+        else if (       // MOSTLY FLAT
+                        ( flatPercentT >= ActivityProcessor.gradeProfileMostlyFlat_MinFlatPercentT )
+                        &&      ( upAvgGradeEstimate < ActivityProcessor.gradeProfileMostlyFlat_MaxAvgGradeEst )
+                        &&      ( AltRange < ActivityProcessor.gradeProfileMostlyFlat_MaxDeltaH )
+                )               { gradeProfile = ActivityProcessor.gradeProfileMostlyFlat; }
 
-        else if (	// MOUNTAINOUS
-        		( flatPercentT < ActivityProcessor.gradeProfileMountainousPercentage )
-			&&	( upAvgGradeEstimate > ActivityProcessor.gradeProfileMountainousAvgGradeEst )
-			&&	( upFlatDownAltitudeInMeters.climbed > ActivityProcessor.gradeProfileMountainousClimbed )
-			&&	( AltRange > ActivityProcessor.gradeProfileMountainousDeltaH )
-		)		{ gradeProfile = ActivityProcessor.gradeProfileMountainous; }
 
-        else if (	// VERY HILLY
-        		( flatPercentT < ActivityProcessor.gradeProfileVeryHillyPercentage )
-			&&	( upAvgGradeEstimate > ActivityProcessor.gradeProfileVeryHillyAvgGradeEst )
-			&&	( upFlatDownAltitudeInMeters.climbed > ActivityProcessor.gradeProfileVeryHillyClimbed )
-			&&	( AltRange > ActivityProcessor.gradeProfileVeryHillyDeltaH )
-		)		{ gradeProfile = ActivityProcessor.gradeProfileVeryHilly; }
+                else if (       // ALPINE
+                                ( flatPercentT < ActivityProcessor.gradeProfileAlpine_MaxFlatPercentT )
+                &&      ( upAvgGradeEstimate > ActivityProcessor.gradeProfileAlpine_MinAvgGradeEst )
+                &&      ( AltRange > ActivityProcessor.gradeProfileAlpine_MinDeltaH )
+        )               { gradeProfile = ActivityProcessor.gradeProfileAlpine; }
 
-        else		// HILLY
-        		{ gradeProfile = ActivityProcessor.gradeProfileHilly; }
+        else if (       // MOUNTAINOUS
+                        ( flatPercentT < ActivityProcessor.gradeProfileMountainous_MaxFlatPercentT )
+                        &&      ( upAvgGradeEstimate > ActivityProcessor.gradeProfileMountainous_MinAvgGradeEst )
+                        &&      ( upFlatDownAltitudeInMeters.climbed > ActivityProcessor.gradeProfileMountainous_MinClimbed )
+                        &&      ( AltRange > ActivityProcessor.gradeProfileMountainous_MinDeltaH )
+                )               { gradeProfile = ActivityProcessor.gradeProfileMountainous; }
+
+        else if (       // VERY HILLY
+                        ( flatPercentT < ActivityProcessor.gradeProfileVeryHilly_MaxFlatPercentT )
+                        &&      ( upAvgGradeEstimate > ActivityProcessor.gradeProfileVeryHilly_MinAvgGradeEst )
+                        &&      ( upFlatDownAltitudeInMeters.climbed > ActivityProcessor.gradeProfileVeryHilly_MinClimbed )
+                        &&      ( AltRange > ActivityProcessor.gradeProfileVeryHilly_MinDeltaH )
+                )               { gradeProfile = ActivityProcessor.gradeProfileVeryHilly; }
+
+        else            // HILLY
+                        { gradeProfile = ActivityProcessor.gradeProfileHilly; }
 
 
 
@@ -1082,6 +1092,8 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
             'upperQuartileGrade': percentiles[2],
             'gradeZones': gradeZones,
             'upFlatDownInSeconds': upFlatDownInSeconds,
+            'upFlatDownInMeters': upFlatDownInMeters,
+            'upAvgGradeEstimate': upAvgGradeEstimate,
             'upFlatDownMoveData': upFlatDownMoveData,
             'gradeProfile': gradeProfile,
             'maxGrade': maxGrade

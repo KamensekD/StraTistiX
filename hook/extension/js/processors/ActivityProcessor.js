@@ -1298,6 +1298,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
                 } else {
                	    smooth_factor = smoothing / (distance[i] - distance[i - 1]);
                     result[i] = result[i - 1] + (data[i] - result[i - 1]) / ( smooth_factor>1 ? smooth_factor : 1 ); // low limit smooth_factor to 1!!!
+//                    result[i] = result[i - 1] + (data[i] - result[i - 1]) / ( smooth_factor ); // no stability check
                     // only apply filter if smooth_factor > 1, else this leads to instability !!!
                 }
             }

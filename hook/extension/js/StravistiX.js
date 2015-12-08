@@ -1,25 +1,122 @@
 if (env.debugMode) console.warn('Begin     StravistiX.js');
 /**
  *   StravistiX is responsible of linking processors with modfiers and user settings/health data
+ *
+
+
+
+
+
+
+/*    check for correct working with following acitivities:
+
+      Downhill < Mostly Down < Flat < Mostly Flat <   Hilly   < Very Hilly < Mountanous < Alpine
+
+                                                StravaType      Streams                         Comment                                 Problems
+Bike:                                           ______________  ______________________________  ______________________________________  ____________________________________________
+~~~~~                                           
+https://www.strava.com/activities/423623105     Ride            (GPS)      			downhill      ANT
+
+https://www.strava.com/activities/122932386     Ride            (GPS, HR, cadence)              mostly down   My
+
+https://www.strava.com/activities/339726290	Ride		(GPS, power, HR, cadence, T)	flat          Marcel Wyss TdF 2
+
+https://www.strava.com/activities/342465523	Ride		(GPS, power, HR, cadence, T)	mostly flat   Marcel Wyss TdF 6
+https://www.strava.com/activities/355194013	Ride		(GPS, power, HR, cadence, T)	mostly flat   Marcel Wyss TdF 21
+
+https://www.strava.com/activities/340423634	Ride		(GPS, power, HR, cadence, T)	Hilly         Marcel Wyss TdF 3
+
+https://www.strava.com/activities/345973208	Ride		(GPS, power, HR, cadence, T)	very hilly    Wyss TdF 10
+
+https://www.strava.com/activities/347389644	Ride		(GPS, power, HR, cadence, T)	mountainous   Marcel Wyss TdF 12
+https://www.strava.com/activities/441531034     Ride            (GPS*, HR, cadence) *baro       mountainous   My
+
+https://www.strava.com/activities/353116695	Ride		(GPS, power, HR, cadence, T)	alpine        Marcel Wyss TdF 19
+
+
+Bike - stationary: (with GPS)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://www.strava.com/activities/443325145     Workout         (*GPS*, power, HR, cadence, T)  GPS, but really stationary   Elle
+                                                                                                -> avg_velocity << 1 (velocity_avgThreshold ~ 0.5)
+
+Bike - trainer: (no GPS)
+~~~~~~~~~~~~~~~~~~~~~~~~
+https://www.strava.com/activities/442775904     Workout         (HR, cadence, power, speed)     on trainer - with speed  Julian
+https://www.strava.com/activities/442206536     Workout         (HR, cadence, power)            on trainer - no speed    Denzyl
+
+
+
+Run:
+~~~~
+https://www.strava.com/activities/255144956	Run             (GPS, HR, cadence)              downhill      My
+https://www.strava.com/activities/249069073	Run             (GPS, HR, cadence)              downhill      My
+
+https://www.strava.com/activities/245769754	Run             (GPS, HR, cadence)              mostly down   My
+
+https://www.strava.com/activities/200732119	Run             (GPS, HR, cadence)              flat          My
+https://www.strava.com/activities/152922062	Run             (GPS, HR, cadence)              mostly flat   My
+https://www.strava.com/activities/325514295	Run             (GPS, HR, cadence)              mostly flat   My Tek trojk
+https://www.strava.com/activities/429614312	Run             (GPS, HR, cadence)              mostly flat   My
+
+https://www.strava.com/activities/442681892     Run             (GPS, HR, cadence)              hilly         My                        elevation stats problem because of filtering!
+https://www.strava.com/activities/152922065     Run             (GPS, HR, cadence)              hilly         My Kalvarija              elevation stats problem because of filtering!
+												!!!   check smoothing, because it fails when there are gaps/missing samples   !!!
+	https://www.strava.com/activities/152922065	should be hilly, is flat
+	https://www.strava.com/activities/307138432	should be mostly flat, is hilly
+	https://www.strava.com/activities/235711434	should be very hilly, is hilly
+	https://www.strava.com/activities/380222430 	should be mountainious, is very hilly - Trail Maraton Pohorje
+	
+https://www.strava.com/activities/107829725     Run             (GPS, HR, cadence)              hilly         My Kalvarija
+https://www.strava.com/activities/159495959     Run             (GPS, HR, cadence)              hilly         My
+https://www.strava.com/activities/107829727     Run             (GPS, HR, cadence)              hilly         My Kalvarija
+
+http://www.strava.com/activities/379977674	Run		(GPS, HR, cadence, T)           mountainous   Balazs Trail Maraton 42km
+
+
+Hike:
+~~~~~
+https://www.strava.com/activities/433810631	hike		(GPS, power, HR, cadence, T)	mountainous
+https://www.strava.com/activities/214252443     hike            (GPS, HR, cadence)              hilly
+                                                                                                -> slow, avg_velocity < 1 (velocity_avgThreshold ~ 0.5)
+https://www.strava.com/activities/119185669     hike            (GPS, HR, cadence)              dowhnill
+https://www.strava.com/activities/83623294      hike            (only GPS)                      flat                                    Avg Ascent infinity
+
+https://www.strava.com/activities/83623294	hike/wall	(only GPS) / badQ GPS		mostly flat
+
+
+Row: (on trainer)
+~~~~~~~~~~~~~~~~~
+https://www.strava.com/activities/269549200     StationaryOther (HR, cadence)								no cadence stats
+
+
+
+
+// poglej se Hike:      *** hike=run ***        https://www.strava.com/activities/119185669     ?
+//                                                                              https://www.strava.com/activities/83623294      ?
+//                                                                              https://www.strava.com/activities/214252443     OK
+
+
+
+
  */
 function StravistiX(userSettings, appResources) {
 if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
-    this.userSettings_ 					= userSettings;
-    this.appResources_ 					= appResources;
-    this.extensionId_ 					= this.appResources_.extensionId;
+        this.userSettings_              = userSettings;
+        this.appResources_              = appResources;
+        this.extensionId_               = this.appResources_.extensionId;
 
-    this.vacuumProcessor_ 				= new VacuumProcessor();
-    this.activityProcessor_ 			= new ActivityProcessor(this.vacuumProcessor_, this.userSettings_.userHrrZones, this.userSettings_.zones);
+        this.vacuumProcessor_           = new VacuumProcessor();
+        this.activityProcessor_         = new ActivityProcessor(this.vacuumProcessor_, this.userSettings_.userHrrZones, this.userSettings_.zones);
 
-    this.athleteId_ 					= this.vacuumProcessor_.getAthleteId();
-    this.athleteName_ 					= this.vacuumProcessor_.getAthleteName();
-    this.athleteIdAuthorOfActivity_ 	= this.vacuumProcessor_.getAthleteIdAuthorOfActivity();
-    this.isPremium_ 					= this.vacuumProcessor_.getPremiumStatus();
-    this.isPro_ 						= this.vacuumProcessor_.getProStatus();
-    this.activityId_ 					= this.vacuumProcessor_.getActivityId();
-    this.activityName_ 					= this.vacuumProcessor_.getActivityName();
-    this.activityTime_ 					= this.vacuumProcessor_.getActivityTime();
+        this.athleteId_                 = this.vacuumProcessor_.getAthleteId();
+        this.athleteName_               = this.vacuumProcessor_.getAthleteName();
+        this.athleteIdAuthorOfActivity_ = this.vacuumProcessor_.getAthleteIdAuthorOfActivity();
+        this.isPremium_                 = this.vacuumProcessor_.getPremiumStatus();
+        this.isPro_                     = this.vacuumProcessor_.getProStatus();
+        this.activityId_                = this.vacuumProcessor_.getActivityId();
+        this.activityName_              = this.vacuumProcessor_.getActivityName();
+        this.activityTime_              = this.vacuumProcessor_.getActivityTime();
 
 
 
@@ -34,36 +131,6 @@ if (env.debugMode && (typeof pageView !== 'undefined')) if( pageView.activityAth
 if (env.debugMode) console.log("--------------------");
 } // StravistiX
 
-
-
-/*    check for correct working with following acitivities:
-
-
-https://www.strava.com/activities/443325145		Biking	stationary, but with GPS data (*speed*, power, HR, cadence, T) -> avg_velocity << 1 (velocity_avgThreshold ~ 0.5)
-
-https://www.strava.com/activities/442775904		Biking 	on trainer - no gps, (speed, power, HR, cadence)
-https://www.strava.com/activities/442206536		Biking 	on trainer - no gps, no speed (power, HR, cadence)
-
-https://www.strava.com/activities/214252443		hiking	slow ->  avg_velocity < 1 (velocity_avgThreshold ~ 0.5)
-https://www.strava.com/activities/119185669		hiking	dowhnill (speed, HR, cadence)
-https://www.strava.com/activities/442681892		run		elevation stats problem because of filtering!
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-*/
 
 
 
@@ -137,9 +204,9 @@ if (env.debugMode) console.warn('\n > (f: StravistiX.js) >   COMMON   < ' + argu
 
 
 
-		//
+                //
         this.handleExtendedActivityData_();
-		//
+                //
 
 
 
@@ -259,26 +326,27 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
         message += "- Improved 'Best Splits' - click on them to highlight the part of activity they represent!<br/>"
         message += "- Improved elevation data accuracy while computing extended statistics.<br/>"
         message += "&nbsp&nbsp(Elevation data smoothed using low pass filter with gain matched to Strava's)<br/>"
+        message += "- Added cadence and power data overview table<br/>"
         message += "- Weather unis preferences<br/>"
         message += "- Various Fixes, sorry for bigbug in 2.0.0.1 - settings menu not working :/<br/>"
         message += "<br/>"
         message += "<h4><strong>From previous update:</strong></h4>";
         message += "- improved grade profile word description<br>"
         message += "- Added year progression (activity count, distance, elevation, time) table and chart<br>"
-		message += "- Added 'Best Splits' (distance, time, elevation, hr,...) to biking activities<br>"
-		message += "- export of segments as Virtual Partner (cycling: button under segment compare)<br>"
-		message += "- Added segment builder link to segments page<br>"
-		message += "- Added biking segment time comparisons to KOM's and PR's<br>"
-		message += "- Added weather at activity date/time (wind/temp/clouds/humidity)<br>"
-		message += "- more analysis data (climbing time and speed, pedalling time,...)<br>"
-		message += "- Searchable common settings<br>"
-		message += "- Moved leftside buttons/links under Edit/Action buttons<br>"
-		message += "- Moved some leftside links to menu, reordered menu a bit<br>"
-		message += "- Changed HR related computations from total to moving time<br>"
-		message += "- Filtering altitude for gain computations<br>"
-		message += "- Various Fixes<br>"
-		message += "<br>* Credits for many of new features go to <a href=https://github.com/tazmanska>tomasz.terlecki / tazmanska</a> !"
-		message += "<br>  and <a href=https://github.com/glandais>Gabriel Landais / glandais</a> !"
+        message += "- Added 'Best Splits' (distance, time, elevation, hr,...) to biking activities<br>"
+        message += "- export of segments as Virtual Partner (cycling: button under segment compare)<br>"
+        message += "- Added segment builder link to segments page<br>"
+        message += "- Added biking segment time comparisons to KOM's and PR's<br>"
+        message += "- Added weather at activity date/time (wind/temp/clouds/humidity)<br>"
+        message += "- more analysis data (climbing time and speed, pedalling time,...)<br>"
+        message += "- Searchable common settings<br>"
+        message += "- Moved leftside buttons/links under Edit/Action buttons<br>"
+        message += "- Moved some leftside links to menu, reordered menu a bit<br>"
+        message += "- Changed HR related computations from total to moving time<br>"
+        message += "- Filtering altitude for gain computations<br>"
+        message += "- Various Fixes<br>"
+        message += "<br>* Credits for many of new features go to <a href=https://github.com/tazmanska>tomasz.terlecki / tazmanska</a> !"
+        message += "<br>  and <a href=https://github.com/glandais>Gabriel Landais / glandais</a> !"
 
         message += "</h4>";
 //        message += "<h4><strong>BUGFIXES:</strong></h4><h5>";
@@ -594,10 +662,16 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
 
 
                 // write activity type on page for all except Ride/Run activities
-				if ( (activityType !== "Ride") && (activityType !== "Run") ) {
-                    var html = '<div  style="padding: 0px 0px 0px 0px;background: #FFFFFF;font-size: 9px;color: rgb(103, 103, 103);">&nbsp&nbsp&nbspActivity type: '+window.pageView.activity().attributes.type+'</div>';
-                    $('.inset').parent().children().first().before(html);
-				}
+//                if ( (activityType !== "Ride") && (activityType !== "Run") ) {
+//                        var html = '<div  style="padding: 0px 0px 0px 0px;background: #FFFFFF;font-size: 9px;color: rgb(103, 103, 103);">&nbsp&nbsp&nbspActivity type: '+window.pageView.activity().attributes.type+'</div>';
+//                        $('.inset').parent().children().first().before(html);
+		var html = '';
+		if (this.isPremium_) 	html += '<div  style="line-height:90%; padding: 0px 0px 0px 22px;';
+		else 			html += '<div  style="line-height:90%; padding: 0px 0px 0px 0px;';
+                html += 'font-size: 8px;color: rgb(180, 180, 180);">Activity type:   - <strong>'+window.pageView.activity().attributes.type+'</strong> -</div>';
+                    $(".js-activity-privacy").after(html);
+//                    $('.title').after(html);
+//                }
 
 
 if (env.debugMode) console.log("--- StravistiX.js switch (activityType): " + activityType);
@@ -613,10 +687,6 @@ if (env.debugMode) console.log("--- StravistiX.js switch (activityType): " + act
                     case 'Run':
                         extendedActivityDataModifier = new RunningExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_, basicInfos);
                         break;
-// poglej se Hike:	*** hike=run ***	https://www.strava.com/activities/119185669	?
-//										https://www.strava.com/activities/83623294	?
-//										https://www.strava.com/activities/214252443	OK
-
 
 
                     case 'StationaryOther':
@@ -640,10 +710,10 @@ if (env.debugMode) console.log("--- StravistiX.js switch (activityType): " + act
 
                 if (extendedActivityDataModifier) {
                     extendedActivityDataModifier.modify();
-							
+                                                        
                 }
 
-            }.bind(this)  // getAnalysisData			//!?!? check !?!?
+            }.bind(this)  // getAnalysisData                    //!?!? check !?!?
         );// this.activityProcessor_.getAnalysisData    //!?!? check !?!?
 //  ------------------------------------
 
@@ -880,11 +950,11 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
             return;
         }
 
-		// ** manually refresh activity segment page if you want to move away footer **
-		fh=document.getElementsByClassName("run segments-list")[0].offsetHeight;
-		if (env.debugMode) console.log("Moving footer out of way..."+fh);
-		if ( typeof $('footer')[1] !== 'undefined' )   $('footer')[1].setAttribute("style", "position: relative; top: "+(fh-300)+"px; opacity: 0.33;");
-		if ( typeof $('footer')[2] !== 'undefined' )   $('footer')[2].setAttribute("style", "position: relative; top: "+(300)+"px; opacity: 0.33;");
+                // ** manually refresh activity segment page if you want to move away footer **
+                fh=document.getElementsByClassName("run segments-list")[0].offsetHeight;
+                if (env.debugMode) console.log("Moving footer out of way..."+fh);
+                if ( typeof $('footer')[1] !== 'undefined' )   $('footer')[1].setAttribute("style", "position: relative; top: "+(fh-300)+"px; opacity: 0.33;");
+                if ( typeof $('footer')[2] !== 'undefined' )   $('footer')[2].setAttribute("style", "position: relative; top: "+(300)+"px; opacity: 0.33;");
     },
 
 
@@ -931,25 +1001,25 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
     /**
      *
      */
-	handleGoogleMapsComeBackModifier: function handleGoogleMapsComeBackModifier() {  
+        handleGoogleMapsComeBackModifier: function handleGoogleMapsComeBackModifier() {  
 if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
    
-		if (window.location.pathname.match(/\/truncate/)) { // Skipping on activity cropping
-			return;
-		}
-		
-	  	if (!this.userSettings_.reviveGoogleMaps) {  
-	    	return;  
-    	}  
+                if (window.location.pathname.match(/\/truncate/)) { // Skipping on activity cropping
+                        return;
+                }
+                
+                if (!this.userSettings_.reviveGoogleMaps) {  
+                return;  
+        }  
  
-    	// Test where are on an activity...  or segment... // doesn't work on segment view, yet
-//	    if ((!window.location.pathname.match(/^\/activities/)) && (!window.location.pathname.match(/^\/segments/))) {  
-	    if (!window.location.pathname.match(/^\/activities/)) {  
-	    	return;  
-    	}  
+        // Test where are on an activity...  or segment... // doesn't work on segment view, yet
+//          if ((!window.location.pathname.match(/^\/activities/)) && (!window.location.pathname.match(/^\/segments/))) {  
+            if (!window.location.pathname.match(/^\/activities/)) {  
+                return;  
+        }  
  
-    	var googleMapsComeBackModifier = new GoogleMapsComeBackModifier(this.activityId_, this.appResources_, this.userSettings_);
-    	googleMapsComeBackModifier.modify();  
+        var googleMapsComeBackModifier = new GoogleMapsComeBackModifier(this.activityId_, this.appResources_, this.userSettings_);
+        googleMapsComeBackModifier.modify();  
    },  
 
 

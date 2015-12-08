@@ -37,34 +37,38 @@ ActivityProcessor.gradeProfileMostlyDown = 'MOSTLY DOWN';
 
 ActivityProcessor.gradeProfileFlat_MinFlatPercentT = 75;        // if at least 75% of time is flat
 ActivityProcessor.gradeProfileFlat_MaxUpDownPercentD = 20;      // and up/down distance distance percentage is less then 20%
-ActivityProcessor.gradeProfileFlat_MaxAvgGradeEst = 1.5;        // or average (estimated) grade of climbing% is less then 1.5%
+ActivityProcessor.gradeProfileFlat_MaxClimbed = 11;             // or total vertical meters climbed less then 11m
+ActivityProcessor.gradeProfileFlat_MaxAvgGradeEst = 1.0;//1.5   // or average (estimated) grade of climbing% is less then 1.0%
 ActivityProcessor.gradeProfileFlat = 'FLAT';
 
-ActivityProcessor.gradeProfileMostlyFlat_MinFlatPercentT = 50;  // if at least 50% of time is flat
-ActivityProcessor.gradeProfileMostlyFlat_MaxAvgGradeEst = 5;    // and average (estimated) grade of climbing% is less then 5%
-ActivityProcessor.gradeProfileMostlyFlat_MaxDeltaH = 200;       // and at most 200m difference of highest and lowest altitude
+ActivityProcessor.gradeProfileMostlyFlat_MinFlatPercentT = 33;//50// if at least 33% of time is flat
+ActivityProcessor.gradeProfileMostlyFlat_MaxAvgGradeEst = 3.3;//4%// and average (estimated) grade of climbing% is less then 3%
+ActivityProcessor.gradeProfileMostlyFlat_MaxDeltaH = 222;       // and at most 222m difference of highest and lowest altitude
 ActivityProcessor.gradeProfileMostlyFlat = 'MOSTLY FLAT';
 
 
 ActivityProcessor.gradeProfileVeryHilly_MaxFlatPercentT = 50;   // less than 50% of time is flat
-ActivityProcessor.gradeProfileVeryHilly_MinAvgGradeEst = 5;     // and average (estimated) grade of climbing% is more than 5%
+ActivityProcessor.gradeProfileVeryHilly_MinAvgGradeEst = 4.5;     // and average (estimated) grade of climbing% is more than 5%
 ActivityProcessor.gradeProfileVeryHilly_MinDeltaH = 400;        // and at least 400m difference between highest and lowest altitude
-ActivityProcessor.gradeProfileVeryHilly_MinClimbed = 600;       // and at least 600m vertical meters climbed
+ActivityProcessor.gradeProfileVeryHilly_MinClimbed = 500;//600  // and at least 600m vertical meters climbed
+								// or AvgGradeEst >10% *** check
 ActivityProcessor.gradeProfileVeryHilly = 'VERY HILLY';
 
 ActivityProcessor.gradeProfileMountainous_MaxFlatPercentT = 60; // less than 60% of time is flat
 ActivityProcessor.gradeProfileMountainous_MinAvgGradeEst = 5;   // and average (estimated) grade of climbing% is more than 5%
 ActivityProcessor.gradeProfileMountainous_MinDeltaH = 600;      // and at least 600m difference between highest and lowest altitude
-ActivityProcessor.gradeProfileMountainous_MinClimbed = 800;     // and at least 800m vertical meters climbed
+ActivityProcessor.gradeProfileMountainous_MinClimbed = 1000;//800// and at least 800m vertical meters climbed
 ActivityProcessor.gradeProfileMountainous = 'MOUNTAINOUS';
 
 ActivityProcessor.gradeProfileAlpine_MaxFlatPercentT = 50;      // less than 50% of time is flat
-ActivityProcessor.gradeProfileAlpine_MInAvgGradeEst = 5;        // and average (estimated) grade of climbing% is more than 5%
+ActivityProcessor.gradeProfileAlpine_MinAvgGradeEst = 5.5;        // and average (estimated) grade of climbing% is more than 5%
 ActivityProcessor.gradeProfileAlpine_MinDeltaH = 1500;          // and at least 1500m difference of highest and lowest altitude
 ActivityProcessor.gradeProfileAlpine = 'ALPINE';
 
 ActivityProcessor.gradeProfileHilly = 'HILLY';                  // All other scenarios - hilly
 
+
+// !!!   try to lower MinClimbed figures, because these are not total climbed, but climbed @ at least "gradeClimbingLimit"   !!!
 
 
 /**
@@ -1047,8 +1051,10 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
                         (
                         ( flatPercentT >= ActivityProcessor.gradeProfileFlat_MinFlatPercentT )
                         &&      ( ( upPercentD + downPercentD ) < ActivityProcessor.gradeProfileFlat_MaxUpDownPercentD )
-                        ) || (
+                        ) || (  // or
                                 ( upAvgGradeEstimate < ActivityProcessor.gradeProfileFlat_MaxAvgGradeEst )
+                        ) || (  // or
+                                ( upFlatDownAltitudeInMeters.climbed < ActivityProcessor.gradeProfileFlat_MaxClimbed )
                         )
                 )               { gradeProfile = ActivityProcessor.gradeProfileFlat; }
 
@@ -1060,8 +1066,8 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
                 )               { gradeProfile = ActivityProcessor.gradeProfileMostlyFlat; }
 
 
-                else if (       // ALPINE
-                                ( flatPercentT < ActivityProcessor.gradeProfileAlpine_MaxFlatPercentT )
+        else if (       // ALPINE
+                        ( flatPercentT < ActivityProcessor.gradeProfileAlpine_MaxFlatPercentT )
                 &&      ( upAvgGradeEstimate > ActivityProcessor.gradeProfileAlpine_MinAvgGradeEst )
                 &&      ( AltRange > ActivityProcessor.gradeProfileAlpine_MinDeltaH )
         )               { gradeProfile = ActivityProcessor.gradeProfileAlpine; }

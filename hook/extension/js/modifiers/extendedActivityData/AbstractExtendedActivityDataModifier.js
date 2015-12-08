@@ -217,29 +217,6 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 			html += '<td><strong>'+this.analysisData_.powerData.maxWatts.toFixed(1)+'</strong> W</td></tr>';
 		};
 
-		if (this.analysisData_.gradeData != null ) {
-//		if (this.analysisData_.gradeData != null && !(this.analysisData_.gradeData.lowerQuartileGrade == 0 && this.analysisData_.gradeData.upperQuartileGrade == 0)) {
-			html += '<tr style="color: rgb(20,120,20)"><td>Grade<strong></td>';
-			html += '<td><strong>'+this.analysisData_.gradeData.avgGrade.toFixed(1);
-			html += '<td><strong>'+this.analysisData_.gradeData.lowerQuartileGrade.toFixed(1)+'</strong>%</td>';
-			html += '<td><strong>'+this.analysisData_.gradeData.medianGrade.toFixed(1)+'</strong>%</td>';
-			html += '<td><strong>'+this.analysisData_.gradeData.upperQuartileGrade.toFixed(1)+'</strong>%</td>';
-			html += '<td><strong>'+this.analysisData_.gradeData.maxGrade.toFixed(1)+'</strong>%</td></tr>';
-
-			html += '<tr style="color: rgb(20,120,20)"><td>Profile<br><strong>'+this.analysisData_.gradeData.gradeProfile+'</strong></td>';
-			html += '<td>% moving<br>Dst / Time</td>';
-			html += '<td>DH<br>'
-				+(this.analysisData_.gradeData.upFlatDownInMeters.down / this.analysisData_.gradeData.upFlatDownInMeters.total * 100).toFixed(0)
-				+' / '+(this.analysisData_.gradeData.upFlatDownInSeconds.down / this.analysisData_.gradeData.upFlatDownInSeconds.total * 100).toFixed(0)+'</td>';
-			html += '<td>FLAT<br>'
-				+(this.analysisData_.gradeData.upFlatDownInMeters.flat / this.analysisData_.gradeData.upFlatDownInMeters.total * 100).toFixed(0)
-				+' / '+(this.analysisData_.gradeData.upFlatDownInSeconds.flat / this.analysisData_.gradeData.upFlatDownInSeconds.total * 100).toFixed(0)+'</td>';
-			html += '<td>UP<br>'
-				+(this.analysisData_.gradeData.upFlatDownInMeters.up / this.analysisData_.gradeData.upFlatDownInMeters.total * 100).toFixed(0)
-				+' / '+(this.analysisData_.gradeData.upFlatDownInSeconds.up / this.analysisData_.gradeData.upFlatDownInSeconds.total * 100).toFixed(0)+'</td>';
-			html += '<td>UP grade%<br>'+this.analysisData_.gradeData.upAvgGradeEstimate.toFixed(1)+'% (est.)</td></tr>';
-		};
-
 		if (this.analysisData_.speedData != null) {
 			html += '<tr style="color: rgb(60,155, 200)"><td>Speed [km/h]</td>';
 //			html += '<td><strong>'+(3600*window.distance/window.elapsedTime).toFixed(1)+'</strong></td>';
@@ -264,6 +241,29 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 			html += '<td><strong>'+this.analysisData_.cadenceData.medianCadence.toFixed(1)+'</strong> rpm</td>';
 			html += '<td><strong>'+this.analysisData_.cadenceData.upperQuartileCadence.toFixed(1)+'</strong> rpm</td>';
 			html += '<td><strong>'+this.analysisData_.cadenceData.maxCadence.toFixed(1)+'</strong> rpm</td></tr>';
+		};
+
+		if (this.analysisData_.gradeData != null ) {
+//		if (this.analysisData_.gradeData != null && !(this.analysisData_.gradeData.lowerQuartileGrade == 0 && this.analysisData_.gradeData.upperQuartileGrade == 0)) {
+			html += '<tr style="color: rgb(20,120,20)"><td>Grade<strong></td>';
+			html += '<td><strong>'+this.analysisData_.gradeData.avgGrade.toFixed(1);
+			html += '<td><strong>'+this.analysisData_.gradeData.lowerQuartileGrade.toFixed(1)+'</strong>%</td>';
+			html += '<td><strong>'+this.analysisData_.gradeData.medianGrade.toFixed(1)+'</strong>%</td>';
+			html += '<td><strong>'+this.analysisData_.gradeData.upperQuartileGrade.toFixed(1)+'</strong>%</td>';
+			html += '<td><strong>'+this.analysisData_.gradeData.maxGrade.toFixed(1)+'</strong>%</td></tr>';
+
+			html += '<tr style="color: rgb(20,120,20)"><td><strong>'+this.analysisData_.gradeData.gradeProfile+'</strong><br>Profile</td>';
+			html += '<td>moving %<br>Dst / Time</td>';
+			html += '<td>DH<br>'
+				+(this.analysisData_.gradeData.upFlatDownInMeters.down / this.analysisData_.gradeData.upFlatDownInMeters.total * 100).toFixed(0)
+				+' / '+(this.analysisData_.gradeData.upFlatDownInSeconds.down / this.analysisData_.gradeData.upFlatDownInSeconds.total * 100).toFixed(0)+'</td>';
+			html += '<td>FLAT<br>'
+				+(this.analysisData_.gradeData.upFlatDownInMeters.flat / this.analysisData_.gradeData.upFlatDownInMeters.total * 100).toFixed(0)
+				+' / '+(this.analysisData_.gradeData.upFlatDownInSeconds.flat / this.analysisData_.gradeData.upFlatDownInSeconds.total * 100).toFixed(0)+'</td>';
+			html += '<td>UP<br>'
+				+(this.analysisData_.gradeData.upFlatDownInMeters.up / this.analysisData_.gradeData.upFlatDownInMeters.total * 100).toFixed(0)
+				+' / '+(this.analysisData_.gradeData.upFlatDownInSeconds.up / this.analysisData_.gradeData.upFlatDownInSeconds.total * 100).toFixed(0)+'</td>';
+			html += '<td>avgUPgr%<br>'+this.analysisData_.gradeData.upAvgGradeEstimate.toFixed(1)+'% (est.)</td></tr>';
 		};
 
 		html += '</table></a></div>';

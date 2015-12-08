@@ -161,19 +161,19 @@ RemoteLinksModifier.prototype = {
 
 
 
-        // Add tcx export
-        if (this.authorOfActivity) {
-            var htmlForTCXExport = "<li><a href='" + window.location.pathname + "/export_tcx'>Export TCX</a></li>";
-            $(".actions-menu .slide-menu .options").append(htmlForTCXExport);
-        }
-
-
-
         // Add csv export
 //        if (this.authorOfActivity) {
             var htmlForCSVExport = "<li onclick='Helper.csv(StravaStreams)'><a>Export CSV</a></li>";
             $(".actions-menu .slide-menu .options").append(htmlForCSVExport);
 //        }
+
+
+
+        // Add tcx export
+        if (this.authorOfActivity) {
+            var htmlForTCXExport = "<li><a href='" + window.location.pathname + "/export_tcx'>Export TCX</a></li>";
+            $(".actions-menu .slide-menu .options").append(htmlForTCXExport);
+        }
 
 
 

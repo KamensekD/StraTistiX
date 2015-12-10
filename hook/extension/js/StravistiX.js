@@ -1,4 +1,5 @@
-if (env.debugMode) console.warn('Begin     StravistiX.js');
+//if (env.debugMode) console.warn('Begin     StravistiX.js');
+//  \--- this line should't be here, because then BestSplits and Updated message don't work. No idea why?!?!?
 /**
  *   StravistiX is responsible of linking processors with modfiers and user settings/health data
  *
@@ -308,14 +309,15 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
 
 
     /**
-     *
+     *   update message popup can be started with: "StravistiX.prototype.handleUpdateRibbon_()"
      */
     handleUpdateRibbon_: function handleUpdateRibbon_() {
 if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
-        var title = 'StraTistiX updated/installed to <strong>v' + this.appResources_.extVersion + '</strong>';
+//        var title = 'StraTistiX updated/installed to <strong>v' + this.appResources_.extVersion + '</strong>';
+        var title = 'StraTistiX recently added/updated/fixed features:';
         var message = '';
-        message += "<h4><strong>Important changes:</strong><br>";
+	message += "<font size=+1>"
         message += "- statistics now computed on <strong>weighted percentiles</strong><br/>"
         message += "&nbsp&nbsp(might have big impact for activities with dynamic sampling period!)<br/>"
         message += "- heart rate extended statistics now computed based on <strong>moving time</strong>, not total time<br/>"
@@ -323,14 +325,15 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
         message += "<br/>"
         message += "- Added CSV export (for easy analysis in spreadsheet software)<br/>"
         message += "- Added Ascent speed statistics (VAM) for cycling<br/>"
-        message += "- Improved 'Best Splits' - click on them to highlight the part of activity they represent!<br/>"
+        message += "- Improved 'Best Splits' - click to highlight the part of activity they represent!<br/>"
         message += "- Improved elevation data accuracy while computing extended statistics.<br/>"
         message += "&nbsp&nbsp(Elevation data smoothed using low pass filter with gain matched to Strava's)<br/>"
         message += "- Added cadence and power data overview table<br/>"
         message += "- Weather unis preferences<br/>"
         message += "- Various Fixes, sorry for bigbug in 2.0.0.1 - settings menu not working :/<br/>"
-        message += "<br/>"
-        message += "<h4><strong>From previous update:</strong></h4>";
+        
+        message += "<br/></font>"
+        message += "<font size=+1><strong>From previous updates:</strong></font><br><font size=-1>";
         message += "- improved grade profile word description<br>"
         message += "- Added year progression (activity count, distance, elevation, time) table and chart<br>"
         message += "- Added 'Best Splits' (distance, time, elevation, hr,...) to biking activities<br>"
@@ -344,19 +347,18 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
         message += "- Moved some leftside links to menu, reordered menu a bit<br>"
         message += "- Changed HR related computations from total to moving time<br>"
         message += "- Filtering altitude for gain computations<br>"
-        message += "- Various Fixes<br>"
-        message += "<br>* Credits for many of new features go to <a href=https://github.com/tazmanska>tomasz.terlecki / tazmanska</a> !"
-        message += "<br>  and <a href=https://github.com/glandais>Gabriel Landais / glandais</a> !"
+        message += "- Various Fixes<br></font>"
+        message += "<br>* Credits for many of new features go to <a href=https://github.com/tazmanska>tomasz.terlecki / tazmanska</a> and <a href=https://github.com/glandais>Gabriel Landais / glandais</a> !"
 
-        message += "</h4>";
+//        message += "</h4>";
 //        message += "<h4><strong>BUGFIXES:</strong></h4><h5>";
 //        message += "- bugfix<br/>"
 //        message += "</h5><br>";
 
-        message += "<br>";
-        message += "<h4>This is <strong><a href='https://chrome.google.com/webstore/detail/stratistix-with-arpee-sco/bilbbbdgdimchenccmooakpfomfajepd'>StraTistiX</a></strong> - Dejan Kamensek's <a href='https://github.com/KamensekD/StraTistiX'>fork</a> of <a href='https://chrome.google.com/webstore/detail/stravistix-for-strava/dhiaggccakkgdfcadnklkbljcgicpckn'>StravistiX</a>";
-        message += '<br><font size=-1>Original StravistiX (formerly named StravaPlus) is being developed by Thomas Champagne</font></h4>';
-        message += '<h4><a target="_blank" href="' + this.appResources_.settingsLink + '#/donate">Donate Thomas Champagne to get more features</a></h4>';
+        message += "<br><br><div align='center'>";
+        message += "<h4>This is <strong><a href='https://chrome.google.com/webstore/detail/stratistix-with-arpee-sco/bilbbbdgdimchenccmooakpfomfajepd'>StraTistiX</a></strong> - Dejan Kamensek's <a href='https://github.com/KamensekD/StraTistiX'>fork</a> of <a href='https://chrome.google.com/webstore/detail/stravistix-for-strava/dhiaggccakkgdfcadnklkbljcgicpckn'>StravistiX</a><br>";
+        message += '<div align><font size=-1>Original StravistiX (formerly named StravaPlus) is being developed by Thomas Champagne</font></h4></div>';
+//        message += '<h4><a target="_blank" href="' + this.appResources_.settingsLink + '#/donate">Donate Thomas Champagne to get more features</a></h4>';
 
         $.fancybox('<h2>' + title + '</h2>' + message);
     },

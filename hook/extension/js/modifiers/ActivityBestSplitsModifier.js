@@ -103,7 +103,11 @@ ActivityBestSplitsModifier.prototype = {
             return result;
             }
         };
-        this.activityJson.filteredAltitude = filterData(this.activityJson.altitude, this.activityJson.distance, 200);
+env.debugMode>0   && console.log(' > (f: ActivityBestSplitsModifier.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log('                                      >   Smoothing   --- ' + ActivityProcessor.smoothing + ' ---');
+
+        this.activityJson.filteredAltitude = filterData(this.activityJson.altitude, this.activityJson.distance, ActivityProcessor.smoothing); // use calculated smoothing here **
+        // ** in ActivityProcessor.js we calculated smoothing to aproach Strava's elevation estimate as close as possible
 
         self.distanceUnit = (measurementPreference == 'meters') ? ActivityBestSplitsModifier.Units.Kilometers : ActivityBestSplitsModifier.Units.Miles;
 

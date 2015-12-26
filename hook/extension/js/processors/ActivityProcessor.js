@@ -67,6 +67,9 @@ ActivityProcessor.gradeProfileAlpine = 'ALPINE';
 
 ActivityProcessor.gradeProfileHilly = 'HILLY';                  // All other scenarios - hilly
 
+ActivityProcessor.smoothingL = 1;
+ActivityProcessor.smoothingH = 99;
+
 
 // !!!   try to lower MinClimbed figures, because these are not total climbed, but climbed @ at least "gradeClimbingLimit"   !!!
 
@@ -1249,12 +1252,10 @@ if (env.debugMode) console.warn(' > (f: ActivityProcessor.js) >   ' + arguments.
         var distanceArray = activityStream.distance;  // for smoothing by distance
 //        var timeArray = activityStream.time;  // for smoothing by time
         var velocityArray = activityStream.velocity_smooth;
-        var smoothingL = 10;
-        var smoothingH = 600;
         var smoothing;
         var altitudeArray;
-        while (smoothingH - smoothingL >= 1) {
-            smoothing = smoothingL + (smoothingH - smoothingL) / 2;
+        while (ActivityProcessor.smoothingH - ActivityProcessor.smoothingL >= 0.1) {	// max difference - defines how closely we should try to aproach Strava's elevation estimate
+            smoothing = ActivityProcessor.smoothingL + (ActivityProcessor.smoothingH - ActivityProcessor.smoothingL) / 2;
             altitudeArray = this.lowPassDataSmoothing_(activityAltitudeArray, distanceArray, smoothing);	// smoothing by distance
 //            altitudeArray = this.lowPassDataSmoothing_(activityAltitudeArray, timeArray, smoothing);	// smoothing by time
             var totalElevation = 0;
@@ -1268,12 +1269,13 @@ if (env.debugMode) console.warn(' > (f: ActivityProcessor.js) >   ' + arguments.
             }
 
 if (env.debugMode) console.log("          ...Altitude smoothing factor:" + smoothing.toFixed(2) + "   Strava Elev.: " + stravaElevation + "   Smoothed: " + totalElevation.toFixed(2) );
-            if (totalElevation < stravaElevation) {
-                smoothingH = smoothing;
+            if (totalElevation < stravaElevation) {	// might not always work as intended, as Strava elevation is too high estimate...
+                ActivityProcessor.smoothingH = smoothing;
             } else {
-                smoothingL = smoothing;
+                ActivityProcessor.smoothingL = smoothing;
             }
         }
+        ActivityProcessor.smoothing = smoothing;
         return altitudeArray;
     },
 

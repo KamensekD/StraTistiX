@@ -1,3 +1,9 @@
+var contentDebug=1;
+if (contentDebug) console.warn('Begin     Content.js');
+//if (contentDebug) console.log(' > > (f:  Content.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
+/**
+ *   
+ */
 var Loader = function() {}
 
 Loader.prototype = {
@@ -28,11 +34,13 @@ Loader.prototype = {
             s.async = false;
             s.src = src;
             s.addEventListener('load', function(e) {
+//if (contentDebug) console.log(' > (f:  Content.js) > Load JS:' + src.toString() );
                 self.loaded(e);
             }, false);
             var head = document.getElementsByTagName('head')[0];
             head.appendChild(s);
         } else if (ext === 'css') {
+//if (contentDebug) console.log(' > (f:  Content.js) > LoadCSS:' + src.toString() );
             var link = document.createElement('link');
             link.href = src;
             link.addEventListener('load', function(e) {
@@ -46,6 +54,10 @@ Loader.prototype = {
         }
     }
 }
+
+
+
+
 
 /**
  *   Content is responsible of ...
@@ -257,3 +269,4 @@ var cssDependencies = [
 
 var content = new Content(jsDependencies, cssDependencies, userSettings, appResources);
 content.start();
+if (contentDebug) console.warn('End       Content.js');

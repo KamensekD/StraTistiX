@@ -32,7 +32,7 @@ VacuumProcessor.prototype = {
      *  @returns the strava athlete id
      */
     getAthleteId: function getAthleteId() {
-if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
         var athleteId = null;
         try {
             if (!_.isUndefined(currentAthlete) && !_.isUndefined(currentAthlete.id)) {
@@ -52,7 +52,7 @@ if (env.debugMode) console.warn(err);
      *  @returns the strava athlete id
      */
     getAthleteName: function getAthleteName() {
-if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
         var athleteName = null;
         try {
             if (!_.isUndefined(currentAthlete) && !_.isUndefined(currentAthlete.get('display_name'))) {
@@ -72,7 +72,7 @@ if (env.debugMode) console.warn(err);
      *  @returns the strava athlete id
      */
     getAthleteIdAuthorOfActivity: function getAthleteIdAuthorOfActivity() {
-if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
         if (_.isUndefined(window.pageView)) {
             return null;
@@ -96,7 +96,7 @@ if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.cal
      *  @returns premium status
      */
     getPremiumStatus: function getPremiumStatus() {
-if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
         var premiumStatus = null;
         try {
@@ -117,7 +117,7 @@ if (env.debugMode) console.warn(err);
      *  @returns the strava pro athlete id
      */
     getProStatus: function getProStatus() {
-if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
         var proStatus = null;
 
@@ -148,7 +148,7 @@ if (env.debugMode) console.warn(err);
      *  @returns ActivityId
      */
     getActivityId: function getActivityId() {
-if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
         return (_.isUndefined(window.pageView)) ? null : pageView.activity().id;
     },
 
@@ -159,7 +159,7 @@ if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.cal
      *  @returns ActivityName
      */
     getActivityName: function getActivityName() {
-if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
         var actStatsContainer = $(".activity-summary-container");
 
@@ -177,7 +177,7 @@ if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.cal
      *  @returns ActivityTime
      */
     getActivityTime: function getActivityTime() {
-if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
         var actStatsContainer = $(".activity-summary-container");
 
@@ -202,7 +202,7 @@ if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.cal
      *  @returns AthleteWeight
      */
     getAthleteWeight: function getAthleteWeight() {
-if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
         return (_.isUndefined(window.pageView)) ? null : pageView.activityAthleteWeight();
     },
 
@@ -219,7 +219,7 @@ if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.cal
      * @returns Common activity stats given by Strava throught right panel
      */
     getActivityCommonStats: function getActivityStats() {
-if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
         var actStatsContainer = $(".activity-summary-container");
 
@@ -420,7 +420,7 @@ if (env.debugMode) console.warn("Can't get average speed... tryin' to get pace")
      * @returns formated/cleaned activity data
      */
     formatActivityDataValue_: function formatActivityDataValue_(dataIn, parsingTime, parsingElevation, parsingDistance, parsingEnergy) {
-if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
 
         if (dataIn == "") {
@@ -467,17 +467,17 @@ if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.cal
      * @returns activity streams in callback
      */
     getActivityStream: function getActivityStream(callback) {
-if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
-if (env.debugMode) console.log('--- (f: VacuumProcessor.js) >   Try to read  -Activity '+this.getActivityId()+' Streams-  from cache/localStorage (' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + ')' )
+if (env.debugMode) console.log('>>>(f: VacuumProcessor.js) >   Try to read  -Activity '+this.getActivityId()+' Streams-  from cache/localStorage (' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + ')' )
         var cache = localStorage.getItem(VacuumProcessor.cachePrefix + this.getActivityId());
         if (cache) {
-if (env.debugMode) console.log('...   FOUND in cache - using cached Activity Streams   ...' );
+if (env.debugMode) console.warn('...   FOUND in cache - using cached Activity Streams   ...' );
             cache = JSON.parse(cache);
             callback(cache.activityCommonStats, cache.stream, cache.athleteWeight, cache.hasPowerMeter);
             return;
         } else {
-if (env.debugMode) console.log('...   NOT in cache - getting Activity Streams from Strava   ...');
+if (env.debugMode) console.error('...   NOT in cache - getting Activity Streams from Strava   ...');
         }
 
 //        var url = "/activities/" + this.getActivityId() + "/streams?stream_types[]=watts_calc&stream_types[]=watts&stream_types[]=velocity_smooth&stream_types[]=time&stream_types[]=distance&stream_types[]=cadence&stream_types[]=heartrate&stream_types[]=grade_smooth&stream_types[]=altitude&stream_types[]=latlng";
@@ -494,7 +494,7 @@ if (env.debugMode) console.log('...   NOT in cache - getting Activity Streams fr
 
             try {
                 // Save result to cache
-if (env.debugMode) console.log('--- (f: VacuumProcessor.js) >   Try to write  -Activity '+this.getActivityId()+' Streams-  to cache/localStorage < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log('<<<(f: VacuumProcessor.js) >   Try to write  -Activity '+pageView.activityId()+' Streams-  to cache/localStorage < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
             	var result = {
                     activityCommonStats: this.getActivityCommonStats(),
@@ -543,7 +543,7 @@ var simpl_array=simplify(full_array,0.1,1);
      * @returns Segments in callback
      */
     getSegmentsFromBounds: function getSegmentsFromBounds(vectorA, vectorB, callback) {
-if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
         var segmentsUnify = {
             cycling: null,
@@ -602,7 +602,7 @@ if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.cal
      * @returns Strava Segment Stream in callback
      */
     getSegmentStream: function getSegmentStream(segmentId, callback) {
-if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
         $.ajax({
             url: '/stream/segments/' + segmentId,
@@ -622,7 +622,7 @@ if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.cal
      * @returns Array of bikes/odo in callback
      */
     getBikeOdoOfAthlete: function getBikeOdoOfAthlete(athleteId, callback) {
-if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
         if (_.isUndefined(window.pageView)) {
             callback(null);

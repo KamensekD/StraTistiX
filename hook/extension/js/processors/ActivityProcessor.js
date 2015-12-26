@@ -84,7 +84,7 @@ ActivityProcessor.prototype = {
      *
      */
     setActivityType: function setActivityType(activityType) {
-if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
         this.activityType = activityType;
     },
 
@@ -94,19 +94,19 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
      *
      */
     getAnalysisData: function getAnalysisData(activityId, userGender, userRestHr, userMaxHr, userFTP, callback) {
-if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
         if (!this.activityType) {
             console.error('No activity type set for ActivityProcessor');
         }
 
         // Find in cache first is data exist
-if (env.debugMode) console.log('--- (f: ActivityProcessor.js) >   Try to read  -Analysis Data-  from cache/localStorage (' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + ')' )
+if (env.debugMode) console.log('>>>(f: ActivityProcessor.js) >   Try to read  -Analysis Data-  from cache/localStorage (' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + ')' )
         var cacheResult = JSON.parse(localStorage.getItem(ActivityProcessor.cachePrefix + activityId));
                 if (cacheResult) {
-if (env.debugMode) console.log('...   FOUND in cache - using cached Analysis Data   ...' );
+if (env.debugMode) console.warn('...   FOUND in cache - using cached Analysis Data   ...' );
                 } else {
-if (env.debugMode) console.log('...   NOT in cache - calculating Analysis Data   ...' );
+if (env.debugMode) console.error('...   NOT in cache - calculating Analysis Data   ...' );
                 }
 
                 
@@ -133,7 +133,7 @@ if (env.debugMode) console.warn('Executing   VacuumProcessor_.getActivityStream 
             var result = this.computeAnalysisData_(userGender, userRestHr, userMaxHr, userFTP, athleteWeight, hasPowerMeter, activityStatsMap, activityStream);
 
 
-if (env.debugMode) console.log('--- (f: ActivityProcessor.js) >   Try to write  -Analysis Data-  to cache/localStorage (' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + ')' )
+if (env.debugMode) console.log('<<<(f: ActivityProcessor.js) >   Try to write  -Analysis Data-  to cache/localStorage (' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + ')' )
             localStorage.setItem(ActivityProcessor.cachePrefix + activityId, JSON.stringify(result)); // Cache the result to local storage
 if (env.debugMode) console.log("\nWritten to cache/localstorage: " + ActivityProcessor.cachePrefix + activityId + "\n\n" + JSON.stringify(result) + "\n\n\n");
             callback(result);
@@ -148,7 +148,7 @@ if (env.debugMode) console.log("\nWritten to cache/localstorage: " + ActivityPro
      */
 // =================================================================================================
     computeAnalysisData_: function computeAnalysisData_(userGender, userRestHr, userMaxHr, userFTP, athleteWeight, hasPowerMeter, activityStatsMap, activityStream) {
-if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
 
 //
@@ -249,7 +249,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
      * ...
      */
     moveRatio_: function moveRatio_(activityStatsMap, activityStream) {
-if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
         if (_.isNull(activityStatsMap.movingTime) || _.isNull(activityStatsMap.elapsedTime)) {
             Helper.log('WARN', 'Unable to compute ActivityRatio on this activity with following data: ' + JSON.stringify(activityStatsMap))
@@ -268,7 +268,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
      * ...
      */
     toughnessScore_: function toughnessScore_(activityStatsMap, activityStream, moveRatio) {
-if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
         if (_.isNull(activityStatsMap.elevation) || _.isNull(activityStatsMap.avgPower) || _.isNull(activityStatsMap.averageSpeed) || _.isNull(activityStatsMap.distance)) {
             return null;
@@ -293,7 +293,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
      *
      */
     getZoneFromDistributionStep_: function getZoneFromDistributionStep_(value, distributionStep, minValue) {
-if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
         return parseInt((value - minValue) / (distributionStep));
     },
 
@@ -303,7 +303,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
      *
      */
     getZoneId: function getZoneId(zones, value) {
-//if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+//if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
         for (zoneId = 0; zoneId < zones.length; zoneId++) {
             if (value <= zones[zoneId].to) {
                 return zoneId;
@@ -317,7 +317,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
      *
      */
     prepareZonesForDistribComputation: function prepareZonesForDistribComputation(sourceZones) {
-if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
         var preparedZones = [];
         for (zone in sourceZones) {
             sourceZones[zone].s = 0;
@@ -333,7 +333,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
      *
      */
     finalizeDistribComputationZones: function finalizeDistribComputationZones(zones) {
-if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
         var total = 0;
         for (zone of zones) {
             if (zone['s']) {
@@ -357,7 +357,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
      *
      */
     valueForSum_: function valueForSum_(currentValue, previousValue, delta) {
-//if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+//if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
         // discrete integral
         return currentValue * delta - ((currentValue - previousValue) * delta) / 2;
     },
@@ -368,7 +368,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 
 //  --------------------------------------------------------------------------------------------------------------------
     moveData_: function moveData_(activityStatsMap, velocityArray, timeArray) {
-if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
 //        if (!velocityArray) {
         if (_.isEmpty(velocityArray) || _.isEmpty(timeArray)) {
@@ -468,7 +468,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
      * @return pace in seconds/km
      */
     convertSpeedToPace: function convertSpeedToPace(speed) {
-//if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+//if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
         return (speed === 0) ? 'infinite' : parseInt((1 / speed) * 60 * 60);
     },
 
@@ -478,7 +478,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 
 //  --------------------------------------------------------------------------------------------------------------------
     powerData_: function powerData_(athleteWeight, hasPowerMeter, userFTP, activityStatsMap, powerArray, velocityArray, timeArray) {
-if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
 //        if (_.isEmpty(powerArray) || _.isEmpty(velocityArray)) {
 //        if (_.isEmpty(powerArray) || _.isEmpty(velocityArray) || _.isEmpty(timeArray)) {
@@ -568,7 +568,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 
 //  --------------------------------------------------------------------------------------------------------------------
     heartRateData_: function heartRateData_(userGender, userRestHr, userMaxHr, heartRateArray, timeArray, velocityArray, activityStatsMap) {
-if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
         if (_.isEmpty(heartRateArray) || _.isEmpty(timeArray) ) {
             return null;
@@ -766,7 +766,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
      *
      */
     getHrrZoneId: function getHrrZoneId(hrrZonesCount, hrrValue) {
-//if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+//if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
         for (zoneId = 0; zoneId < hrrZonesCount; zoneId++) {
             if (hrrValue <= this.userHrrZones_[zoneId]['toHrr']) {
                 return zoneId;
@@ -780,7 +780,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 
 //  --------------------------------------------------------------------------------------------------------------------
     cadenceData_: function cadenceData_(cadenceArray, velocityArray, activityStatsMap, timeArray) { // TODO add cadence type here
-if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
 //        if (_.isUndefined(cadenceArray) || _.isUndefined(velocityArray)) {
 //        if (_.isEmpty(cadenceArray) || _.isEmpty(velocityArray) || _.isEmpty(timeArray)) {
@@ -884,7 +884,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 
 //  --------------------------------------------------------------------------------------------------------------------
     gradeData_: function gradeData_(gradeArray, velocityArray, timeArray, distanceArray, altitudeArray) {
-if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 //        if (_.isEmpty(gradeArray) || _.isEmpty(timeArray)) {
 //        if (_.isEmpty(gradeArray) || _.isEmpty(velocityArray) || _.isEmpty(timeArray) || _.isEmpty(altitudeArray) || ( velocity_avg < velocity_avgThreshold ) ){
         if ( _.isEmpty(gradeArray) || _.isEmpty(timeArray) || ( velocity_avg < velocity_avgThreshold ) ) {
@@ -1113,7 +1113,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 
 //  --------------------------------------------------------------------------------------------------------------------
     elevationData_: function elevationData_(activityStream, activityStatsMap) {
-if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
         var distanceArray = activityStream.distance;
         var timeArray = activityStream.time;
         var velocityArray = activityStream.velocity_smooth;
@@ -1244,7 +1244,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
      *
      */
     smoothAltitude_: function smoothAltitude(activityStream, stravaElevation) {
-if (env.debugMode) console.warn(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.warn(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
         var activityAltitudeArray = activityStream.altitude;
         var distanceArray = activityStream.distance;  // for smoothing by distance
 //        var timeArray = activityStream.time;  // for smoothing by time
@@ -1283,7 +1283,7 @@ if (env.debugMode) console.log("          ...Altitude smoothing factor:" + smoot
      *
      */
     lowPassDataSmoothing_: function lowPassDataSmoothing_(data, distance, smoothing) {
-if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
         // Below algorithm is applied in this method
         // http://phrogz.net/js/framerate-independent-low-pass-filter.html
         // value += (currentValue - value) / (smoothing / timeSinceLastSample);

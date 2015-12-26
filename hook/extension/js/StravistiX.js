@@ -101,7 +101,7 @@ https://www.strava.com/activities/269549200     StationaryOther (HR, cadence)			
 
  */
 function StravistiX(userSettings, appResources) {
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         this.userSettings_              = userSettings;
         this.appResources_              = appResources;
@@ -126,10 +126,10 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
     
 
 
-if (env.debugMode) console.log("--------------------");
+env.debugMode>0   && console.log("--------------------");
 if (env.debugMode && (typeof pageView !== 'undefined')) console.warn( "Activity: " + pageView.activity().get('type') + " (" + pageView.activity().get('id') + ")" );
 if (env.debugMode && (typeof pageView !== 'undefined')) if( pageView.activityAthlete() != null ) console.warn( "Athlete:  " + pageView.activityAthlete().get('display_name') + " (" + pageView.activityAthlete().get('id') + ")" );
-if (env.debugMode) console.log("--------------------");
+env.debugMode>0   && console.log("--------------------");
 } // StravistiX
 
 
@@ -156,7 +156,7 @@ StravistiX.prototype = {
      *
      */
     init_: function init_() {
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
 
 
@@ -190,7 +190,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
 
 
         // Common
-if (env.debugMode) console.warn('\n > (f: StravistiX.js) >   COMMON   < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + '\n\n')
+env.debugMode>0   && console.warn('\n > (f: StravistiX.js) >   COMMON   < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + '\n\n')
         this.handleMenu_();
         this.handleRemoteLinks_();
         this.handleWindyTyModifier_();
@@ -212,7 +212,7 @@ if (env.debugMode) console.warn('\n > (f: StravistiX.js) >   COMMON   < ' + argu
 
 
         // Bike
-if (env.debugMode) console.warn(' > (f: StravistiX.js) >   BIKE   < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.warn(' > (f: StravistiX.js) >   BIKE   < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
         this.handleNearbySegments_();
         this.handleActivityBikeOdo_();
         this.handleActivitySegmentTimeComparison_();
@@ -221,7 +221,7 @@ if (env.debugMode) console.warn(' > (f: StravistiX.js) >   BIKE   < ' + argument
 
 
         // Run
-if (env.debugMode) console.warn(' > (f: StravistiX.js) >   RUN   < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.warn(' > (f: StravistiX.js) >   RUN   < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
         this.handleRunningGradeAdjustedPace_();
         this.handleRunningHeartRate_();
         this.handleMoveFooterOutofWay_();
@@ -229,7 +229,7 @@ if (env.debugMode) console.warn(' > (f: StravistiX.js) >   RUN   < ' + arguments
 
 
         // All activities
-if (env.debugMode) console.warn(' > (f: StravistiX.js) >   ALL   < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.warn(' > (f: StravistiX.js) >   ALL   < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
         this.handleActivityQRCodeDisplay_();
         this.handleVirtualPartner_();
         this.handleAthletesStats();
@@ -237,7 +237,7 @@ if (env.debugMode) console.warn(' > (f: StravistiX.js) >   ALL   < ' + arguments
 
 
         // Must be done at the end
-if (env.debugMode) console.warn(' > (f: StravistiX.js) >   FINAL   < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.warn(' > (f: StravistiX.js) >   FINAL   < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
         this.handleTrackTodayIncommingConnection_();
         this.handleGoogleMapsComeBackModifier();
 
@@ -257,7 +257,7 @@ if (env.debugMode) console.warn(' > (f: StravistiX.js) >   FINAL   < ' + argumen
      *
      */
     handleForwardToWWW_: function handleForwardToWWW() {
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         if (_.isEqual(window.location.hostname, 'app.strava.com')) {
             var forwardUrl = window.location.protocol + "//www.strava.com" + window.location.pathname;
@@ -273,13 +273,13 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
      *
      */
     handleExtensionHasJustUpdated_: function handleExtensionHasJustUpdated_() {
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
 
         // Clear localstorage
         // Especially for activies data stored in cache
-        console.log("Extension Has Updated -> localstorage clear");
         localStorage.clear();
+        console.error("Extension Has Updated ->   !!!   localstorage cleared   !!!");
 
 
         if (!window.location.pathname.match(/^\/dashboard/)) {
@@ -312,7 +312,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
      *   update message popup can be started with: "StravistiX.prototype.handleUpdateRibbon_()"
      */
     handleUpdateRibbon_: function handleUpdateRibbon_() {
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
 //        var title = 'StraTistiX updated/installed to <strong>v' + this.appResources_.extVersion + '</strong>';
         var title = 'StraTistiX recently added/updated/fixed features:';
@@ -369,7 +369,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
      *
      */
     handleAthletesStats: function handleAthletesStats() {
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         // If we are not on the athletes page then return...
         if (!window.location.pathname.match(new RegExp("/athletes/" + this.athleteId_ + "$", "g"))) {
@@ -386,7 +386,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
      *
      */
     handlePreviewRibbon_: function handlePreviewRibbon_() {
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
         var globalStyle = 'background-color: #FFF200; color: rgb(84, 84, 84); font-size: 12px; padding: 5px; font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif; text-align: center;';
         var html = '<div id="updateRibbon" style="' + globalStyle + '"><strong>WARNING</strong> You are running a preview of <strong>StravistiX</strong>, to remove it, open a new tab and type <strong>chrome://extensions</strong></div>';
         $('body').before(html);
@@ -398,7 +398,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
      *
      */
     handleMenu_: function handleMenu_() {
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         var menuModifier = new MenuModifier(this.athleteId_, this.userSettings_.highLightStravistiXFeature, this.appResources_);
         menuModifier.modify();
@@ -410,7 +410,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
      *
      */
     handleRemoteLinks_: function handleRemoteLinks_() {
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         // If we are not on a segment or activity page then return...
 //        if (!window.location.pathname.match(/^\/segments\/(\d+)$/) && !window.location.pathname.match(/^\/activities/)) {
@@ -432,7 +432,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
      *
      */
     handleWindyTyModifier_: function handleWindyTyModifier_() {
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         // If we are not on a segment or activity page then return...
         if (!window.location.pathname.match(/^\/activities/)) {
@@ -463,7 +463,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
      *
      */
     handleActivityScrolling_: function handleActivityScrolling_() {
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         if (!this.userSettings_.feedAutoScroll) {
             return;
@@ -479,7 +479,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
      *
      */
     handleDefaultLeaderboardFilter_: function handleDefaultLeaderboardFilter_() {
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         // If we are not on a segment or activity page then return...
         if (!window.location.pathname.match(/^\/segments\/(\d+)$/) && !window.location.pathname.match(/^\/activities/)) {
@@ -490,7 +490,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
         try {
             eval('Strava.Labs.Activities.SegmentLeaderboardView');
         } catch (err) {
-            if (env.debugMode) console.log('Kick out no Strava.Labs.Activities.SegmentLeaderboardView available');
+env.debugMode>0   && console.log('Kick out no Strava.Labs.Activities.SegmentLeaderboardView available');
             return;
         }
 
@@ -504,7 +504,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
      *
      */
     handleSegmentRankPercentage_: function handleSegmentRankPercentage_() {
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         if (!this.userSettings_.displaySegmentRankPercentage) {
             return;
@@ -525,7 +525,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
      *
      */
     handleActivityGoogleMapType_: function handleActivityGoogleMapType_() {
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         // Test where are on an activity...
         if (!window.location.pathname.match(/^\/activities/)) {
@@ -542,7 +542,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
      *
      */
     handleCustomMapboxStyle_: function handleCustomMapboxStyle_() {
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         // Test where are on an activity...
         if (!window.location.pathname.match(/^\/activities/)) {
@@ -557,7 +557,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
      *
      */
     handleHidePremium_: function handleHidePremium_() {
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         // Eject premium users of this "Hiding" feature
         // Even if they checked "ON" the hide premium option
@@ -579,7 +579,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
      *
      */
     handleHideFeed_: function handleHideFeed_() {
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         // Test if where are on dashboard page
         if (!window.location.pathname.match(/^\/dashboard/)) {
@@ -600,7 +600,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
      *
      */
     handleDisplayFlyByFeedModifier_: function handleDisplayFlyByFeedModifier_() {
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         // Test if where are on dashboard page
         if (!window.location.pathname.match(/^\/dashboard/)) {
@@ -620,7 +620,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
      *
      */
     handleExtendedActivityData_: function handleExtendedActivityData_() {
-if (env.debugMode) console.warn(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.warn(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         if (_.isUndefined(window.pageView)) {
             return;
@@ -632,7 +632,7 @@ if (env.debugMode) console.warn(' > (f: StravistiX.js) >   ' + arguments.callee.
 
         // Skip manual activities
         if (activityType === 'Manual') {
-if (env.debugMode) console.log("--- StravistiX.js skip Manual activity: " + activityType);
+env.debugMode>0   && console.log("--- StravistiX.js skip Manual activity: " + activityType);
             return;
         }
 
@@ -641,7 +641,7 @@ if (env.debugMode) console.log("--- StravistiX.js skip Manual activity: " + acti
 
 
         this.activityProcessor_.setActivityType(activityType);
-if (env.debugMode) console.warn("--- StravistiX.js Getting activity data and analysing... ");
+env.debugMode>0   && console.warn("--- StravistiX.js Getting activity data and analysing... ");
 
 
 
@@ -654,7 +654,7 @@ if (env.debugMode) console.warn("--- StravistiX.js Getting activity data and ana
             this.userSettings_.userFTP,
 
             function getAnalysisData (analysisData) { // Callback when analysis data has been computed
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
                 var extendedActivityDataModifier = null;
                 var basicInfos = {
@@ -676,7 +676,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
 //                }
 
 
-if (env.debugMode) console.log("--- StravistiX.js switch (activityType): " + activityType);
+env.debugMode>0   && console.log("--- StravistiX.js switch (activityType): " + activityType);
                 switch (activityType) {
 
 
@@ -741,7 +741,7 @@ if (env.debugMode) console.log("--- StravistiX.js switch (activityType): " + act
      *
      */
     handleNearbySegments_: function handleNearbySegments_() {
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         if (!this.userSettings_.displayNearbySegments) {
             return;
@@ -760,7 +760,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
 
         var arrayOfNearbySegments = segmentProcessor.getNearbySegmentsAround(function(jsonSegments) {
 
-            if (env.debugMode) console.log(jsonSegments);
+env.debugMode>0   && console.log(jsonSegments);
 
             var nearbySegmentsModifier = new NearbySegmentsModifier(jsonSegments, this.appResources_, this.userSettings_.highLightStravistiXFeature);
             nearbySegmentsModifier.modify();
@@ -774,7 +774,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
      *
      */
     handleActivityBikeOdo_: function handleActivityBikeOdo_() {
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         if (!this.userSettings_.displayBikeOdoInActivity) {
             return;
@@ -809,7 +809,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
      *
      */
     handleActivitySegmentTimeComparison_: function handleActivitySegmentTimeComparison_() {
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         // Test where are on an activity...
         if (!window.location.pathname.match(/^\/activities/)) {
@@ -840,7 +840,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
      *
      */
     handleActivityBestSplits_: function handleActivityBestSplits_() {
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         if (!this.userSettings_.displayActivityBestSplits) {
             return;
@@ -880,7 +880,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
      *
      */
     handleRunningGradeAdjustedPace_: function handleRunningGradeAdjustedPace_() {
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         if (!this.userSettings_.activateRunningGradeAdjustedPace) {
             return;
@@ -910,7 +910,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
      *
      */
     handleRunningHeartRate_: function handleRunningHeartRate_() {
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         if (!this.userSettings_.activateRunningHeartRate) {
             return;
@@ -940,7 +940,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
      *
      */
     handleMoveFooterOutofWay_: function handleMoveFooterOutofWay_() {
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         // If we are not on a activitie's segment page then return...
         if (!window.location.pathname.match(/activities\/\d*\/segments/)) {
@@ -954,7 +954,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
 
                 // ** manually refresh activity segment page if you want to move away footer **
                 fh=document.getElementsByClassName("run segments-list")[0].offsetHeight;
-                if (env.debugMode) console.log("Moving footer out of way..."+fh);
+env.debugMode>0   && console.log("Moving footer out of way..."+fh);
                 if ( typeof $('footer')[1] !== 'undefined' )   $('footer')[1].setAttribute("style", "position: relative; top: "+(fh-300)+"px; opacity: 0.33;");
                 if ( typeof $('footer')[2] !== 'undefined' )   $('footer')[2].setAttribute("style", "position: relative; top: "+(300)+"px; opacity: 0.33;");
     },
@@ -965,7 +965,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
      *
      */
     handleActivityQRCodeDisplay_: function handleActivityQRCodeDisplay_() {
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         // Test where are on an activity...
         if (!window.location.pathname.match(/^\/activities/)) {
@@ -987,7 +987,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
      *
      */
     handleVirtualPartner_: function handleVirtualPartner_() {
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         // Test where are on an activity...
         if (!window.location.pathname.match(/^\/activities/)) {
@@ -1004,7 +1004,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
      *
      */
         handleGoogleMapsComeBackModifier: function handleGoogleMapsComeBackModifier() {  
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
    
                 if (window.location.pathname.match(/\/truncate/)) { // Skipping on activity cropping
                         return;
@@ -1030,14 +1030,14 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
      * Launch a track event once a day (is user use it once a day), to follow is account type
      */
     handleTrackTodayIncommingConnection_: function handleTrackTodayIncommingConnection_() {
-if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         var userHasConnectSince24Hour = StorageManager.getCookie('stravistix_daily_connection_done');
 
-        if (env.debugMode) console.log("Cookie 'stravistix_daily_connection_done' value found is: " + userHasConnectSince24Hour);
+env.debugMode>0   && console.log("Cookie 'stravistix_daily_connection_done' value found is: " + userHasConnectSince24Hour);
 
         if (_.isNull(this.athleteId_)) {
-            if (env.debugMode) console.log("athleteId is empty value: " + this.athleteId_);
+env.debugMode>0   && console.log("athleteId is empty value: " + this.athleteId_);
             return;
         }
 
@@ -1061,7 +1061,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
             // Push IncomingConnection to piwik
             var eventName = accountName + ' #' + this.athleteId_ + ' v' + this.appResources_.extVersion;
 
-            if (env.debugMode) console.log("Cookie 'stravistix_daily_connection_done' not found, send track <IncomingConnection> / <" + accountType + "> / <" + eventName + ">");
+env.debugMode>0   && console.log("Cookie 'stravistix_daily_connection_done' not found, send track <IncomingConnection> / <" + accountType + "> / <" + eventName + ">");
 
             if (!env.debugMode) {
                 _spTrack('send', 'event', 'DailyConnection', eventAction, eventName);
@@ -1072,7 +1072,7 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
 
         } else {
 
-            if (env.debugMode) console.log("Cookie 'stravistix_daily_connection_done' exist, DO NOT TRACK IncomingConnection");
+env.debugMode>0   && console.log("Cookie 'stravistix_daily_connection_done' exist, DO NOT TRACK IncomingConnection");
 
         }
     }
@@ -1083,4 +1083,4 @@ if (env.debugMode) console.log(' > (f: StravistiX.js) >   ' + arguments.callee.t
 
 
 
-if (env.debugMode) console.warn('End       StravistiX.js');
+env.debugMode>0   && console.warn('End       StravistiX.js');

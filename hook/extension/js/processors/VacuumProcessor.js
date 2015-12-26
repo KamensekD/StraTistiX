@@ -474,6 +474,7 @@ if (env.debugMode) console.log('>>>(f: VacuumProcessor.js) >   Try to read  -Act
         if (cache) {
 if (env.debugMode) console.warn('...   FOUND in cache - using cached Activity Streams   ...' );
             cache = JSON.parse(cache);
+            StravaStreams=cache.stream;	// set StravaStreams from cache
             callback(cache.activityCommonStats, cache.stream, cache.athleteWeight, cache.hasPowerMeter);
             return;
         } else {

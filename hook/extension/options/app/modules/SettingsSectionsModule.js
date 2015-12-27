@@ -170,6 +170,7 @@ settingsSectionsModule.data = [{
             name: 'custom'
         }],
         optionHtml: 'Mapbox Style ID that is used to replace "Standard Map" background map.<br /><br/>Look at: <a href="http://www.mapbox.com/developers/api/maps/#mapids">www.mapbox.com/developers/api/maps/#mapids</a> and <a href="http://www.mapbox.com/editor/#style">www.mapbox.com/editor/#style</a> for details<br/><br/>Use <b>custom</b> to set user defined style. You can create Your own style with Mapbox free account!<br />',
+    }, {
         optionKey: 'displayActivityBestSplits',
         optionType: 'checkbox',
         optionTitle: 'Enable best splits into your cycling activities',

@@ -253,7 +253,9 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 			html += '<td><strong>'+this.analysisData_.gradeData.maxGrade.toFixed(1)+'</strong>%</td></tr>';
 
 			html += '<tr style="color: rgb(20,120,20)"><td><strong>'+this.analysisData_.gradeData.gradeProfile+'</strong><br>';
-			html += this.analysisData_.gradeData.minAlt.toFixed(0)+'-'+this.analysisData_.gradeData.maxAlt.toFixed(0)+' ['+(this.analysisData_.gradeData.maxAlt-this.analysisData_.gradeData.minAlt).toFixed(0)+'m]</td>';
+			html += '<font style="font-size:10px">';
+			html += this.analysisData_.gradeData.minAlt.toFixed(0)+'-'+this.analysisData_.gradeData.maxAlt.toFixed(0)+' ['+(this.analysisData_.gradeData.maxAlt-this.analysisData_.gradeData.minAlt).toFixed(0)+'m]';
+			html += '</font></td>';
 			html += '<td>moving %<br>Dist. / Time</td>';
 			html += '<td>DH<br>'
 				+(this.analysisData_.gradeData.upFlatDownInMeters.down / this.analysisData_.gradeData.upFlatDownInMeters.total * 100).toFixed(0)

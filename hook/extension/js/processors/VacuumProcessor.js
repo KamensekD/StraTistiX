@@ -517,6 +517,7 @@ if (env.debugMode) console.log("\nWritten to cache/localstorage: " + VacuumProce
 				result=null; result1=null// Memory clean
             } catch (err) {
                 console.warn(err);
+                localStorage.clear();
             }
 
 

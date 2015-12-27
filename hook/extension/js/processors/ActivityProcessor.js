@@ -83,7 +83,6 @@ ActivityProcessor.gradeProfileHilly = 'HILLY';                  // All other sce
 
 
 
-
 /**
  * Define prototype
  */
@@ -147,8 +146,14 @@ if (env.debugMode) console.warn('Executing   VacuumProcessor_.getActivityStream 
 
 
 if (env.debugMode) console.log('<<<(f: ActivityProcessor.js) >   Try to write  -Analysis Data-  to cache/localStorage (' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + ')' )
-            localStorage.setItem(ActivityProcessor.cachePrefix + activityId, JSON.stringify(result)); // Cache the result to local storage
+            try {
+                localStorage.setItem(ActivityProcessor.cachePrefix + activityId, JSON.stringify(result)); // Cache the result to local storage
+            } catch (err) {
+                console.warn(err);
+                localStorage.clear();
+            }
 if (env.debugMode) console.log("\nWritten to cache/localstorage: " + ActivityProcessor.cachePrefix + activityId + "\n\n" + JSON.stringify(result) + "\n\n\n");
+            
             callback(result);
 
         }.bind(this));
@@ -452,7 +457,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         var genuineAvgSpeed = genuineAvgSpeedSum / genuineAvgSpeedSumCount;
         var varianceSpeed = (speedVarianceSum / speedsNonZero.length) - Math.pow(activityStatsMap.averageSpeed, 2);
         var standardDeviationSpeed = (varianceSpeed > 0) ? Math.sqrt(varianceSpeed) : 0;
-        var percentiles = Helper.weightedPercentiles(speedsNonZero, speedsNonZeroDuration, [ 0.25, 0.5, 0.75 ]);
+        var percentiles = Helper.weightedPercentiles(speedsNonZero, speedsNonZeroDuration, [0.25, 0.5, 0.75]);
 
         return [{
             'genuineAvgSpeed': genuineAvgSpeed,
@@ -746,7 +751,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         activityStatsMap.maxHeartRate = heartRateArraySorted[heartRateArraySorted.length - 1];
 
         var TRIMPPerHour = TRIMP / hrrSecondsCount * 60 * 60;
-        var percentiles = Helper.weightedPercentiles(heartRateArrayMoving, heartRateArrayMovingDuration, [ 0.25, 0.5, 0.75 ]);
+        var percentiles = Helper.weightedPercentiles(heartRateArrayMoving, heartRateArrayMovingDuration, [0.25, 0.5, 0.75]);
 
         } //if
 
@@ -1031,7 +1036,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         // Update zone distribution percentage
         gradeZones = this.finalizeDistribComputationZones(gradeZones);
 
-        var percentiles = Helper.weightedPercentiles(gradeArrayMoving, gradeArrayDistance, [ 0.25, 0.5, 0.75 ]);
+        var percentiles = Helper.weightedPercentiles(gradeArrayMoving, gradeArrayDistance, [0.25, 0.5, 0.75]);
 
 
 
@@ -1238,12 +1243,13 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 
         var avgAscentSpeed = ascentSpeedMeterPerHourSum / ascentSpeedMeterPerHourSamples.length;
 
+
         // Update zone distribution percentage
         elevationZones = this.finalizeDistribComputationZones(elevationZones);
         ascentSpeedZones = this.finalizeDistribComputationZones(ascentSpeedZones);
 
-        var percentilesElevation = Helper.weightedPercentiles(elevationSamples, elevationSamplesDistance, [ 0.25, 0.5, 0.75 ]);
-        var percentilesAscent = Helper.weightedPercentiles(ascentSpeedMeterPerHourSamples, ascentSpeedMeterPerHourDistance, [ 0.25, 0.5, 0.75 ]);
+        var percentilesElevation = Helper.weightedPercentiles(elevationSamples, elevationSamplesDistance, [0.25, 0.5, 0.75]);
+        var percentilesAscent = Helper.weightedPercentiles(ascentSpeedMeterPerHourSamples, ascentSpeedMeterPerHourDistance, [0.25, 0.5, 0.75]);
 
         return {
             'avgElevation': avgElevation.toFixed(0),
@@ -1255,7 +1261,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
             'elevationZones': elevationZones, // Only while moving
             'ascentSpeedZones': ascentSpeedZones, // Only while moving
             'ascentSpeed': {
-                'avg': avgAscentSpeed,
+                'avg': _.isFinite(avgAscentSpeed) ? avgAscentSpeed : -1,
                 'lowerQuartile': percentilesAscent[0].toFixed(0),
                 'median': percentilesAscent[1].toFixed(0),
                 'upperQuartile': percentilesAscent[2].toFixed(0)
@@ -1273,6 +1279,14 @@ if (env.debugMode) console.warn(' > (f: ActivityProcessor.js) >   ' + arguments.
         var activityAltitudeArray = activityStream.altitude;
         var distanceArray = activityStream.distance;  // for smoothing by distance
 //        var timeArray = activityStream.time;  // for smoothing by time
+
+//        if (!activityStream.altitude) {
+//            return null;
+//        }
+
+        var activityAltitudeArray = activityStream.altitude;
+        var distanceArray = activityStream.distance;
+        //  var timeArray = activityStream.time;  // for smoothing by time
         var velocityArray = activityStream.velocity_smooth;
         var smoothing;
         var altitudeArray;
@@ -1313,17 +1327,17 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         // value += (currentValue - value) / (smoothing / timeSinceLastSample);
         // it is adapted for stability - if (smoothing / timeSinceLastSample) is less then 1, set it to 1 -> no smoothing for that sample
         if (data && distance) {
-            var smooth_factor=0;
+            var smooth_factor = 0;
             var result = [];
             result[0] = data[0];
             for (i = 1, max = data.length; i < max; i++) {
                 if (smoothing === 0) {
                     result[i] = data[i];
                 } else {
-               	    smooth_factor = smoothing / (distance[i] - distance[i - 1]);
-                    result[i] = result[i - 1] + (data[i] - result[i - 1]) / ( smooth_factor>1 ? smooth_factor : 1 ); // low limit smooth_factor to 1!!!
-//                    result[i] = result[i - 1] + (data[i] - result[i - 1]) / ( smooth_factor ); // no stability check
+                    smooth_factor = smoothing / (distance[i] - distance[i - 1]);
                     // only apply filter if smooth_factor > 1, else this leads to instability !!!
+                    result[i] = result[i - 1] + (data[i] - result[i - 1]) / (smooth_factor > 1 ? smooth_factor : 1); // low limit smooth_factor to 1!!!
+                    // result[i] = result[i - 1] + (data[i] - result[i - 1]) / ( smooth_factor ); // no stability check
                 }
             }
             return result;

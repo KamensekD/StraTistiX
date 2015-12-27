@@ -340,9 +340,9 @@ env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee
         message += "- Improved 'Best Splits' - click to highlight the part of activity they represent!<br/>"
         message += "- Improved elevation data accuracy while computing extended statistics.<br/>"
         message += "&nbsp&nbsp(Elevation data smoothed using low pass filter with gain matched to Strava's)<br/>"
-        message += "- Added cadence and power data overview table<br/>"
+        message += "- Added cadence, power and altitude data in overview table<br/>"
         message += "- Weather unis preferences<br/>"
-        message += "- Various Fixes, sorry for bigbug in 2.0.0.1 - settings menu not working :/<br/>"
+        message += "- Various smaller additions and fixes, sorry for bigbug in 2.0.0.1 - settings menu not working :/<br/>"
         
         message += "<br/></font>"
         message += "<font size=+1><strong>From previous updates:</strong></font><br><font size=-1>";
@@ -374,6 +374,7 @@ env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee
 
         $.fancybox('<h2>' + title + '</h2>' + message);
     },
+
 
 
 

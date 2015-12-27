@@ -1,6 +1,6 @@
 var env = {
-    buildNumber: 2101, // v2.1.0.1 develop
-//    buildNumber: 2001, // v2.0.0.1
+    buildNumber: 221, // v2.2.1 develop
+//    based on ThomasChampagne's v2.2.1
     preview: false, // Must be false in release
 //    analyticsTrackingID: 'UA-62527089-1', 	// my "Release" Google Analytics Code
     analyticsTrackingID: 'UA-62527089-2', 		// my "Development" Google Analytics Code

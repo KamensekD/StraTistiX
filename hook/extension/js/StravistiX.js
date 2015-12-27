@@ -11,28 +11,34 @@
 
 /*    check for correct working with following acitivities:
 
-      Downhill < Mostly Down < Flat < Mostly Flat <   Hilly   < Very Hilly < Mountanous < Alpine
+      Downhill < Mostly Down < Flat < Mostly Flat < A Bit Hilly <  Hilly  < Very Hilly < Mountanous < Alpine
 
                                                 StravaType      Streams                         Comment                                 Problems
 Bike:                                           ______________  ______________________________  ______________________________________  ____________________________________________
 ~~~~~                                           
-https://www.strava.com/activities/423623105     Ride            (GPS)      			downhill      ANT
+https://www.strava.com/activities/423623105     Ride            (GPS)                           downhill      ANT
 
 https://www.strava.com/activities/122932386     Ride            (GPS, HR, cadence)              mostly down   My
 
-https://www.strava.com/activities/339726290	Ride		(GPS, power, HR, cadence, T)	flat          Marcel Wyss TdF 2
+https://www.strava.com/activities/339726290     Ride            (GPS, power, HR, cadence, T)    flat          Marcel Wyss TdF 2
 
-https://www.strava.com/activities/342465523	Ride		(GPS, power, HR, cadence, T)	mostly flat   Marcel Wyss TdF 6
-https://www.strava.com/activities/355194013	Ride		(GPS, power, HR, cadence, T)	mostly flat   Marcel Wyss TdF 21
+https://www.strava.com/activities/355194013     Ride            (GPS, power, HR, cadence, T)    mostly flat   Marcel Wyss TdF 21
 
-https://www.strava.com/activities/340423634	Ride		(GPS, power, HR, cadence, T)	Hilly         Marcel Wyss TdF 3
+https://www.strava.com/activities/342465523     Ride            (GPS, power, HR, cadence, T)    a bit hilly   Marcel Wyss TdF 6
 
-https://www.strava.com/activities/345973208	Ride		(GPS, power, HR, cadence, T)	very hilly    Wyss TdF 10
+https://www.strava.com/activities/340423634     Ride            (GPS, power, HR, cadence, T)    hilly         Marcel Wyss TdF 3
+https://www.strava.com/activities/275555059     Ride            (GPS, HR, cadence)              hilly         TTR
+https://www.strava.com/activities/155030220     Ride            (GPS)                           hilly         Tojzl
+https://www.strava.com/activities/69193942      Ride            (GPS)                           hilly         trikotna
 
-https://www.strava.com/activities/347389644	Ride		(GPS, power, HR, cadence, T)	mountainous   Marcel Wyss TdF 12
-https://www.strava.com/activities/441531034     Ride            (GPS*, HR, cadence) *baro       mountainous   My
+https://www.strava.com/activities/145492114     Ride            (GPS)                           very hilly    Žavcar
+https://www.strava.com/activities/345973208     Ride            (GPS, power, HR, cadence, T)    very hilly    Wyss TdF 10
 
-https://www.strava.com/activities/353116695	Ride		(GPS, power, HR, cadence, T)	alpine        Marcel Wyss TdF 19
+https://www.strava.com/activities/441531034     Ride            (GPS*, HR, cadence) *baro       mountainous   My Rið
+https://www.strava.com/activities/347389644     Ride            (GPS, power, HR, cadence, T)    mountainous   Marcel Wyss TdF 12
+https://www.strava.com/activities/344723361     Ride            (GPS*, HR, cadence) *baro       mountainous   My
+
+https://www.strava.com/activities/353116695     Ride            (GPS, power, HR, cadence, T)    alpine        Marcel Wyss TdF 19
 
 
 Bike - stationary: (with GPS)
@@ -49,52 +55,58 @@ https://www.strava.com/activities/442206536     Workout         (HR, cadence, po
 
 Run:
 ~~~~
-https://www.strava.com/activities/255144956	Run             (GPS, HR, cadence)              downhill      My
-https://www.strava.com/activities/249069073	Run             (GPS, HR, cadence)              downhill      My
+https://www.strava.com/activities/255144956     Run             (GPS, HR, cadence)              downhill      My
+*https://www.strava.com/activities/249069073    Run             (GPS, HR, cadence)              downhill      My                        UP grade avg shows negative?
 
-https://www.strava.com/activities/245769754	Run             (GPS, HR, cadence)              mostly down   My
+https://www.strava.com/activities/245769754     Run             (GPS, HR, cadence)              mostly down   My
 
-https://www.strava.com/activities/200732119	Run             (GPS, HR, cadence)              flat          My
-https://www.strava.com/activities/152922062	Run             (GPS, HR, cadence)              mostly flat   My
-https://www.strava.com/activities/325514295	Run             (GPS, HR, cadence)              mostly flat   My Tek trojk
-https://www.strava.com/activities/429614312	Run             (GPS, HR, cadence)              mostly flat   My
+https://www.strava.com/activities/200732119     Run             (GPS, HR, cadence)              flat          My Banovci
 
-https://www.strava.com/activities/442681892     Run             (GPS, HR, cadence)              hilly         My                        elevation stats problem because of filtering!
-https://www.strava.com/activities/152922065     Run             (GPS, HR, cadence)              hilly         My Kalvarija              elevation stats problem because of filtering!
-												!!!   check smoothing, because it fails when there are gaps/missing samples   !!!
-	https://www.strava.com/activities/152922065	should be hilly, is flat
-	https://www.strava.com/activities/307138432	should be mostly flat, is hilly
-	https://www.strava.com/activities/235711434	should be very hilly, is hilly
-	https://www.strava.com/activities/380222430 	should be mountainious, is very hilly - Trail Maraton Pohorje
-	
-https://www.strava.com/activities/107829725     Run             (GPS, HR, cadence)              hilly         My Kalvarija
-https://www.strava.com/activities/159495959     Run             (GPS, HR, cadence)              hilly         My
-https://www.strava.com/activities/107829727     Run             (GPS, HR, cadence)              hilly         My Kalvarija
+https://www.strava.com/activities/325514295     Run             (GPS, HR, cadence)              mostly flat   My Tek trojk
+https://www.strava.com/activities/429614312     Run             (GPS, HR, cadence)              mostly flat   My
 
-http://www.strava.com/activities/379977674	Run		(GPS, HR, cadence, T)           mountainous   Balazs Trail Maraton 42km
+https://www.strava.com/activities/307138432     Run             (GPS, HR, cadence)              a bit hilly   My park, 3r
+https://www.strava.com/activities/152922062     Run             (GPS, HR, cadence)              a bit hilly   My nabrežje
+
+https://www.strava.com/activities/442681892     Run             (GPS, HR, cadence)              hilly         My panorama
+https://www.strava.com/activities/107829725     Run             (GPS, HR, cadence)              hilly         My 2x Kalvarija
+https://www.strava.com/activities/107829727     Run             (GPS, HR, cadence)              hilly         My 3x Kalvarija
+https://www.strava.com/activities/159495959     Run             (GPS, HR, cadence)              hilly         My proti obr. domu
+
+https://www.strava.com/activities/235711434     Run             (GPS, HR, cadence)              very hilly    My zppp, stolp, šani
+
+https://www.strava.com/activities/380222430     Run             (GPS, HR, cadence)              mountainous   My trail maraton 22km
+https://www.strava.com/activities/379977674     Run             (GPS, HR, cadence, T)           mountainous   Balazs Trail Maraton 42km
+
+*alpine*
 
 
-Hike:
+Hike (*** hike=run ***)
 ~~~~~
-https://www.strava.com/activities/433810631	hike		(GPS, power, HR, cadence, T)	mountainous
+https://www.strava.com/activities/119185669     hike            (GPS, HR, cadence)              dowhnill
+
+* mostly down *
+
+https://www.strava.com/activities/83623294      hike            (only GPS) / badQ GPS           flat          My LJ
+
+* mostly flat *
+
+* a bit hilly *
+* https://www.strava.com/activities/83625038    hike            (only GPS)                      hilly (should be a bit hilly)
+
 https://www.strava.com/activities/214252443     hike            (GPS, HR, cadence)              hilly
                                                                                                 -> slow, avg_velocity < 1 (velocity_avgThreshold ~ 0.5)
-https://www.strava.com/activities/119185669     hike            (GPS, HR, cadence)              dowhnill
-https://www.strava.com/activities/83623294      hike            (only GPS)                      flat                                    Avg Ascent infinity
 
-https://www.strava.com/activities/83623294	hike/wall	(only GPS) / badQ GPS		mostly flat
+https://www.strava.com/activities/433810631     hike            (GPS, power, HR, cadence, T)    mountainous
+
+* alpine *
+
 
 
 Row: (on trainer)
 ~~~~~~~~~~~~~~~~~
-https://www.strava.com/activities/269549200     StationaryOther (HR, cadence)								no cadence stats
+https://www.strava.com/activities/269549200     StationaryOther (HR, cadence)
 
-
-
-
-// poglej se Hike:      *** hike=run ***        https://www.strava.com/activities/119185669     ?
-//                                                                              https://www.strava.com/activities/83623294      ?
-//                                                                              https://www.strava.com/activities/214252443     OK
 
 
 
@@ -317,7 +329,7 @@ env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee
 //        var title = 'StraTistiX updated/installed to <strong>v' + this.appResources_.extVersion + '</strong>';
         var title = 'StraTistiX recently added/updated/fixed features:';
         var message = '';
-	message += "<font size=+1>"
+    message += "<font size=+1>"
         message += "- statistics now computed on <strong>weighted percentiles</strong><br/>"
         message += "&nbsp&nbsp(might have big impact for activities with dynamic sampling period!)<br/>"
         message += "- heart rate extended statistics now computed based on <strong>moving time</strong>, not total time<br/>"
@@ -667,9 +679,9 @@ env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee
 //                if ( (activityType !== "Ride") && (activityType !== "Run") ) {
 //                        var html = '<div  style="padding: 0px 0px 0px 0px;background: #FFFFFF;font-size: 9px;color: rgb(103, 103, 103);">&nbsp&nbsp&nbspActivity type: '+window.pageView.activity().attributes.type+'</div>';
 //                        $('.inset').parent().children().first().before(html);
-		var html = '';
-		if (this.isPremium_) 	html += '<div  style="line-height:90%; padding: 0px 0px 0px 22px;';
-		else 			html += '<div  style="line-height:90%; padding: 0px 0px 0px 0px;';
+        var html = '';
+        if (this.isPremium_)    html += '<div  style="line-height:90%; padding: 0px 0px 0px 22px;';
+        else            html += '<div  style="line-height:90%; padding: 0px 0px 0px 0px;';
                 html += 'font-size: 8px;color: rgb(180, 180, 180);">Activity type:   - <strong>'+window.pageView.activity().attributes.type+'</strong> -</div>';
                     $(".js-activity-privacy").after(html);
 //                    $('.title').after(html);

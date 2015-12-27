@@ -15,7 +15,7 @@ ActivityProcessor.cachePrefix = 'stravistix_activity_';
 
 
 
-// *** PUT THIS STUFF IN CONFIGURABLE SETTINGS! ***
+// *** PUT SOME OF THIS STUFF IN CONFIGURABLE SETTINGS! ***
 ActivityProcessor.movingThresholdKph    = 2.0;  // Kph          !!!   make this separate for biking and other activities   !!!
                                                 // it has very BIG impact on calculation of flat/up/down times and because of that also on "word gradeProfile estimate"
                                                 // since using altitude filtering, it is better, though
@@ -23,11 +23,20 @@ ActivityProcessor.movingThresholdKph    = 2.0;  // Kph          !!!   make this 
 ActivityProcessor.cadenceThresholdRpm   = 30;   // RPMs
 ActivityProcessor.cadenceLimitRpm       = 150;
 ActivityProcessor.defaultBikeWeight     = 10;   // KGs
-ActivityProcessor.gradeClimbingLimit    =  2.0; // thresholds for UP/DOWN vs FLAT   *** also used as treshold for VAM calculations
-ActivityProcessor.gradeDownHillLimit    = -2.0; // for not very good GPS data, flat time can be underestimated if this setting too low
 
 velocity_avgThreshold                   = 0.5;  // Kph - average velocity threshold to consider activity "stationary" aka "on trainer"
 
+ActivityProcessor.gradeClimbingLimit    =  2.0; // thresholds for UP/DOWN vs FLAT   *** also used as treshold for VAM calculations and for Grade profile estimate!
+ActivityProcessor.gradeDownHillLimit    = -2.0; // for not very good GPS data, flat time can be underestimated if this setting too low
+
+ActivityProcessor.smoothingL = 1;
+ActivityProcessor.smoothingH = 99;
+
+
+
+// GRADE PROFILE "WORD" ESTIMATE parameters
+// note that "MinClimbed" doesn't mean total climbed min, but min climbed @ minimum "gradeClimbingLimit" !
+// so climbing at low grades doesn't count-in here !
 ActivityProcessor.gradeProfileDownhill_MinDownPercentD = 75;    // if at least 75% of distance is down
 ActivityProcessor.gradeProfileDownhill = 'DOWNHILL';
 
@@ -37,41 +46,42 @@ ActivityProcessor.gradeProfileMostlyDown = 'MOSTLY DOWN';
 
 ActivityProcessor.gradeProfileFlat_MinFlatPercentT = 75;        // if at least 75% of time is flat
 ActivityProcessor.gradeProfileFlat_MaxUpDownPercentD = 20;      // and up/down distance distance percentage is less then 20%
-ActivityProcessor.gradeProfileFlat_MaxClimbed = 11;             // or total vertical meters climbed less then 11m
-ActivityProcessor.gradeProfileFlat_MaxAvgGradeEst = 1.0;//1.5   // or average (estimated) grade of climbing% is less then 1.0%
+ActivityProcessor.gradeProfileFlat_MaxClimbed = 11;             // -OR- total vertical meters climbed less then 11m
+ActivityProcessor.gradeProfileFlat_MaxAvgGradeEst = 1.1;        // -OR- average (estimated) grade of climbing% is less then 1.1%
 ActivityProcessor.gradeProfileFlat = 'FLAT';
 
-ActivityProcessor.gradeProfileMostlyFlat_MinFlatPercentT = 33;//50// if at least 33% of time is flat
-ActivityProcessor.gradeProfileMostlyFlat_MaxAvgGradeEst = 3.3;//4%// and average (estimated) grade of climbing% is less then 3%
-ActivityProcessor.gradeProfileMostlyFlat_MaxDeltaH = 222;       // and at most 222m difference of highest and lowest altitude
+ActivityProcessor.gradeProfileMostlyFlat_MinFlatPercentT = 50;  // if at least 50% of time is flat
+ActivityProcessor.gradeProfileMostlyFlat_MaxAvgGradeEst = 2.5;  // and average (estimated) grade of climbing% is less then 2.5%
+ActivityProcessor.gradeProfileMostlyFlat_MaxAvgGradeEst1 = 2.0; // -OR- average (estimated) grade of climbing% is less then 2.0%
 ActivityProcessor.gradeProfileMostlyFlat = 'MOSTLY FLAT';
 
+ActivityProcessor.gradeProfileAbitHilly_MinFlatPercentT = 33;   // if at least 33% of time is flat otherwise "almost flat" runs can be detected as hilly
+//ActivityProcessor.gradeProfileAbitHilly_MaxAvgGradeEst = 4.0;   // and average (estimated) grade of climbing% is less then 4.0%
+ActivityProcessor.gradeProfileAbitHilly_MaxDeltaH = 222;        //and at most 222m difference of highest and lowest altitude
+ActivityProcessor.gradeProfileAbitHilly = 'A BIT HILLY';
 
 ActivityProcessor.gradeProfileVeryHilly_MaxFlatPercentT = 50;   // less than 50% of time is flat
-ActivityProcessor.gradeProfileVeryHilly_MinAvgGradeEst = 4.5;     // and average (estimated) grade of climbing% is more than 5%
-ActivityProcessor.gradeProfileVeryHilly_MinDeltaH = 400;        // and at least 400m difference between highest and lowest altitude
-ActivityProcessor.gradeProfileVeryHilly_MinClimbed = 500;//600  // and at least 600m vertical meters climbed
-								// or AvgGradeEst >10% *** check
+ActivityProcessor.gradeProfileVeryHilly_MinAvgGradeEst = 4.5;   // and average (estimated) grade of climbing% is more than 4.5%
+ActivityProcessor.gradeProfileVeryHilly_MinDeltaH = 555;        // and at least 555m difference between highest and lowest altitude
+ActivityProcessor.gradeProfileVeryHilly_MinClimbed = 600;       // and at least 600m vertical meters climbed
+								                                // ? or AvgGradeEst >10% *** consider
 ActivityProcessor.gradeProfileVeryHilly = 'VERY HILLY';
 
-ActivityProcessor.gradeProfileMountainous_MaxFlatPercentT = 60; // less than 60% of time is flat
+ActivityProcessor.gradeProfileMountainous_MaxFlatPercentT = 50; // less than 50% of time is flat
 ActivityProcessor.gradeProfileMountainous_MinAvgGradeEst = 5;   // and average (estimated) grade of climbing% is more than 5%
-ActivityProcessor.gradeProfileMountainous_MinDeltaH = 600;      // and at least 600m difference between highest and lowest altitude
-ActivityProcessor.gradeProfileMountainous_MinClimbed = 1000;//800// and at least 800m vertical meters climbed
+ActivityProcessor.gradeProfileMountainous_MinDeltaH = 888;      // and at least 888m difference between highest and lowest altitude
+ActivityProcessor.gradeProfileMountainous_MinClimbed = 777;     // and at least 777m vertical meters climbed @gradeClimbingLimit
+
 ActivityProcessor.gradeProfileMountainous = 'MOUNTAINOUS';
 
 ActivityProcessor.gradeProfileAlpine_MaxFlatPercentT = 50;      // less than 50% of time is flat
-ActivityProcessor.gradeProfileAlpine_MinAvgGradeEst = 5.5;        // and average (estimated) grade of climbing% is more than 5%
+ActivityProcessor.gradeProfileAlpine_MinAvgGradeEst = 5.5;      // and average (estimated) grade of climbing% is more than 5.5%
 ActivityProcessor.gradeProfileAlpine_MinDeltaH = 1500;          // and at least 1500m difference of highest and lowest altitude
 ActivityProcessor.gradeProfileAlpine = 'ALPINE';
 
 ActivityProcessor.gradeProfileHilly = 'HILLY';                  // All other scenarios - hilly
 
-ActivityProcessor.smoothingL = 1;
-ActivityProcessor.smoothingH = 99;
 
-
-// !!!   try to lower MinClimbed figures, because these are not total climbed, but climbed @ at least "gradeClimbingLimit"   !!!
 
 
 /**
@@ -1063,10 +1073,20 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 
 
         else if (       // MOSTLY FLAT
+						(
                         ( flatPercentT >= ActivityProcessor.gradeProfileMostlyFlat_MinFlatPercentT )
                         &&      ( upAvgGradeEstimate < ActivityProcessor.gradeProfileMostlyFlat_MaxAvgGradeEst )
-                        &&      ( AltRange < ActivityProcessor.gradeProfileMostlyFlat_MaxDeltaH )
+                        ) || (  // or
+                                ( upAvgGradeEstimate < ActivityProcessor.gradeProfileMostlyFlat_MaxAvgGradeEst1 )
+                        )
                 )               { gradeProfile = ActivityProcessor.gradeProfileMostlyFlat; }
+
+
+        else if (       // A BIT HILLY
+                        ( flatPercentT >= ActivityProcessor.gradeProfileAbitHilly_MinFlatPercentT )
+//                        &&      ( upAvgGradeEstimate < ActivityProcessor.gradeProfileAbitHilly_MaxAvgGradeEst )
+                        &&      ( AltRange < ActivityProcessor.gradeProfileAbitHilly_MaxDeltaH )
+                )               { gradeProfile = ActivityProcessor.gradeProfileAbitHilly; }
 
 
         else if (       // ALPINE
@@ -1105,7 +1125,6 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
             'upAvgGradeEstimate': upAvgGradeEstimate,
             'upFlatDownMoveData': upFlatDownMoveData,
             'gradeProfile': gradeProfile,
-            'maxGrade': maxGrade
         };
 
     },

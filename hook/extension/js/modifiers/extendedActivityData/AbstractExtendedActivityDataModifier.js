@@ -252,8 +252,9 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 			html += '<td><strong>'+this.analysisData_.gradeData.upperQuartileGrade.toFixed(1)+'</strong>%</td>';
 			html += '<td><strong>'+this.analysisData_.gradeData.maxGrade.toFixed(1)+'</strong>%</td></tr>';
 
-			html += '<tr style="color: rgb(20,120,20)"><td><strong>'+this.analysisData_.gradeData.gradeProfile+'</strong><br>Profile</td>';
-			html += '<td>moving %<br>Dst / Time</td>';
+			html += '<tr style="color: rgb(20,120,20)"><td><strong>'+this.analysisData_.gradeData.gradeProfile+'</strong><br>';
+			html += this.analysisData_.gradeData.minAlt.toFixed(0)+'-'+this.analysisData_.gradeData.maxAlt.toFixed(0)+' ['+(this.analysisData_.gradeData.maxAlt-this.analysisData_.gradeData.minAlt).toFixed(0)+'m]</td>';
+			html += '<td>moving %<br>Dist. / Time</td>';
 			html += '<td>DH<br>'
 				+(this.analysisData_.gradeData.upFlatDownInMeters.down / this.analysisData_.gradeData.upFlatDownInMeters.total * 100).toFixed(0)
 				+' / '+(this.analysisData_.gradeData.upFlatDownInSeconds.down / this.analysisData_.gradeData.upFlatDownInSeconds.total * 100).toFixed(0)+'</td>';
@@ -263,7 +264,7 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 			html += '<td>UP<br>'
 				+(this.analysisData_.gradeData.upFlatDownInMeters.up / this.analysisData_.gradeData.upFlatDownInMeters.total * 100).toFixed(0)
 				+' / '+(this.analysisData_.gradeData.upFlatDownInSeconds.up / this.analysisData_.gradeData.upFlatDownInSeconds.total * 100).toFixed(0)+'</td>';
-			html += '<td>avgUPgr%<br>'+this.analysisData_.gradeData.upAvgGradeEstimate.toFixed(1)+'% (est.)</td></tr>';
+			html += '<td>UPgrade avg<br>'+this.analysisData_.gradeData.upAvgGradeEstimate.toFixed(1)+'% (est.)</td></tr>';
 		};
 
 		html += '</table></a></div>';

@@ -1125,6 +1125,9 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
             'upAvgGradeEstimate': upAvgGradeEstimate,
             'upFlatDownMoveData': upFlatDownMoveData,
             'gradeProfile': gradeProfile,
+            'maxGrade': maxGrade,
+            'minAlt': minAlt,
+            'maxAlt': maxAlt
         };
 
     },

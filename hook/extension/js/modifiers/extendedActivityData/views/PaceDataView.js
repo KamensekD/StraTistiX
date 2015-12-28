@@ -34,7 +34,7 @@ var PaceDataView = AbstractDataView.extend(function(base) {
             this.content += this.generateSectionTitle('Pace stats <a style="font-size: 16px;" target="_blank" href="' + this.appResources.settingsLink + '#/zonesSettings">(customize)</a>');
 
             // Creates a grid
-            this.makeGrid(3, 2); // (col, row)
+            this.makeGrid(3,5); // (col, row)
 
             this.insertPaceDataIntoGrid();
             this.generateCanvasForGraph();
@@ -52,10 +52,23 @@ var PaceDataView = AbstractDataView.extend(function(base) {
             var speedUnitFactor = this.speedUnitsData[1];
             var distanceUnits = this.speedUnitsData[2];
 
-            // Quartiles
-            this.insertContentAtGridPosition(0, 0, Helper.secondsToHHMMSS((this.paceData.lowerQuartilePace / speedUnitFactor).toFixed(0)).replace('00:', ''), '25% Quartile Pace', this.units, 'displayAdvancedSpeedData');
-            this.insertContentAtGridPosition(1, 0, Helper.secondsToHHMMSS((this.paceData.medianPace / speedUnitFactor).toFixed(0)).replace('00:', ''), '50% Quartile Pace', this.units, 'displayAdvancedSpeedData');
-            this.insertContentAtGridPosition(2, 0, Helper.secondsToHHMMSS((this.paceData.upperQuartilePace / speedUnitFactor).toFixed(0)).replace('00:', ''), '75% Quartile Pace', this.units, 'displayAdvancedSpeedData');
+
+            this.insertContentAtGridPosition(1, 0, this.paceData.realAvgSpeed.toFixed(1), 'Real Average Speed', this.units, 'displayCadenceData');
+
+            // Quartiles Speed
+            this.insertContentAtGridPosition(0, 1, (this.paceData.lowerQuartileSpeed * speedUnitFactor).toFixed(1), '25% Quartile Speed', speedUnitPerhour, 'displayAdvancedSpeedData');
+            this.insertContentAtGridPosition(1, 1, (this.paceData.medianSpeed * speedUnitFactor).toFixed(1), '50% Quartile Speed', speedUnitPerhour, 'displayAdvancedSpeedData');
+            this.insertContentAtGridPosition(2, 1, (this.paceData.upperQuartileSpeed * speedUnitFactor).toFixed(1), '75% Quartile Speed', speedUnitPerhour, 'displayAdvancedSpeedData');
+
+            this.insertContentAtGridPosition(1, 2, Helper.secondsToHHMMSS((this.paceData.realAvgPace / speedUnitFactor).toFixed(0)).replace('00:', ''), 'Average Pace', this.units, 'displayCadenceData');
+
+          // Quartiles Pace
+            this.insertContentAtGridPosition(0, 3, Helper.secondsToHHMMSS((this.paceData.lowerQuartilePace / speedUnitFactor).toFixed(0)).replace('00:', ''), '25% Quartile Pace', this.units, 'displayAdvancedSpeedData');
+            this.insertContentAtGridPosition(1, 3, Helper.secondsToHHMMSS((this.paceData.medianPace / speedUnitFactor).toFixed(0)).replace('00:', ''), '50% Quartile Pace', this.units, 'displayAdvancedSpeedData');
+            this.insertContentAtGridPosition(2, 3, Helper.secondsToHHMMSS((this.paceData.upperQuartilePace / speedUnitFactor).toFixed(0)).replace('00:', ''), '75% Quartile Pace', this.units, 'displayAdvancedSpeedData');
+
+//            this.insertContentAtGridPosition(2, 0, Helper.secondsToHHMMSS((this.paceData.standardDeviationPace / speedUnitFactor).toFixed(0)).replace('00:', ''), 'Std Deviation &sigma;', this.units, 'displayAdvancedSpeedData');
+			if (this.paceData.standardDeviationSpeed) this.insertContentAtGridPosition(1, 4, (this.paceData.standardDeviationSpeed * speedUnitFactor).toFixed(1), 'Std Deviation &sigma;', speedUnitPerhour, 'displayAdvancedSpeedData');
 
             // this.insertContentAtGridPosition(1, 1, (this.paceData.genuineAvgSpeed * speedUnitFactor).toFixed(1), 'Genuine average speed', speedUnitPerhour, 'displayAdvancedSpeedData'); // DELAYED_FOR_TESTING
             // this.insertContentAtGridPosition(2, 1, paceTimePerDistance, 'Genuine average pace', '/' + distanceUnits, 'displayAdvancedSpeedData'); // DELAYED_FOR_TESTING

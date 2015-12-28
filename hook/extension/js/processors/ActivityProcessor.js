@@ -29,8 +29,8 @@ velocity_avgThreshold                   = 0.5;  // Kph - average velocity thresh
 ActivityProcessor.gradeClimbingLimit    =  2.0; // thresholds for UP/DOWN vs FLAT   *** also used as treshold for VAM calculations and for Grade profile estimate!
 ActivityProcessor.gradeDownHillLimit    = -2.0; // for not very good GPS data, flat time can be underestimated if this setting too low
 
-ActivityProcessor.VAMsmoothing = -11;		// +99 positive for smoothing by distance for VAM distribution calculations, elevation data is smoothed by distance with low pass filter with this smoothing factor
-											// -11 negative for smoothing by time
+ActivityProcessor.VAMsmoothing = -11;       // +99 positive for smoothing by distance for VAM distribution calculations, elevation data is smoothed by distance with low pass filter with this smoothing factor
+                                            // -11 negative for smoothing by time
 
 ActivityProcessor.smoothingL = 1;
 ActivityProcessor.smoothingH = 99;
@@ -67,7 +67,7 @@ ActivityProcessor.gradeProfileVeryHilly_MaxFlatPercentT = 50;   // less than 50%
 ActivityProcessor.gradeProfileVeryHilly_MinAvgGradeEst = 4.5;   // and average (estimated) grade of climbing% is more than 4.5%
 ActivityProcessor.gradeProfileVeryHilly_MinDeltaH = 555;        // and at least 555m difference between highest and lowest altitude
 ActivityProcessor.gradeProfileVeryHilly_MinClimbed = 600;       // and at least 600m vertical meters climbed
-								                                // ? or AvgGradeEst >10% *** consider
+                                                                // ? or AvgGradeEst >10% *** consider
 ActivityProcessor.gradeProfileVeryHilly = 'VERY HILLY';
 
 ActivityProcessor.gradeProfileMountainous_MaxFlatPercentT = 50; // less than 50% of time is flat
@@ -375,15 +375,13 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 
 
     /**
-     *
+     *     discrete integral
      */
     valueForSum_: function valueForSum_(currentValue, previousValue, delta) {
 //if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
-        // discrete integral
+        
         return currentValue * delta - ((currentValue - previousValue) * delta) / 2;
     },
-
-
 
 
 
@@ -465,7 +463,6 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         return [{
             'genuineAvgSpeed': genuineAvgSpeed,
             'realAvgSpeed': realAvgSpeed,
-            'avgPace': parseInt(((1 / genuineAvgSpeed) * 60 * 60).toFixed(0)), // send in seconds
             'lowerQuartileSpeed': percentiles[0],
             'medianSpeed': percentiles[1],
             'upperQuartileSpeed': percentiles[2],
@@ -474,10 +471,17 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
             'speedZones': speedZones,
             'maxSpeed': maxSpeed,
         }, {
+            'realAvgPace': parseInt(((1 / realAvgSpeed) * 60 * 60).toFixed(0)), // send in seconds
+            'realAvgSpeed': realAvgSpeed,
+            'lowerQuartileSpeed': percentiles[0],
+            'medianSpeed': percentiles[1],
+            'upperQuartileSpeed': percentiles[2],
+            'standardDeviationSpeed': standardDeviationSpeed,
             'lowerQuartilePace': this.convertSpeedToPace(percentiles[0]),
             'medianPace': this.convertSpeedToPace(percentiles[1]),
             'upperQuartilePace': this.convertSpeedToPace(percentiles[2]),
             'variancePace': this.convertSpeedToPace(varianceSpeed),
+//            'standardDeviationPace': this.convertSpeedToPace(standardDeviationSpeed),
             'paceZones': paceZones
         }];
     },
@@ -922,35 +926,20 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
             gradeCount = 0;
 
         var gradeZones = this.prepareZonesForDistribComputation(this.zones.grade);
-        var upFlatDownInSeconds = {
-            up: 0,
-            flat: 0,
-            down: 0,
-            total: 0
-        };
-        var upFlatDownInMeters = {
-            up: 0,
-            flat: 0,
-            down: 0,
-            total: 0
-        };
-        var upFlatDownAltitudeInMeters = {      // altitude meters climbed, lost, altitude ballance
-            climbed: 0,
-            lost: 0,
-            ignore: 0,
-            ballance: 0
-        };
 
+        var RAWupFlatDownInMeters           = { up: 0, flat: 0, down: 0, total: 0 };
+        var RAWupFlatDownInSeconds          = { up: 0, flat: 0, down: 0, total: 0 };
+        var RAWupFlatDownAltitudeInMeters   = { climbed: 0, lost: 0, ballance: 0 };
+
+        var upFlatDownInSeconds 			= { up: 0, flat: 0, down: 0, total: 0 };
+        var upFlatDownInMeters 				= { up: 0, flat: 0, down: 0, total: 0 };
+        var upFlatDownAltitudeInMeters 		= { climbed: 0, lost: 0, ignore: 0,  ballance: 0 };   // altitude meters climbed, lost, altitude ballance
 
         var maxGrade = _.max(gradeArray);
-        var minGrade = _.min(gradeArray);
+//        var minGrade = _.min(gradeArray);
 
-        // Currently deals with avg speed/pace
-        var upFlatDownMoveData = {
-            up: 0,
-            flat: 0,
-            down: 0
-        };
+        var upFlatDownSpeed = { up: 0, flat: 0, down: 0 };   // Currently deals with avg speed/pace
+
 
         var durationInSeconds = 0;
         var distance = 0;
@@ -958,88 +947,113 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         var currentSpeed = 0;
 
         var gradeArrayMoving = [];
-        var gradeArrayDistance = [];
+        var gradeArrayMovingDistance = [];
 
-        for (var i = 0; i < gradeArray.length; i++) { // Loop on samples
+        for (var i = 1; i < gradeArray.length; i++) { // Loop on samples
 
-            if (i > 0) {
+            durationInSeconds = (timeArray[i] - timeArray[i - 1]); // Getting deltaTime in seconds (current sample and previous one)
+            distance = distanceArray[i] - distanceArray[i - 1];
+            deltaAltitude = altitudeArray[i] - altitudeArray[i - 1];
 
-                // Compute distribution for graph/table
-//                if (currentSpeed > 0) { // If moving...
-//                    if ( ( currentSpeed > 0 ) || ( velocity_avg < velocity_avgThreshold ) ) { 
-                    if ( // if moving or if avg. speed < threshold
-                           !_.isEmpty(velocityArray) && ( ( currentSpeed = velocityArray[i] * 3.6 ) > ActivityProcessor.movingThresholdKph )
-                        || ( velocity_avg < velocity_avgThreshold ) || (_.isEmpty(velocityArray)) )
-                        {// Multiply by 3.6 to convert to kph; 
+            //
+            // Compute RAW up/down/flat altitudes/times/distances (no speed and/or grade restriction)
+            //
+            if(deltaAltitude>0) {
+                RAWupFlatDownInMeters.up += distance;
+                RAWupFlatDownInSeconds.up += durationInSeconds;
+                RAWupFlatDownAltitudeInMeters.climbed += deltaAltitude;
+            } else if (deltaAltitude<0) {
+                RAWupFlatDownInMeters.down += distance;
+                RAWupFlatDownInSeconds.down += durationInSeconds;
+                RAWupFlatDownAltitudeInMeters.lost += deltaAltitude;
+            } else {
+                RAWupFlatDownInMeters.flat += distance;
+                RAWupFlatDownInSeconds.flat += durationInSeconds;
+            }
+            RAWupFlatDownInMeters.total += distance;
+            RAWupFlatDownInSeconds.total += durationInSeconds;
+            RAWupFlatDownAltitudeInMeters.ballance += deltaAltitude;
 
 
-                    durationInSeconds = (timeArray[i] - timeArray[i - 1]); // Getting deltaTime in seconds (current sample and previous one)
-                    distance = distanceArray[i] - distanceArray[i - 1];
-                    deltaAltitude = altitudeArray[i] - altitudeArray[i - 1];
 
-                    // elevation? gain
-                    gradeSum += this.valueForSum_(gradeArray[i], gradeArray[i - 1], distance);
+            // Compute distribution for graph/table
+//            if (currentSpeed > 0) { // If moving...
+//            if ( ( currentSpeed > 0 ) || ( velocity_avg < velocity_avgThreshold ) ) { 
+            if ( // if moving or if avg. speed < threshold
+               !_.isEmpty(velocityArray) && ( ( currentSpeed = velocityArray[i] * 3.6 ) > ActivityProcessor.movingThresholdKph )
+                || ( velocity_avg < velocity_avgThreshold ) || (_.isEmpty(velocityArray)) )
+                {// Multiply by 3.6 to convert to kph; 
+
+                // elevation? gain? grade integrate     for computing of average grade
+                gradeSum += this.valueForSum_(gradeArray[i], gradeArray[i - 1], distance);
+                // distance
+                gradeCount += distance;
+
+                gradeArrayMoving.push(gradeArray[i]);
+                gradeArrayMovingDistance.push(distance);
+
+                var gradeZoneId = this.getZoneId(this.zones.grade, gradeArray[i]);
+
+                if (!_.isUndefined(gradeZoneId) && !_.isUndefined(gradeZones[gradeZoneId])) {
+                    gradeZones[gradeZoneId]['s'] += durationInSeconds;
+                }
+
+                upFlatDownInSeconds.total += durationInSeconds;
+                upFlatDownInMeters.total += distance;
+                upFlatDownAltitudeInMeters.ballance += deltaAltitude;
+
+
+                //
+                // Compute DOWN/FLAT/UP duration (@ grade over gradeClimbingLimit)
+                //
+                if (gradeArray[i] > ActivityProcessor.gradeClimbingLimit) {
+                // UPHILL
+                    // time
+                    upFlatDownInSeconds.up += durationInSeconds;
                     // distance
-                    gradeCount += distance;
-
-                    gradeArrayMoving.push(gradeArray[i]);
-                    gradeArrayDistance.push(distance);
-
-                    var gradeZoneId = this.getZoneId(this.zones.grade, gradeArray[i]);
-
-                    if (!_.isUndefined(gradeZoneId) && !_.isUndefined(gradeZones[gradeZoneId])) {
-                        gradeZones[gradeZoneId]['s'] += durationInSeconds;
-                    }
-
-                    upFlatDownInSeconds.total += durationInSeconds;
-                    upFlatDownInMeters.total += distance;
-                    upFlatDownAltitudeInMeters.ballance += deltaAltitude;
-
-
-                    // Compute DOWN/FLAT/UP duration
-                    if (gradeArray[i] > ActivityProcessor.gradeClimbingLimit) {
-                    // UPHILL
-                        // time
-                        upFlatDownInSeconds.up += durationInSeconds;
-                        // distance
-                        upFlatDownInMeters.up += distance;
-                        upFlatDownMoveData.up += currentSpeed * durationInSeconds;
-                        // altitude
-                        upFlatDownAltitudeInMeters.climbed += deltaAltitude;
-                    } else if (gradeArray[i] < ActivityProcessor.gradeDownHillLimit) {
-                    // DOWNHILL
-                        // time
-                        upFlatDownInSeconds.down += durationInSeconds;
-                        // distance
-                        upFlatDownInMeters.down += distance;
-                        upFlatDownMoveData.down += currentSpeed * durationInSeconds;
-                        // altitude
-                        upFlatDownAltitudeInMeters.lost += deltaAltitude;
-                    } else {
-                    // FLAT
-                        // time
-                        upFlatDownInSeconds.flat += durationInSeconds;
-                        // distance
-                        upFlatDownInMeters.flat += distance;
-                        upFlatDownMoveData.flat += currentSpeed * durationInSeconds;
-                        // altitude
-                        upFlatDownAltitudeInMeters.ignore += deltaAltitude;
-                    }
-                }// if
-                }// if
+                    upFlatDownInMeters.up += distance;
+                    upFlatDownSpeed.up += currentSpeed * durationInSeconds;
+                    // altitude
+                    upFlatDownAltitudeInMeters.climbed += deltaAltitude;
+                } else if (gradeArray[i] < ActivityProcessor.gradeDownHillLimit) {
+                // DOWNHILL
+                    // time
+                    upFlatDownInSeconds.down += durationInSeconds;
+                    // distance
+                    upFlatDownInMeters.down += distance;
+                    upFlatDownSpeed.down += currentSpeed * durationInSeconds;
+                    // altitude
+                    upFlatDownAltitudeInMeters.lost += deltaAltitude;
+                } else {
+                // FLAT
+                    // time
+                    upFlatDownInSeconds.flat += durationInSeconds;
+                    // distance
+                    upFlatDownInMeters.flat += distance;
+                    upFlatDownSpeed.flat += currentSpeed * durationInSeconds;
+                    // altitude
+                    upFlatDownAltitudeInMeters.ignore += deltaAltitude;
+                }
+            }// if
         }// for
 
-        // Compute speed while up, flat down
-        upFlatDownMoveData.up = upFlatDownMoveData.up / upFlatDownInSeconds.up;
-        upFlatDownMoveData.down = upFlatDownMoveData.down / upFlatDownInSeconds.down;
-        upFlatDownMoveData.flat = upFlatDownMoveData.flat / upFlatDownInSeconds.flat;
 
-        var avgGrade = gradeSum / gradeCount;
+
+        // Compute speed while up, flat down
+        upFlatDownSpeed.up = upFlatDownSpeed.up / upFlatDownInSeconds.up;
+        upFlatDownSpeed.down = upFlatDownSpeed.down / upFlatDownInSeconds.down;
+        upFlatDownSpeed.flat = upFlatDownSpeed.flat / upFlatDownInSeconds.flat;
+
+
+
+        var avgGrade = gradeSum / gradeCount; // compute Average Grade
+
+
 
         // Update zone distribution percentage
         gradeZones = this.finalizeDistribComputationZones(gradeZones);
 
-        var percentiles = Helper.weightedPercentiles(gradeArrayMoving, gradeArrayDistance, [0.25, 0.5, 0.75]);
+        var percentiles = Helper.weightedPercentiles(gradeArrayMoving, gradeArrayMovingDistance, [0.25, 0.5, 0.75]);
 
 
 
@@ -1048,16 +1062,22 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         // Downhill < Mostly Down < Flat < Mostly Flat <   Hilly   < Very Hilly < Mountanous < Alpine
         //
         var gradeProfile;
+
                 var minAlt              = Helper.getMinOfArray(StravaStreams.altitude);
                 var maxAlt              = Helper.getMaxOfArray(StravaStreams.altitude);
                 var AltRange            = maxAlt-minAlt;
+
                 var upPercentT          = 100 * upFlatDownInSeconds.up / upFlatDownInSeconds.total;
                 var flatPercentT        = 100 * upFlatDownInSeconds.flat / upFlatDownInSeconds.total;
                 var downPercentT        = 100 * upFlatDownInSeconds.down / upFlatDownInSeconds.total;
+
                 var upPercentD          = 100 * upFlatDownInMeters.up / upFlatDownInMeters.total;
                 var flatPercentD        = 100 * upFlatDownInMeters.flat / upFlatDownInMeters.total;
                 var downPercentD        = 100 * upFlatDownInMeters.down / upFlatDownInMeters.total;
-                var upAvgGradeEstimate  = 100 * ( upFlatDownAltitudeInMeters.climbed + upFlatDownAltitudeInMeters.ignore ) / upFlatDownInMeters.up;
+
+//                var upAvgGradeEstimate  = 100 * ( upFlatDownAltitudeInMeters.climbed + upFlatDownAltitudeInMeters.ignore ) / upFlatDownInMeters.up;
+//                var upAvgGradeEstimate  = 100 * RAWupFlatDownAltitudeInMeters.climbed / RAWupFlatDownInMeters.up;
+                var upAvgGradeEstimate  = 100 * upFlatDownAltitudeInMeters.climbed / upFlatDownInMeters.up;
                 
         if (            // DOWNHILL
                         ( downPercentD >= ActivityProcessor.gradeProfileDownhill_MinDownPercentD )
@@ -1081,7 +1101,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 
 
         else if (       // MOSTLY FLAT
-						(
+                        (
                         ( flatPercentT >= ActivityProcessor.gradeProfileMostlyFlat_MinFlatPercentT )
                         &&      ( upAvgGradeEstimate < ActivityProcessor.gradeProfileMostlyFlat_MaxAvgGradeEst )
                         ) || (  // or
@@ -1128,10 +1148,17 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
             'medianGrade': percentiles[1],
             'upperQuartileGrade': percentiles[2],
             'gradeZones': gradeZones,
+
             'upFlatDownInSeconds': upFlatDownInSeconds,
             'upFlatDownInMeters': upFlatDownInMeters,
+            'upFlatDownAltitudeInMeters': upFlatDownAltitudeInMeters,
+
+            'RAWupFlatDownInSeconds': RAWupFlatDownInSeconds,
+            'RAWupFlatDownInMeters': RAWupFlatDownInMeters,
+            'RAWupFlatDownAltitudeInMeters': RAWupFlatDownAltitudeInMeters,
+
             'upAvgGradeEstimate': upAvgGradeEstimate,
-            'upFlatDownMoveData': upFlatDownMoveData,
+            'upFlatDownSpeed': upFlatDownSpeed,
             'gradeProfile': gradeProfile,
             'maxGrade': maxGrade,
             'minAlt': minAlt,
@@ -1153,13 +1180,13 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 //        var altitudeArray = activityStream.altitude;
 //        var altitudeArray = activityStream.altitude_smooth;
 
-	if (ActivityProcessor.VAMsmoothing>0) {        // smoothing by distance
-		var altitudeArray = this.lowPassDataSmoothing_(activityStream.altitude, activityStream.distance , ActivityProcessor.VAMsmoothing);
-	} else if (ActivityProcessor.VAMsmoothing<0) { // smoothing by time
-		var altitudeArray = this.lowPassDataSmoothing_(activityStream.altitude, activityStream.time , -1*ActivityProcessor.VAMsmoothing);
-	} else {  // same smoothing as for other calculations
-		var altitudeArray = activityStream.altitude_smooth;
-	}
+    if (ActivityProcessor.VAMsmoothing>0) {        // smoothing by distance
+        var altitudeArray = this.lowPassDataSmoothing_(activityStream.altitude, activityStream.distance , ActivityProcessor.VAMsmoothing);
+    } else if (ActivityProcessor.VAMsmoothing<0) { // smoothing by time
+        var altitudeArray = this.lowPassDataSmoothing_(activityStream.altitude, activityStream.time , -1*ActivityProcessor.VAMsmoothing);
+    } else {  // same smoothing as for other calculations
+        var altitudeArray = activityStream.altitude_smooth;
+    }
 
 
 
@@ -1231,9 +1258,9 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 
                     // only if grade > ActivityProcessor.gradeClimbingLimit
                     if (distance > 0 && ( 100*(elevationDiff / distance) > ActivityProcessor.gradeClimbingLimit ) ) {
-                    	
-                    	ascentOverGradeClimbingLimitDurationInSeconds += ascentDurationInSeconds;
-                    	
+                        
+                        ascentOverGradeClimbingLimitDurationInSeconds += ascentDurationInSeconds;
+                        
                         accumulatedDistance += distanceArray[i] - distanceArray[i - 1];
                         ascentSpeedMeterPerHourSamples.push(ascentSpeedMeterPerHour);
                         ascentSpeedMeterPerHourDistance.push(accumulatedDistance);
@@ -1318,23 +1345,22 @@ if (env.debugMode) console.warn(' > (f: ActivityProcessor.js) >   ' + arguments.
         var velocityArray = activityStream.velocity_smooth;
         var smoothing;
         var altitudeArray;
-        while (ActivityProcessor.smoothingH - ActivityProcessor.smoothingL >= 0.1) {	// max difference - defines how closely we should try to aproach Strava's elevation estimate
+        while (ActivityProcessor.smoothingH - ActivityProcessor.smoothingL >= 0.1) {    // max difference - defines how closely we should try to aproach Strava's elevation estimate
             smoothing = ActivityProcessor.smoothingL + (ActivityProcessor.smoothingH - ActivityProcessor.smoothingL) / 2;
-            altitudeArray = this.lowPassDataSmoothing_(activityAltitudeArray, distanceArray, smoothing);	// smoothing by distance
-//            altitudeArray = this.lowPassDataSmoothing_(activityAltitudeArray, timeArray, smoothing);	// smoothing by time
+            altitudeArray = this.lowPassDataSmoothing_(activityAltitudeArray, distanceArray, smoothing);    // smoothing by distance
+//            altitudeArray = this.lowPassDataSmoothing_(activityAltitudeArray, timeArray, smoothing);  // smoothing by time
             var totalElevation = 0;
             for (var i = 0; i < altitudeArray.length; i++) { // Loop on samples
-//                if (i > 0 && velocityArray[i] * 3.6 > VacuumProcessor.movingThresholdKph) {
-                if (i > 0 && velocityArray[i] * 3.6 > ActivityProcessor.movingThresholdKph) {
+//                if (i > 0 && velocityArray[i] * 3.6 > ActivityProcessor.movingThresholdKph) {
                     var elevationDiff = altitudeArray[i] - altitudeArray[i - 1];
                     if (elevationDiff > 0) {
                         totalElevation += elevationDiff;
                     }
-                }
+//                }
             }
 
 if (env.debugMode) console.log("          ...Altitude smoothing factor:" + smoothing.toFixed(2) + "   Strava Elev.: " + stravaElevation + "   Smoothed: " + totalElevation.toFixed(2) );
-            if (totalElevation < stravaElevation) {	// might not always work as intended, as Strava elevation is too high estimate...
+            if (totalElevation < stravaElevation) { // might not always work as intended, as Strava elevation is too high estimate...
                 ActivityProcessor.smoothingH = smoothing;
             } else {
                 ActivityProcessor.smoothingL = smoothing;

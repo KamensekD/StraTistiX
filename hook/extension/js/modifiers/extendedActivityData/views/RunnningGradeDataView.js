@@ -17,13 +17,13 @@ var RunnningGradeDataView = AbstractGradeDataView.extend(function(base) {
             var speedUnitFactor = this.speedUnitsData[1];
             var distanceUnits = this.speedUnitsData[2];
 
-            this.gradeData.upFlatDownMoveData.up = this.convertSpeedToPace(this.gradeData.upFlatDownMoveData.up);
-            this.gradeData.upFlatDownMoveData.flat = this.convertSpeedToPace(this.gradeData.upFlatDownMoveData.flat);
-            this.gradeData.upFlatDownMoveData.down = this.convertSpeedToPace(this.gradeData.upFlatDownMoveData.down);
+            this.gradeData.upFlatDownSpeed.down = this.convertSpeedToPace(this.gradeData.upFlatDownSpeed.down);
+            this.gradeData.upFlatDownSpeed.flat = this.convertSpeedToPace(this.gradeData.upFlatDownSpeed.flat);
+            this.gradeData.upFlatDownSpeed.up = this.convertSpeedToPace(this.gradeData.upFlatDownSpeed.up);
 
-            this.insertContentAtGridPosition(0, 4, (this.gradeData.upFlatDownMoveData.up / speedUnitFactor != 0) ? Helper.secondsToHHMMSS((this.gradeData.upFlatDownMoveData.up / speedUnitFactor).toFixed(0)).replace('00:', '') : '-', 'Avg climbing pace', '/' + distanceUnits, 'displayAdvancedGradeData');
-            this.insertContentAtGridPosition(1, 4, (this.gradeData.upFlatDownMoveData.flat / speedUnitFactor != 0) ? Helper.secondsToHHMMSS((this.gradeData.upFlatDownMoveData.flat / speedUnitFactor).toFixed(0)).replace('00:', '') : '-', 'Avg flat pace', '/' + distanceUnits, 'displayAdvancedGradeData');
-            this.insertContentAtGridPosition(2, 4, (this.gradeData.upFlatDownMoveData.down / speedUnitFactor != 0) ? Helper.secondsToHHMMSS((this.gradeData.upFlatDownMoveData.down / speedUnitFactor).toFixed(0)).replace('00:', '') : '-', 'Avg downhill pace', '/' + distanceUnits, 'displayAdvancedGradeData');
+            this.insertContentAtGridPosition(0, 3, (this.gradeData.upFlatDownSpeed.down / speedUnitFactor != 0) ? Helper.secondsToHHMMSS((this.gradeData.upFlatDownSpeed.down / speedUnitFactor).toFixed(0)).replace('00:', '') : '-', 'Avg downhill pace', '/' + distanceUnits, 'displayAdvancedGradeData');
+            this.insertContentAtGridPosition(1, 3, (this.gradeData.upFlatDownSpeed.flat / speedUnitFactor != 0) ? Helper.secondsToHHMMSS((this.gradeData.upFlatDownSpeed.flat / speedUnitFactor).toFixed(0)).replace('00:', '') : '-', 'Avg flat pace', '/' + distanceUnits, 'displayAdvancedGradeData');
+            this.insertContentAtGridPosition(2, 3, (this.gradeData.upFlatDownSpeed.up / speedUnitFactor != 0) ? Helper.secondsToHHMMSS((this.gradeData.upFlatDownSpeed.up / speedUnitFactor).toFixed(0)).replace('00:', '') : '-', 'Avg climbing pace', '/' + distanceUnits, 'displayAdvancedGradeData');
         }
     }
 });

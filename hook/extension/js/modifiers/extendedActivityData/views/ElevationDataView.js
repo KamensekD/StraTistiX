@@ -26,10 +26,10 @@ var ElevationDataView = AbstractDataView.extend(function(base) {
             base.render.call(this);
 
             // Add a title
-            this.content += this.generateSectionTitle('Elevation stats <a style="font-size: 16px;" target="_blank" href="' + this.appResources.settingsLink + '#/zonesSettings">(customize)</a>');
+            this.content += this.generateSectionTitle('Elevation stats (moving over '+ActivityProcessor.movingThresholdKph+'kmh) <a style="font-size: 16px;" target="_blank" href="' + this.appResources.settingsLink + '#/zonesSettings">(customize)</a>');
 
             // Creates a grid
-            this.makeGrid(3, 2); // (col, row)
+            this.makeGrid(3, 4); // (col, row)
 
             this.insertElevationDataIntoGrid();
             this.generateCanvasForGraph();
@@ -42,13 +42,18 @@ var ElevationDataView = AbstractDataView.extend(function(base) {
 
         insertElevationDataIntoGrid: function() {
 
-            this.insertContentAtGridPosition(0, 0, this.elevationData.avgElevation, 'Average Elevation', 'm', 'displayAdvancedElevationData');
-            this.insertContentAtGridPosition(1, 0, this.elevationData.accumulatedElevationAscent.toFixed(0), 'Ascent', 'm', 'displayAdvancedElevationData');
-            this.insertContentAtGridPosition(2, 0, this.elevationData.accumulatedElevationDescent.toFixed(0), 'Descent', 'm', 'displayAdvancedElevationData');
+            this.insertContentAtGridPosition(0, 0, this.elevationData.accumulatedElevationDescent.toFixed(0), 'Descent @ grade<-'+ActivityProcessor.gradeClimbingLimit+'%', 'm', 'displayAdvancedElevationData');
+            this.insertContentAtGridPosition(2, 0, this.elevationData.accumulatedElevationAscent.toFixed(0), 'Ascent @ grade>+'+ActivityProcessor.gradeClimbingLimit+'%', 'm', 'displayAdvancedElevationData');
 
-            this.insertContentAtGridPosition(0, 1, this.elevationData.lowerQuartileElevation, '25% Quartile Elevation', 'm', 'displayAdvancedElevationData');
-            this.insertContentAtGridPosition(1, 1, this.elevationData.medianElevation, '50% Quartile Elevation', 'm', 'displayAdvancedElevationData');
-            this.insertContentAtGridPosition(2, 1, this.elevationData.upperQuartileElevation, '75% Quartile Elevation', 'm', 'displayAdvancedElevationData');
+            this.insertContentAtGridPosition(0, 1, this.elevationData.minElevation, 'Lowest Elevation', 'm', 'displayAdvancedElevationData');
+            this.insertContentAtGridPosition(1, 1, this.elevationData.maxElevation-this.elevationData.minElevation, 'Elevation Difference', 'm', 'displayAdvancedElevationData');
+            this.insertContentAtGridPosition(2, 1, this.elevationData.maxElevation, 'Highest Elevation', 'm', 'displayAdvancedElevationData');
+
+            this.insertContentAtGridPosition(1, 2, this.elevationData.avgElevation, 'Average Elevation', 'm', 'displayAdvancedElevationData');
+
+            this.insertContentAtGridPosition(0, 3, this.elevationData.lowerQuartileElevation, '25% Quartile Elevation', 'm', 'displayAdvancedElevationData');
+            this.insertContentAtGridPosition(1, 3, this.elevationData.medianElevation, '50% Quartile Elevation', 'm', 'displayAdvancedElevationData');
+            this.insertContentAtGridPosition(2, 3, this.elevationData.upperQuartileElevation, '75% Quartile Elevation', 'm', 'displayAdvancedElevationData');
         }
 
     }

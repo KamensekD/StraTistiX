@@ -16,7 +16,7 @@ ActivityProcessor.cachePrefix = 'stravistix_activity_';
 
 
 // *** PUT SOME OF THIS STUFF IN CONFIGURABLE SETTINGS! ***
-ActivityProcessor.movingThresholdKph    = 2.0;  // Kph          !!!   make this separate for biking and other activities   !!!
+ActivityProcessor.movingThresholdKph    = 1.5;  // 1.5 Kph   !!!   consider making this separate for biking and other activities   !!!
                                                 // it has very BIG impact on calculation of flat/up/down times and because of that also on "word gradeProfile estimate"
                                                 // since using altitude filtering, it is better, though
                                                 // should use bigger threshold for worse GPS devices and could use lesser for best GPS devices
@@ -28,6 +28,9 @@ velocity_avgThreshold                   = 0.5;  // Kph - average velocity thresh
 
 ActivityProcessor.gradeClimbingLimit    =  2.0; // thresholds for UP/DOWN vs FLAT   *** also used as treshold for VAM calculations and for Grade profile estimate!
 ActivityProcessor.gradeDownHillLimit    = -2.0; // for not very good GPS data, flat time can be underestimated if this setting too low
+
+ActivityProcessor.VAMsmoothing = -11;		// +99 positive for smoothing by distance for VAM distribution calculations, elevation data is smoothed by distance with low pass filter with this smoothing factor
+											// -11 negative for smoothing by time
 
 ActivityProcessor.smoothingL = 1;
 ActivityProcessor.smoothingH = 99;
@@ -116,7 +119,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 if (env.debugMode) console.log('>>>(f: ActivityProcessor.js) >   Try to read  -Analysis Data-  from cache/localStorage (' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + ')' )
         var cacheResult = JSON.parse(localStorage.getItem(ActivityProcessor.cachePrefix + activityId));
                 if (cacheResult) {
-if (env.debugMode) console.warn('...   FOUND in cache - using cached Analysis Data   ...' );
+if (env.debugMode) console.error('...   FOUND in cache - using cached Analysis Data   ...' );
                 } else {
 if (env.debugMode) console.error('...   NOT in cache - calculating Analysis Data   ...' );
                 }
@@ -400,7 +403,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         var speedVarianceSum = 0;
         var currentSpeed;
 
-                var realAvgSpeed = 3600 * activityStatsMap.distance / activityStatsMap.elapsedTime;
+        var realAvgSpeed = 3600 * activityStatsMap.distance / activityStatsMap.elapsedTime;
         var maxSpeed = _.max(velocityArray) * 3.6;
         var minSpeed = _.min(velocityArray) * 3.6;
 
@@ -679,7 +682,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         var TRIMPPerHour = TRIMP / hrrSecondsCount * 60 * 60;
 //        var TRIMP_hr = Math.round(TRIMPPerHour*10)/10;
 //        var percentiles = Helper.weightedPercentiles(heartRateArrayMoving, heartRateArrayMovingDuration, [ 0.25, 0.5, 0.75 ]);
-                var percentiles=[];
+        var percentiles=[];
         percentiles[0]=Helper.lowerQuartile(heartRateArraySorted);
         percentiles[1]=Helper.median(heartRateArraySorted);
         percentiles[2]=Helper.upperQuartile(heartRateArraySorted);
@@ -1147,8 +1150,20 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         var distanceArray = activityStream.distance;
         var timeArray = activityStream.time;
         var velocityArray = activityStream.velocity_smooth;
-        var altitudeArray = activityStream.altitude_smooth;
 //        var altitudeArray = activityStream.altitude;
+//        var altitudeArray = activityStream.altitude_smooth;
+
+	if (ActivityProcessor.VAMsmoothing>0) {        // smoothing by distance
+		var altitudeArray = this.lowPassDataSmoothing_(activityStream.altitude, activityStream.distance , ActivityProcessor.VAMsmoothing);
+	} else if (ActivityProcessor.VAMsmoothing<0) { // smoothing by time
+		var altitudeArray = this.lowPassDataSmoothing_(activityStream.altitude, activityStream.time , -1*ActivityProcessor.VAMsmoothing);
+	} else {  // same smoothing as for other calculations
+		var altitudeArray = activityStream.altitude_smooth;
+	}
+
+
+
+
 
 //        if (_.isEmpty(distanceArray) || _.isEmpty(timeArray) || _.isEmpty(velocityArray) || _.isEmpty(altitudeArray) || !( velocity_avg < velocity_avgThreshold ) ) {
         if (_.isEmpty(distanceArray) || _.isEmpty(timeArray) || _.isEmpty(velocityArray) || _.isEmpty(altitudeArray) ) {
@@ -1174,6 +1189,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         var durationInSeconds = 0;
         var distance = 0;
         var ascentDurationInSeconds = 0;
+        var ascentOverGradeClimbingLimitDurationInSeconds = 0;
 
         for (var i = 0; i < altitudeArray.length; i++) { // Loop on samples
 
@@ -1201,6 +1217,10 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
                 // Meters climbed between current and previous
                 var elevationDiff = altitudeArray[i] - altitudeArray[i - 1];
 
+//
+// consider reprograming this so that it would only count in every 1 to n samples only after positive elevation diff of those
+// samples would be over threshold (for example 10m) AND grade would be over gradeClimbingLimit
+//
                 // If previous altitude lower than current then => climbing
                 if (elevationDiff > 0) {
 
@@ -1209,8 +1229,11 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 
                     var ascentSpeedMeterPerHour = elevationDiff / ascentDurationInSeconds * 3600; // m climbed / seconds
 
-                    // only if grade is > ActivityProcessor.gradeClimbingLimit
+                    // only if grade > ActivityProcessor.gradeClimbingLimit
                     if (distance > 0 && ( 100*(elevationDiff / distance) > ActivityProcessor.gradeClimbingLimit ) ) {
+                    	
+                    	ascentOverGradeClimbingLimitDurationInSeconds += ascentDurationInSeconds;
+                    	
                         accumulatedDistance += distanceArray[i] - distanceArray[i - 1];
                         ascentSpeedMeterPerHourSamples.push(ascentSpeedMeterPerHour);
                         ascentSpeedMeterPerHourDistance.push(accumulatedDistance);
@@ -1252,6 +1275,10 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         var percentilesAscent = Helper.weightedPercentiles(ascentSpeedMeterPerHourSamples, ascentSpeedMeterPerHourDistance, [0.25, 0.5, 0.75]);
 
         return {
+            'minElevation': Math.min(...StravaStreams.altitude).toFixed(0),
+            'maxElevation': Math.max(...StravaStreams.altitude).toFixed(0),
+//            'minElevation': Math.min(...elevationSamples).toFixed(0),
+//            'maxElevation': Math.max(...elevationSamples).toFixed(0),
             'avgElevation': avgElevation.toFixed(0),
             'accumulatedElevationAscent': accumulatedElevationAscent,
             'accumulatedElevationDescent': accumulatedElevationDescent,
@@ -1259,7 +1286,8 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
             'medianElevation': percentilesElevation[1].toFixed(0),
             'upperQuartileElevation': percentilesElevation[2].toFixed(0),
             'elevationZones': elevationZones, // Only while moving
-            'ascentSpeedZones': ascentSpeedZones, // Only while moving
+            'ascentSpeedZones': ascentSpeedZones, // Only while moving and grade > ActivityProcessor.gradeClimbingLimit
+            'ascentTimeOverGradeClimbingLimit' : ascentOverGradeClimbingLimitDurationInSeconds,
             'ascentSpeed': {
                 'avg': _.isFinite(avgAscentSpeed) ? avgAscentSpeed : -1,
                 'lowerQuartile': percentilesAscent[0].toFixed(0),
@@ -1296,7 +1324,8 @@ if (env.debugMode) console.warn(' > (f: ActivityProcessor.js) >   ' + arguments.
 //            altitudeArray = this.lowPassDataSmoothing_(activityAltitudeArray, timeArray, smoothing);	// smoothing by time
             var totalElevation = 0;
             for (var i = 0; i < altitudeArray.length; i++) { // Loop on samples
-                if (i > 0 && velocityArray[i] * 3.6 > VacuumProcessor.movingThresholdKph) {
+//                if (i > 0 && velocityArray[i] * 3.6 > VacuumProcessor.movingThresholdKph) {
+                if (i > 0 && velocityArray[i] * 3.6 > ActivityProcessor.movingThresholdKph) {
                     var elevationDiff = altitudeArray[i] - altitudeArray[i - 1];
                     if (elevationDiff > 0) {
                         totalElevation += elevationDiff;

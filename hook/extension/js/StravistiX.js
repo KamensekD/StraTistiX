@@ -28,7 +28,7 @@ https://www.strava.com/activities/342465523     Ride            (GPS, power, HR,
 
 https://www.strava.com/activities/340423634     Ride            (GPS, power, HR, cadence, T)    hilly         Marcel Wyss TdF 3
 https://www.strava.com/activities/275555059     Ride            (GPS, HR, cadence)              hilly         TTR
-https://www.strava.com/activities/155030220     Ride            (GPS)                           hilly         Tojzl
+https://www.strava.com/activities/155030220     Ride            (GPS)                           hilly         Tojzl						* badQ gps -> VAM calculations not good
 https://www.strava.com/activities/69193942      Ride            (GPS)                           hilly         trikotna
 
 https://www.strava.com/activities/145492114     Ride            (GPS)                           very hilly    Žavcar
@@ -49,7 +49,7 @@ https://www.strava.com/activities/443325145     Workout         (*GPS*, power, H
 Bike - trainer: (no GPS)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 https://www.strava.com/activities/442775904     Workout         (HR, cadence, power, speed)     on trainer - with speed  Julian
-https://www.strava.com/activities/442206536     Workout         (HR, cadence, power)            on trainer - no speed    Denzyl
+https://www.strava.com/activities/442206536     Workout         (HR, cadence, power)            on trainer - no speed    Denzyl			* pedaling time shows 0, elapsed and moving time bad
 
 
 
@@ -62,11 +62,11 @@ https://www.strava.com/activities/245769754     Run             (GPS, HR, cadenc
 
 https://www.strava.com/activities/200732119     Run             (GPS, HR, cadence)              flat          My Banovci
 
-https://www.strava.com/activities/325514295     Run             (GPS, HR, cadence)              mostly flat   My Tek trojk
+https://www.strava.com/activities/325514295     Run             (GPS, HR, cadence)              mostly flat   My Tek trojk				*RACE* elaped and moving time 0 until reload at overview
 https://www.strava.com/activities/429614312     Run             (GPS, HR, cadence)              mostly flat   My
+https://www.strava.com/activities/152922062     Run             (GPS, HR, cadence)              mostly flat   My nabrežje
 
 https://www.strava.com/activities/307138432     Run             (GPS, HR, cadence)              a bit hilly   My park, 3r
-https://www.strava.com/activities/152922062     Run             (GPS, HR, cadence)              a bit hilly   My nabrežje
 
 https://www.strava.com/activities/442681892     Run             (GPS, HR, cadence)              hilly         My panorama
 https://www.strava.com/activities/107829725     Run             (GPS, HR, cadence)              hilly         My 2x Kalvarija
@@ -75,7 +75,7 @@ https://www.strava.com/activities/159495959     Run             (GPS, HR, cadenc
 
 https://www.strava.com/activities/235711434     Run             (GPS, HR, cadence)              very hilly    My zppp, stolp, šani
 
-https://www.strava.com/activities/380222430     Run             (GPS, HR, cadence)              mountainous   My trail maraton 22km
+https://www.strava.com/activities/380222430     Run             (GPS, HR, cadence)              mountainous   My trail maraton 22km		*RACE* elaped and moving time 0 until reload at overview
 https://www.strava.com/activities/379977674     Run             (GPS, HR, cadence, T)           mountainous   Balazs Trail Maraton 42km
 
 *alpine*
@@ -87,15 +87,17 @@ https://www.strava.com/activities/119185669     hike            (GPS, HR, cadenc
 
 * mostly down *
 
-https://www.strava.com/activities/83623294      hike            (only GPS) / badQ GPS           flat          My LJ
+https://www.strava.com/activities/83625036      hike            (only GPS) / badQ GPS           flat           My Vrbanski plato
 
-* mostly flat *
+https://www.strava.com/activities/83623294      hike            (only GPS) / badQ GPS           mostly flat    My LJ
 
 * a bit hilly *
-* https://www.strava.com/activities/83625038    hike            (only GPS)                      hilly (should be a bit hilly)
 
-https://www.strava.com/activities/214252443     hike            (GPS, HR, cadence)              hilly
-                                                                                                -> slow, avg_velocity < 1 (velocity_avgThreshold ~ 0.5)
+https://www.strava.com/activities/83625038      hike            (only GPS)                      hilly (could also be a bit hilly) my
+
+https://www.strava.com/activities/214252443     hike            (GPS, HR, cadence)              hilly          My trikotna
+
+* very hilly *
 
 https://www.strava.com/activities/433810631     hike            (GPS, power, HR, cadence, T)    mountainous
 
@@ -106,6 +108,59 @@ https://www.strava.com/activities/433810631     hike            (GPS, power, HR,
 Row: (on trainer)
 ~~~~~~~~~~~~~~~~~
 https://www.strava.com/activities/269549200     StationaryOther (HR, cadence)
+
+
+
+
+
+
+
+
+
+
+Console Activity Data Access examples:
+================================================================================
+
+this
+this.parent
+
+$.browser
+
+this.stravistiX			this.StravistiX
+this.stravistiX.userSettings_
+this.stravistiX.vacuumProcessor_.getActivityCommonStats()
+this.stravistiX.appResources_
+
+this.stravistiX.activityProcessor_
+this.stravistiX.activityProcessor_.zones			zone distribution (ascent, cadence, elevation, grade, pace, power, speed)
+this.stravistiX.activityProcessor_.userHrrZones_	zone distribution HRR
+
+this.strava				this.Strava				this.StravaStreams
+
+this.ActivityProcessor
+this.Helper
+
+this.RPEnote1
+
+this.VacuumProcessor
+
+this.activityName
+this.currentAthlete.attributes
+
+this.document
+
+this.env
+
+this.lightboxdata     pageView.lightboxData()     pageView.lightboxData().title
+
+this.version	??? v2.2
+
+this.pageView     this.pageView.activity().attributes
+this.pageView.streams().streamData.data.altitude		=		this.pageView.streams().attributes.altitude
+
+
+================================================================================
+
 
 
 
@@ -341,8 +396,9 @@ env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee
         message += "- Improved elevation data accuracy while computing extended statistics.<br/>"
         message += "&nbsp&nbsp(Elevation data smoothed using low pass filter with gain matched to Strava's)<br/>"
         message += "- Added cadence, power and altitude data in overview table<br/>"
+		message += "- reordered and added some new data in extended statistics<br/>"
         message += "- Weather unis preferences<br/>"
-        message += "- Various smaller additions and fixes, sorry for bigbug in 2.0.0.1 - settings menu not working :/<br/>"
+        message += "- Various smaller additions and fixes, <span style='text-decoration: underline'>sorry</span> for bigbug in 2.0.0.1 - settings menu not working :/<br/>"
         
         message += "<br/></font>"
         message += "<font size=+1><strong>From previous updates:</strong></font><br><font size=-1>";

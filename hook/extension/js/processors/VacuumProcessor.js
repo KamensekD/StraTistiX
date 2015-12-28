@@ -12,12 +12,6 @@ VacuumProcessor.cachePrefix = 'stravistix_activityStream_';
 
 
 
-//VacuumProcessor.movingThresholdKph = 3.5; // Kph
-VacuumProcessor.movingThresholdKph = 3.0; // Kph
-//VacuumProcessor.movingThresholdKph = 2.5; // Kph
-
-
-
 /**
  * Define prototype
  */
@@ -420,7 +414,8 @@ if (env.debugMode) console.warn("Can't get average speed... tryin' to get pace")
      * @returns formated/cleaned activity data
      */
     formatActivityDataValue_: function formatActivityDataValue_(dataIn, parsingTime, parsingElevation, parsingDistance, parsingEnergy) {
-if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
+//if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
+env.debugMode>1   && console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
 
         if (dataIn == "") {
@@ -472,7 +467,7 @@ if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.cal
 if (env.debugMode) console.log('>>>(f: VacuumProcessor.js) >   Try to read  -Activity '+this.getActivityId()+' Streams-  from cache/localStorage (' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + ')' )
         var cache = localStorage.getItem(VacuumProcessor.cachePrefix + this.getActivityId());
         if (cache) {
-if (env.debugMode) console.warn('...   FOUND in cache - using cached Activity Streams   ...' );
+if (env.debugMode) console.error('...   FOUND in cache - using cached Activity Streams   ...' );
             cache = JSON.parse(cache);
             StravaStreams=cache.stream;	// set StravaStreams from cache
             callback(cache.activityCommonStats, cache.stream, cache.athleteWeight, cache.hasPowerMeter);

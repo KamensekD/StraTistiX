@@ -382,7 +382,7 @@ env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee
 env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
 //        var title = 'StraTistiX updated/installed to <strong>v' + this.appResources_.extVersion + '</strong>';
-        var title = 'StraTistiX recently added/updated/fixed features:';
+        var title = 'StraTistiX recently added/updated/fixed features - v2.2.4';
         var message = '';
     message += "<font size=+1>"
         message += "- statistics now computed on <strong>weighted percentiles</strong><br/>"

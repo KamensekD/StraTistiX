@@ -45,7 +45,7 @@ var RunningExtendedActivityDataModifier = AbstractExtendedActivityDataModifier.e
             // Avg climb pace
             var climbSpeed = '-';
             if (this.analysisData_.gradeData && this.userSettings_.displayAdvancedGradeData) {
-                var seconds = parseInt((this.analysisData_.gradeData.upFlatDownMoveData.up / speedUnitFactor).toFixed(0));
+                var seconds = parseInt((this.analysisData_.gradeData.upFlatDownSpeed.up / speedUnitFactor).toFixed(0));
                 if (seconds) {
                     climbSpeed = Helper.secondsToHHMMSS(seconds).replace('00:', '');
                 }

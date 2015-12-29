@@ -1,4 +1,4 @@
-var contentDebug=1;
+var contentDebug=0;
 if (contentDebug) console.warn('Begin     Content.js');
 //if (contentDebug) console.log(' > > (f:  Content.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 /**

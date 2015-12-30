@@ -90,6 +90,12 @@ var userSettings = {
             to: 50
         }, {
             from: 50,
+            to: 55
+        }, {
+            from: 55,
+            to: 60
+        }, {
+            from: 60,
             to: 75
         }, {
             from: 75,
@@ -142,9 +148,18 @@ var userSettings = {
             to: 600
         }, {
             from: 600,
+            to: 720
+        }, {
+            from: 720,
             to: 900
         }, {
             from: 900,
+            to: 1200
+        }, {
+            from: 1200,
+            to: 1800
+        }, {
+            from: 1800,
             to: 3599
         }],
         power: [{
@@ -158,18 +173,33 @@ var userSettings = {
             to: 50
         }, {
             from: 50,
+            to: 75
+        }, {
+            from: 75,
             to: 100
         }, {
             from: 100,
+            to: 125
+        }, {
+            from: 125,
             to: 150
         }, {
             from: 150,
+            to: 175
+        }, {
+            from: 175,
             to: 200
         }, {
             from: 200,
+            to: 225
+        }, {
+            from: 225,
             to: 250
         }, {
             from: 250,
+            to: 275
+        }, {
+            from: 275,
             to: 300
         }, {
             from: 300,
@@ -182,21 +212,12 @@ var userSettings = {
             to: 500
         }, {
             from: 500,
-            to: 600
+            to: 750
         }, {
-            from: 600,
-            to: 700
-        }, {
-            from: 700,
-            to: 800
-        }, {
-            from: 800,
+            from: 750,
             to: 1000
         }, {
             from: 1000,
-            to: 1250
-        }, {
-            from: 1250,
             to: 1500
         }, {
             from: 1500,
@@ -222,9 +243,15 @@ var userSettings = {
             to: 50
         }, {
             from: 50,
+            to: 55
+        }, {
+            from: 55,
             to: 60
         }, {
             from: 60,
+            to: 65
+        }, {
+            from: 65,
             to: 70
         }, {
             from: 70,
@@ -262,6 +289,12 @@ var userSettings = {
             to: 1
         }, {
             from: 1,
+            to: 10
+        }, {
+            from: 10,
+            to: 20
+        }, {
+            from: 20,
             to: 30
         }, {
             from: 30,
@@ -365,6 +398,12 @@ var userSettings = {
             to: 30
         }, {
             from: 30,
+            to: 40
+        }, {
+            from: 40,
+            to: 50
+        }, {
+            from: 50,
             to: 100
         }],
         elevation: [{
@@ -414,6 +453,18 @@ var userSettings = {
             to: 3000
         }, {
             from: 3000,
+            to: 3500
+        }, {
+            from: 3500,
+            to: 4000
+        }, {
+            from: 4000,
+            to: 5000
+        }, {
+            from: 5000,
+            to: 6000
+        }, {
+            from: 6000,
             to: 8848
         }],
         ascent: [{

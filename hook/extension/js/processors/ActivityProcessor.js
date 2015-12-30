@@ -458,7 +458,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         var genuineAvgSpeed = genuineAvgSpeedSum / genuineAvgSpeedSumCount;
         var varianceSpeed = (speedVarianceSum / speedsNonZero.length) - Math.pow(activityStatsMap.averageSpeed, 2);
         var standardDeviationSpeed = (varianceSpeed > 0) ? Math.sqrt(varianceSpeed) : 0;
-        var percentiles = Helper.weightedPercentiles(speedsNonZero, speedsNonZeroDuration, [0.25, 0.5, 0.75]);
+        var percentiles = Helper.weightedPercentiles(speedsNonZero, speedsNonZeroDuration, [0.25, 0.5, 0.75, 0.99]);
 
         return [{
             'genuineAvgSpeed': genuineAvgSpeed,
@@ -466,6 +466,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
             'lowerQuartileSpeed': percentiles[0],
             'medianSpeed': percentiles[1],
             'upperQuartileSpeed': percentiles[2],
+            'percentile99Speed': percentiles[3],
             'varianceSpeed': varianceSpeed,
             'standardDeviationSpeed': standardDeviationSpeed,
             'speedZones': speedZones,
@@ -473,13 +474,17 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         }, {
             'realAvgPace': parseInt(((1 / realAvgSpeed) * 60 * 60).toFixed(0)), // send in seconds
             'realAvgSpeed': realAvgSpeed,
+            'maxPace': parseInt(((1 / maxSpeed) * 60 * 60).toFixed(0)), // send in seconds
+            'maxSpeed': maxSpeed,
             'lowerQuartileSpeed': percentiles[0],
             'medianSpeed': percentiles[1],
             'upperQuartileSpeed': percentiles[2],
+            'percentile99Speed': percentiles[3],
             'standardDeviationSpeed': standardDeviationSpeed,
             'lowerQuartilePace': this.convertSpeedToPace(percentiles[0]),
             'medianPace': this.convertSpeedToPace(percentiles[1]),
             'upperQuartilePace': this.convertSpeedToPace(percentiles[2]),
+            'percentile99Pace': this.convertSpeedToPace(percentiles[3]),
             'variancePace': this.convertSpeedToPace(varianceSpeed),
 //            'standardDeviationPace': this.convertSpeedToPace(standardDeviationSpeed),
             'paceZones': paceZones

@@ -56,6 +56,7 @@ var RunningCadenceDataView = AbstractCadenceDataView.extend(function(base) {
         insertCadenceDataIntoGrid: function() {
 
             this.insertContentAtGridPosition(1, 0, this.cadenceData.averageCadenceMoving.toFixed(1), 'Average Cadence', this.units, 'displayCadenceData');
+            this.insertContentAtGridPosition(2, 0, this.cadenceData.maxCadence.toFixed(1), 'Max Cadence', this.units, 'displayCadenceData');
 
             this.insertContentAtGridPosition(0, 1, this.cadenceData.lowerQuartileCadence, '25% Quartile Cadence', this.units, 'displayCadenceData');
             this.insertContentAtGridPosition(1, 1, this.cadenceData.medianCadence, '50% Quartile Cadence', this.units, 'displayCadenceData');

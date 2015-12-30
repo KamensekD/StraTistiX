@@ -73,7 +73,7 @@ var AbstractDataView = Fiber.extend(function(base) {
             graph += '<div>';
             graph += '<div>';
             graph += '<div class="distributionGraphTitle">' + this.graphTitle + '</div>';
-            graph += '<canvas id="' + this.viewId + '"  width="550" height="400"></canvas>';
+            graph += '<canvas id="' + this.viewId + '"  width="545" height="454"></canvas>';
             graph += '</div>';
             graph += '</div>';
             this.graph = $(graph);

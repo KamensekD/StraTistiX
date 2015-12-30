@@ -27,7 +27,7 @@ var AscentSpeedDataView = AbstractDataView.extend(function(base) {
             base.render.call(this);
 
             // Add a title
-            this.content += this.generateSectionTitle('Ascent speed (VAM) stats (moving over '+ActivityProcessor.movingThresholdKph+'kmh & grade &gt; ' + ActivityProcessor.gradeClimbingLimit + '%) <a style="font-size: 16px;" target="_blank" href="' + this.appResources.settingsLink + '#/zonesSettings">(customize)</a>');
+            this.content += this.generateSectionTitle('VAM Vertical Ascent speed stats (moving > '+ActivityProcessor.movingThresholdKph+'km/h & grade &gt; ' + ActivityProcessor.gradeClimbingLimit + '%) <a style="font-size: 16px;" target="_blank" href="' + this.appResources.settingsLink + '#/zonesSettings">(customize)</a>');
 
             // Creates a grid
             this.makeGrid(3, 3); // (col, row)
@@ -53,7 +53,7 @@ var AscentSpeedDataView = AbstractDataView.extend(function(base) {
                 }
             }
 
-            this.insertContentAtGridPosition(1, 0, ascentSpeedAvg, 'Avg Ascent Speed or VAM', 'Vm/h', 'displayAdvancedElevationData');
+            this.insertContentAtGridPosition(1, 0, ascentSpeedAvg, 'Avg VAM Ascent Speed', 'Vm/h', 'displayAdvancedElevationData');
 
             this.insertContentAtGridPosition(1, 1, Helper.secondsToHHMMSS(this.elevationData.ascentTimeOverGradeClimbingLimit), 'Total VAM Ascent Time', '', 'displayAdvancedElevationData');
             

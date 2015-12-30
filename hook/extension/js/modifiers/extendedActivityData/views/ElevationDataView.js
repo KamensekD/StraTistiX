@@ -26,7 +26,7 @@ var ElevationDataView = AbstractDataView.extend(function(base) {
             base.render.call(this);
 
             // Add a title
-            this.content += this.generateSectionTitle('Elevation stats (moving over '+ActivityProcessor.movingThresholdKph+'kmh) <a style="font-size: 16px;" target="_blank" href="' + this.appResources.settingsLink + '#/zonesSettings">(customize)</a>');
+            this.content += this.generateSectionTitle('Elevation stats (moving > '+ActivityProcessor.movingThresholdKph+'km/h) <a style="font-size: 16px;" target="_blank" href="' + this.appResources.settingsLink + '#/zonesSettings">(customize)</a>');
 
             // Creates a grid
             this.makeGrid(3, 4); // (col, row)

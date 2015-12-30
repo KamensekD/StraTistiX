@@ -58,14 +58,12 @@ var FeaturedDataView = AbstractDataView.extend(function(base) {
                 this.insertContentAtGridPosition(0, 0, this.analysisData.moveRatio.toFixed(2), 'Move Ratio', '', 'displayActivityRatio'); // Move ratio
             }
 
-if (typeof(stravistiX) !== 'undefined') {
-  if (typeof(stravistiX.vacuumProcessor_) !== 'undefined') {
-    if (typeof(stravistiX.vacuumProcessor_.getActivityCommonStats()) !== 'undefined') {
-	  if (typeof(stravistiX.vacuumProcessor_.getActivityCommonStats().elapsedTime) !== 'undefined') this.insertContentAtGridPosition(1, 0, Helper.secondsToHHMMSS((stravistiX.vacuumProcessor_.getActivityCommonStats().elapsedTime / speedUnitFactor).toFixed(0)).replace('00:', '')  , 'Elapsed Time', '', 'displayActivityRatio'); // elapsed Time
-	  if (typeof(stravistiX.vacuumProcessor_.getActivityCommonStats().elapsedTime) !== 'undefined') this.insertContentAtGridPosition(2, 0, Helper.secondsToHHMMSS((stravistiX.vacuumProcessor_.getActivityCommonStats().movingTime / speedUnitFactor).toFixed(0)).replace('00:', '')  , 'Moving Time', '', 'displayActivityRatio'); // moving Time
-	}
-  }
+
+if (typeof(globalActivityStatsMap) !== 'undefined') {
+	  if (typeof(globalActivityStatsMap.elapsedTime) !== 'undefined') this.insertContentAtGridPosition(1, 0, Helper.secondsToHHMMSS((globalActivityStatsMap.elapsedTime / speedUnitFactor).toFixed(0)).replace('00:', '')  , 'Elapsed Time', '', 'displayActivityRatio'); // elapsed Time
+	  if (typeof(globalActivityStatsMap.movingTime) !== 'undefined') this.insertContentAtGridPosition(2, 0, Helper.secondsToHHMMSS((globalActivityStatsMap.movingTime / speedUnitFactor).toFixed(0)).replace('00:', '')  , 'Moving Time', '', 'displayActivityRatio'); // moving Time
 }
+
 
 //            if (this.analysisData.speedData && this.userSettings.displayAdvancedSpeedData) {
 //                this.insertContentAtGridPosition(2, 0, (this.analysisData.speedData.upperQuartileSpeed * speedUnitFactor).toFixed(1), '75% Quartile Speed', speedUnitPerhour, 'displayAdvancedSpeedData'); // Q3 Speed

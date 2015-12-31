@@ -230,39 +230,67 @@ if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.cal
 
 // Elapsed and Moving time
 
+
+        // Get Moving Time
+        movingTime = this.formatActivityDataValue_(
+            actStatsContainer.find('.inline-stats.section').children().first().next().text(),
+            true, false, false, false);
+
+        // Get Elapsed Time
+        elapsedTime = this.formatActivityDataValue_(
+            $('[data-glossary-term*=definition-elapsed-time]').parent().parent().children().last().text(),
+            true, false, false, false);
+
+        // Try to get it another way. (Running races)
+        if (!elapsedTime) {
+            elapsedTime = this.formatActivityDataValue_(
+                $('.section.more-stats').children().last().text(),
+                true, false, false, false);
+        }
+
+        // Invert movingTime and elapsedTime. Theses values seems to be inverted in running races (https://www.strava.com/activities/391338398)
+        if (elapsedTime - movingTime < 0) {
+            var elapsedTimeCopy = elapsedTime;
+            elapsedTime = movingTime;
+            movingTime = elapsedTimeCopy;
+        }
+
+
+
+/*  old code
+
         // Get Elapsed Time
 // without var -> global scope (window.elapsedTime)
-        elapsedTime = this.formatActivityDataValue_(
+        var elapsedTimeRaw=$('[data-glossary-term*=definition-elapsed-time]').parent().next().text();
+
 //        var elapsedTime = this.formatActivityDataValue_(
 //            $('[data-glossary-term*=definition-elapsed-time]').parent().parent().children().last().text(),	// bugfix
-            $('[data-glossary-term*=definition-elapsed-time]').parent().next().text()
-            , true, false, false, false);
+
+		if (elapsedTimeRaw.length<11) elapsedTime = this.formatActivityDataValue_(   elapsedTimeRaw   , true, false, false, false);
+
+// elapsedTimeRaw=$('[data-glossary-term*=definition-elapsed-time]').parent().next().text()
+// if (elapsedTimeRaw.length<11) elapsedTime = VacuumProcessor.prototype.formatActivityDataValue_(   elapsedTimeRaw   , true, false, false, false);
 
         if (isNaN(elapsedTime)) {
 if (env.debugMode) console.warn("Can't get elapsed time - probably 'race'");
 		// if 'race' elapsed and moving time are swapped on Strava overview screen
         // Get Elapsed Time
-// without var -> global scope (window.elapsedTime)
         elapsedTime = this.formatActivityDataValue_(
-//        var elapsedTime = this.formatActivityDataValue_(
             $('[data-glossary-term*=definition-elapsed-time]').parent().first().prev().text()
             , true, false, false, false);
 
-// without var -> global scope (window.movingTime)
         movingTime = this.formatActivityDataValue_(
-//        var movingTime = this.formatActivityDataValue_(
             $('[data-glossary-term*=definition-moving-time]').parent().next().text()
             , true, false, false, false);
 	      } else
 	      {
         // Get Moving Time
-// without var -> global scope (window.movingTime)
         movingTime = this.formatActivityDataValue_(
-//        var movingTime = this.formatActivityDataValue_(
-            $('[data-glossary-term*=definition-moving-time]').parent().first().prev().text()
+            $('[data-glossary-term*=definition-moving-time]').parent().first().next().text()
             , true, false, false, false);
 				}
 
+*/
 
 
         // Get Elevation
@@ -394,7 +422,6 @@ if (env.debugMode) console.warn("Can't get average speed... tryin' to get pace")
 //            'averageHeartRate': averageHeartRate,	// calculated in ActivityProcessor.js
 //            'maxHeartRate': maxHeartRate			// calculated in ActivityProcessor.js
 //            'altitude_smooth': altitude_smooth,	// calculated in ActivityProcessor.js
-//			'maxHeartRate': maxHeartRate
         };
     },
 
@@ -428,6 +455,24 @@ env.debugMode>1   && console.log(' > (f: VacuumProcessor.js) >   ' + arguments.c
         cleanData = cleanData.replace('/', '');					// remove slash     (for Pace /km)
         cleanData = cleanData.replace(/\s/g, '').trim('string');
         cleanData = cleanData.replace(/[\n\r]/g, '');
+
+/*
+       var cleanData = dataIn.toLowerCase();
+        cleanData = cleanData.replace(new RegExp(/\s/g), '');
+        cleanData = cleanData.replace(new RegExp(/[aáâaäa]/g), '');
+        cleanData = cleanData.replace(new RegExp(/a/g), '');
+        cleanData = cleanData.replace(new RegExp(/ç/g), '');
+        cleanData = cleanData.replace(new RegExp(/[eéeë]/g), '');
+        cleanData = cleanData.replace(new RegExp(/[iíîi]/g), '');
+        cleanData = cleanData.replace(new RegExp(/n/g), '');
+        cleanData = cleanData.replace(new RegExp(/[oóôoö]/g), '');
+        cleanData = cleanData.replace(new RegExp(/o/g), "o");
+        cleanData = cleanData.replace(new RegExp(/[uúuü]/g), '');
+        cleanData = cleanData.replace(new RegExp(/[ýy]/g), '');
+        cleanData = cleanData.replace(/\s/g, '').trim('string');
+        cleanData = cleanData.replace(/[\n\r]/g, '');
+        cleanData = cleanData.replace(/([a-z]|[A-Z])+/g, '').trim();
+*/
 
 
 				if (parsingDistance && (cleanData.indexOf("m") != -1)) {	// ce je m
@@ -464,12 +509,15 @@ env.debugMode>1   && console.log(' > (f: VacuumProcessor.js) >   ' + arguments.c
     getActivityStream: function getActivityStream(callback) {
 if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
-if (env.debugMode) console.log('>>>(f: VacuumProcessor.js) >   Try to read  -Activity '+this.getActivityId()+' Streams-  from cache/localStorage (' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + ')' )
-        var cache = localStorage.getItem(VacuumProcessor.cachePrefix + this.getActivityId());
+//if (env.debugMode) console.log('>>>(f: VacuumProcessor.js) >   Try to read  -Activity '+this.getActivityId()+' Streams-  from cache/localStorage (' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + ')' )
+if (env.debugMode) console.log('>>>(f: VacuumProcessor.js) >   Try to read  -Activity '+this.getActivityId()+' Streams-  from cache/sessionStorage (' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + ')' )
+//        var cache = localStorage.getItem(VacuumProcessor.cachePrefix + this.getActivityId());
+        var cache = sessionStorage.getItem(VacuumProcessor.cachePrefix + this.getActivityId());
         if (cache) {
 if (env.debugMode) console.error('...   FOUND in cache - using cached Activity Streams   ...' );
             cache = JSON.parse(cache);
-            StravaStreams=cache.stream;	// set StravaStreams from cache
+            StravaStreams=cache.stream;								// set StravaStreams from cache
+//            StravaActivityCommonStats=cache.activityCommonStats;	// set StravaActivityCommonStats from cache
             callback(cache.activityCommonStats, cache.stream, cache.athleteWeight, cache.hasPowerMeter);
             return;
         } else {
@@ -490,7 +538,7 @@ if (env.debugMode) console.error('...   NOT in cache - getting Activity Streams 
 
             try {
                 // Save result to cache
-if (env.debugMode) console.log('<<<(f: VacuumProcessor.js) >   Try to write  -Activity '+pageView.activityId()+' Streams-  to cache/localStorage < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
+if (env.debugMode) console.log('<<<(f: VacuumProcessor.js) >   Try to write  -Activity '+pageView.activityId()+' Streams-  to cache < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
             	var result = {
                     activityCommonStats: this.getActivityCommonStats(),
@@ -499,16 +547,29 @@ if (env.debugMode) console.log('<<<(f: VacuumProcessor.js) >   Try to write  -Ac
                     hasPowerMeter: hasPowerMeter
                 };
 
-            	var result1 = {
+            	var result1 = { // only for debug console.log
                     activityCommonStats: this.getActivityCommonStats(),
                     stream: "...Activity Streams...",
                     athleteWeight: this.getAthleteWeight(),
                     hasPowerMeter: hasPowerMeter
                 };
 
-                localStorage.setItem(VacuumProcessor.cachePrefix + this.getActivityId(), JSON.stringify(result));
-if (env.debugMode) console.log('   > Written to cache/localstorage' );
-if (env.debugMode) console.log("\nWritten to cache/localstorage: " + VacuumProcessor.cachePrefix + this.getActivityId() + "\n\n" + JSON.stringify(result1) + "\n\n\n");
+
+            //
+            //
+            globalActivityStreams	= result.stream;				// set globalActivityStreams
+            globalActivityStatsMap	= result.activityCommonStats;	// set globalActivityStatsMap
+			//
+			// write streams and statsmap to cache here
+			//
+
+
+//                localStorage.setItem(VacuumProcessor.cachePrefix + this.getActivityId(), JSON.stringify(result));
+                sessionStorage.setItem(VacuumProcessor.cachePrefix + this.getActivityId(), JSON.stringify(result));
+//if (env.debugMode) console.log('   > Written to cache/localstorage' );
+if (env.debugMode) console.log('   > Written to cache/sessionstorage' );
+//if (env.debugMode) console.log("\nWritten to cache/localstorage: " + VacuumProcessor.cachePrefix + this.getActivityId() + "\n\n" + JSON.stringify(result1) + "\n\n\n");
+if (env.debugMode) console.log("\nWritten to cache/sessionstorage: " + VacuumProcessor.cachePrefix + this.getActivityId() + "\n\n" + JSON.stringify(result1) + "\n\n\n");
 				result=null; result1=null// Memory clean
             } catch (err) {
                 console.warn(err);

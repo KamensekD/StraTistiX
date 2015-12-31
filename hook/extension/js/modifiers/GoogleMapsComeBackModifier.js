@@ -368,7 +368,8 @@ GoogleMapsComeBackModifier.prototype = {
     getGoogleMapsApi: function() {
         var script_tag = document.createElement('script');
         script_tag.setAttribute("type", "text/javascript");
-        script_tag.setAttribute("src", "https://maps.google.com/maps/api/js?sensor=false&callback=googleMapsApiLoaded");
+//        script_tag.setAttribute("src", "https://maps.google.com/maps/api/js?sensor=false&callback=googleMapsApiLoaded");
+        script_tag.setAttribute("src", "https://maps.google.com/maps/api/js?callback=googleMapsApiLoaded");
         (document.getElementsByTagName("head")[0] || document.documentElement).appendChild(script_tag);
     }
 };

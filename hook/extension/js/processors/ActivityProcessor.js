@@ -11,7 +11,7 @@ function ActivityProcessor(vacuumProcessor, userHrrZones, zones) {
 
 
 
-ActivityProcessor.cachePrefix = 'stravistix_activity_';
+ActivityProcessor.cachePrefix = 'StraTistiX_activity_';
 
 
 
@@ -115,7 +115,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
             console.error('No activity type set for ActivityProcessor');
         }
 
-        // Find in cache first is data exist
+        // Find in cache first if data exist
 if (env.debugMode) console.log('>>>(f: ActivityProcessor.js) >   Try to read  -Analysis Data-  from cache/localStorage (' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + ')' )
         var cacheResult = JSON.parse(localStorage.getItem(ActivityProcessor.cachePrefix + activityId));
                 if (cacheResult) {
@@ -125,30 +125,49 @@ if (env.debugMode) console.error('...   NOT in cache - calculating Analysis Data
                 }
 
                 
+//
+// got back cached analysis here	now we have to also read streams and statsmap from cache or strava !!! *****
+//
         if (!_.isNull(cacheResult) && env.useActivityStreamCache) {
 if (env.debugMode) console.log("Using existing activity cache in non debug mode: " + JSON.stringify(cacheResult));
-            callback(cacheResult);
+
+            globalActivityStatsMap	= cacheResult.activityCommonStats;		// set globalActivityStatsMap from cache
+            callback(cacheResult.analysisData);
             return;
         }
 
+
+//
+// Else no cache... then call VacuumProcessor for getting data, compute them and cache them
+//
         userFTP = parseInt(userFTP);
-
-
-
-        // Else no cache... then call VacuumProcessor for getting data, compute them and cache them
-
 if (env.debugMode) console.warn('Executing   VacuumProcessor_.getActivityStream   from   ActivityProcessor.js');
-        this.vacuumProcessor_.getActivityStream(function getActivityStream(activityStatsMap, activityStream, athleteWeight, hasPowerMeter) { // Get stream on page
+		// -------------------------------------------------        
+        this.vacuumProcessor_.getActivityStream( function getActivityStream( activityStatsMap, activityStream, athleteWeight, hasPowerMeter ) { // Get stream on page
+
+
+			//
+			// got back cached streams and statsmap here
+			//
+//            globalActivityStreams	= activityStream;		// set globalActivityStreams from cache
+//            globalActivityStatsMap	= activityStatsMap;		// set globalActivityStatsMap from cache
+            //
+            //
+
 
             // Append altitude_smooth to fetched strava activity stream before compute analysis data on
             if (typeof activityStream.altitude !== 'undefined') {
                     activityStream.altitude_smooth = this.smoothAltitude_(activityStream, activityStatsMap.elevation);
                 }
 
-            var result = this.computeAnalysisData_(userGender, userRestHr, userMaxHr, userFTP, athleteWeight, hasPowerMeter, activityStatsMap, activityStream);
+           	var result = {
+                activityCommonStats: activityStatsMap,
+                analysisData: this.computeAnalysisData_(userGender, userRestHr, userMaxHr, userFTP, athleteWeight, hasPowerMeter, activityStatsMap, activityStream)
+            };
 
 
 if (env.debugMode) console.log('<<<(f: ActivityProcessor.js) >   Try to write  -Analysis Data-  to cache/localStorage (' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + ')' )
+
             try {
                 localStorage.setItem(ActivityProcessor.cachePrefix + activityId, JSON.stringify(result)); // Cache the result to local storage
             } catch (err) {
@@ -157,10 +176,11 @@ if (env.debugMode) console.log('<<<(f: ActivityProcessor.js) >   Try to write  -
             }
 if (env.debugMode) console.log("\nWritten to cache/localstorage: " + ActivityProcessor.cachePrefix + activityId + "\n\n" + JSON.stringify(result) + "\n\n\n");
             
-            callback(result);
+            callback(result.analysisData);
 
-        }.bind(this));
-    },
+        }.bind(this));	// this.vacuumProcessor_.getActivityStream
+		// -------------------------------------------------        
+    },	// getAnalysisData: function getAnalysisData
 
 
 

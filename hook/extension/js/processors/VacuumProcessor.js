@@ -8,7 +8,7 @@ function VacuumProcessor() {
 
 
 
-VacuumProcessor.cachePrefix = 'stravistix_activityStream_';
+VacuumProcessor.cachePrefix = 'StraTistiX_activityStream_';
 
 
 
@@ -503,31 +503,38 @@ env.debugMode>1   && console.log(' > (f: VacuumProcessor.js) >   ' + arguments.c
 
 
 
+
+
+	//------------------------------------------------------
     /**
      * @returns activity streams in callback
      */
     getActivityStream: function getActivityStream(callback) {
 if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
-//if (env.debugMode) console.log('>>>(f: VacuumProcessor.js) >   Try to read  -Activity '+this.getActivityId()+' Streams-  from cache/localStorage (' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + ')' )
 if (env.debugMode) console.log('>>>(f: VacuumProcessor.js) >   Try to read  -Activity '+this.getActivityId()+' Streams-  from cache/sessionStorage (' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + ')' )
-//        var cache = localStorage.getItem(VacuumProcessor.cachePrefix + this.getActivityId());
-        var cache = sessionStorage.getItem(VacuumProcessor.cachePrefix + this.getActivityId());
-        if (cache) {
+      var cache = sessionStorage.getItem(VacuumProcessor.cachePrefix + this.getActivityId());
+      if (cache) {
 if (env.debugMode) console.error('...   FOUND in cache - using cached Activity Streams   ...' );
+
+
             cache = JSON.parse(cache);
             StravaStreams=cache.stream;								// set StravaStreams from cache
 //            StravaActivityCommonStats=cache.activityCommonStats;	// set StravaActivityCommonStats from cache
-            callback(cache.activityCommonStats, cache.stream, cache.athleteWeight, cache.hasPowerMeter);
+//            callback(cache.activityCommonStats, cache.stream, cache.athleteWeight, cache.hasPowerMeter);
+            callback( cache.activityCommonStats, cache.stream, cache.athleteWeight, cache.hasPowerMeter);
             return;
-        } else {
+            
+
+      } else {
 if (env.debugMode) console.error('...   NOT in cache - getting Activity Streams from Strava   ...');
-        }
+//      }
+
 
 //        var url = "/activities/" + this.getActivityId() + "/streams?stream_types[]=watts_calc&stream_types[]=watts&stream_types[]=velocity_smooth&stream_types[]=time&stream_types[]=distance&stream_types[]=cadence&stream_types[]=heartrate&stream_types[]=grade_smooth&stream_types[]=altitude&stream_types[]=latlng";
         var url = "/activities/" + this.getActivityId() + "/streams";  // get all available streams for activity
 
-        $.ajax(url).done(function ajax_done(jsonResponse) {
+        $.ajax(url).done( function ajax_done (jsonResponse) {
 
             var hasPowerMeter = true;
 
@@ -540,42 +547,37 @@ if (env.debugMode) console.error('...   NOT in cache - getting Activity Streams 
                 // Save result to cache
 if (env.debugMode) console.log('<<<(f: VacuumProcessor.js) >   Try to write  -Activity '+pageView.activityId()+' Streams-  to cache < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
+            globalActivityStreams	= jsonResponse;						// set globalActivityStreams
+        	globalActivityStatsMap	= this.getActivityCommonStats();	// set globalActivityStatsMap
+
             	var result = {
-                    activityCommonStats: this.getActivityCommonStats(),
-                    stream: jsonResponse,
-                    athleteWeight: this.getAthleteWeight(),
-                    hasPowerMeter: hasPowerMeter
+                    activityCommonStats:	globalActivityStatsMap,
+                    stream:				 	globalActivityStreams,
+                    athleteWeight: 			this.getAthleteWeight(),
+                    hasPowerMeter: 			hasPowerMeter
                 };
 
             	var result1 = { // only for debug console.log
-                    activityCommonStats: this.getActivityCommonStats(),
-                    stream: "...Activity Streams...",
-                    athleteWeight: this.getAthleteWeight(),
-                    hasPowerMeter: hasPowerMeter
+                    activityCommonStats: 	globalActivityStatsMap,
+                    stream: 				"...Activity Streams...",
+                    athleteWeight: 			this.getAthleteWeight(),
+                    hasPowerMeter: 			hasPowerMeter
                 };
 
 
-            //
-            //
-            globalActivityStreams	= result.stream;				// set globalActivityStreams
-            globalActivityStatsMap	= result.activityCommonStats;	// set globalActivityStatsMap
 			//
-			// write streams and statsmap to cache here
+			// write streams to cache here
 			//
 
 
-//                localStorage.setItem(VacuumProcessor.cachePrefix + this.getActivityId(), JSON.stringify(result));
                 sessionStorage.setItem(VacuumProcessor.cachePrefix + this.getActivityId(), JSON.stringify(result));
-//if (env.debugMode) console.log('   > Written to cache/localstorage' );
-if (env.debugMode) console.log('   > Written to cache/sessionstorage' );
-//if (env.debugMode) console.log("\nWritten to cache/localstorage: " + VacuumProcessor.cachePrefix + this.getActivityId() + "\n\n" + JSON.stringify(result1) + "\n\n\n");
-if (env.debugMode) console.log("\nWritten to cache/sessionstorage: " + VacuumProcessor.cachePrefix + this.getActivityId() + "\n\n" + JSON.stringify(result1) + "\n\n\n");
+if (env.debugMode) console.log('   > Written streams to cache/sessionstorage' );
+if (env.debugMode) console.log("\nWritten streams to cache/sessionstorage: " + VacuumProcessor.cachePrefix + this.getActivityId() + "\n\n" + JSON.stringify(result1) + "\n\n\n");
 				result=null; result1=null// Memory clean
             } catch (err) {
                 console.warn(err);
-                localStorage.clear();
+                sessionStorage.clear();
             }
-
 
 
 /*
@@ -584,16 +586,17 @@ var simpl_array=simplify(full_array,0.1,1);
 */
 
 
-
 	StravaStreams = jsonResponse;	// store original Strava streams JSON response in a global variable
 
 
-            callback(this.getActivityCommonStats(), jsonResponse, this.getAthleteWeight(), hasPowerMeter);
-
+            callback( globalActivityStatsMap, globalActivityStreams, this.getAthleteWeight(), hasPowerMeter );
             jsonResponse = null; // Memory clean
+        }.bind(this) ); // ajax
+      }// if no cache
+    },  //function getActivityStream
+	//------------------------------------------------------
 
-        }.bind(this));
-    },
+
 
 
 

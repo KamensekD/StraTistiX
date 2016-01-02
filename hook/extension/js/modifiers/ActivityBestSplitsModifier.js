@@ -9,7 +9,7 @@ function ActivityBestSplitsModifier(activityId, userSettings, activityJson, hasP
     this.splitsConfiguration = splitsConfiguration;
     this.saveSplitsConfigrationMethod = saveSplitsConfigrationMethod || function() {};
     this.distanceUnit = ActivityBestSplitsModifier.Units.Kilometers;
-    this.cacheKeyPrefix = 'stravistix_bestsplit_' + this.activityId + '_';
+    this.cacheKeyPrefix = 'StraTistiX_bestsplit_' + this.activityId + '_';
 }
 
 ActivityBestSplitsModifier.Units = {

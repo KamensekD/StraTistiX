@@ -1,0 +1,28 @@
+- content.js
+
+- StravistiX.js		 178	function StravistiX(userSettings, appResources)
+
+					 190	= this.vacuumProcessor_.getAthleteId()...getActivityTime()	// first get basic about athlete and activity
+					 203    this.init_()
+
+						 238	init_: function init_()
+						 ...	handles menus, links,...
+
+					 291	this.handleExtendedActivityData_();
+					 
+						1050	handleExtendedActivityData_: function handleExtendedActivityData_()
+						
+						1077	this.activityProcessor_.getAnalysisData
+
+- ActivityProcessor.js		 111	getAnalysisData: function getAnalysisData(activityId, userGender, userRestHr, userMaxHr, userFTP, callback)
+
+1) ANALYSIS NOT IN CACHE:
+							 146	this.vacuumProcessor_.getActivityStream(function getActivityStream( activityStream, athleteWeight, hasPowerMeter )
+- VacuumProcessor.js		 512	getActivityStream: function getActivityStream(callback)
+1a) STREAMS NOT IN CACHE:
+
+
+
+2) ANALYSIS IN CACHE:
+
+

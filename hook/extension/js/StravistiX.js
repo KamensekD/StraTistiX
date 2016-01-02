@@ -20,6 +20,7 @@ https://www.strava.com/activities/423623105     Ride            (GPS)           
 
 https://www.strava.com/activities/122932386     Ride            (GPS, HR, cadence)              mostly down   My
 
+https://www.strava.com/activities/338896255     Ride            (GPS, power, HR, cadence, T)    flat          Marcel Wyss TdF TT
 https://www.strava.com/activities/339726290     Ride            (GPS, power, HR, cadence, T)    flat          Marcel Wyss TdF 2
 
 https://www.strava.com/activities/355194013     Ride            (GPS, power, HR, cadence, T)    mostly flat   Marcel Wyss TdF 21
@@ -126,6 +127,13 @@ this.parent
 
 $.browser
 
+this.VacuumProcessor.prototype.getActivityCommonStats()
+this.VacuumProcessor.prototype.getActivityCommonStats().movingTime
+this.VacuumProcessor.prototype.getActivityCommonStats().elapsedTime
+
+activityProcessor.activityStream      - streams					   - accessible if not cached
+activityProcessor.activityStatsMap    - common stats (from vacuum) - accessible if not cached
+
 this.stravistiX			this.StravistiX
 this.stravistiX.userSettings_
 this.stravistiX.vacuumProcessor_.getActivityCommonStats()
@@ -174,9 +182,12 @@ env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee
         this.appResources_              = appResources;
         this.extensionId_               = this.appResources_.extensionId;
 
+
         this.vacuumProcessor_           = new VacuumProcessor();
         this.activityProcessor_         = new ActivityProcessor(this.vacuumProcessor_, this.userSettings_.userHrrZones, this.userSettings_.zones);
 
+
+// first get basic about athlete and activity
         this.athleteId_                 = this.vacuumProcessor_.getAthleteId();
         this.athleteName_               = this.vacuumProcessor_.getAthleteName();
         this.athleteIdAuthorOfActivity_ = this.vacuumProcessor_.getAthleteIdAuthorOfActivity();
@@ -208,6 +219,8 @@ env.debugMode>0   && console.log("--------------------");
 StravistiX.getFromStorageMethod = 'getFromStorage';
 StravistiX.setToStorageMethod = 'setToStorage';
 StravistiX.defaultIntervalTimeMillis = 750;
+
+
 
 
 
@@ -272,9 +285,13 @@ env.debugMode>0   && console.warn('\n > (f: StravistiX.js) >   COMMON   < ' + ar
 
 
 
+
+
                 //
         this.handleExtendedActivityData_();
                 //
+
+
 
 
 
@@ -682,130 +699,6 @@ env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee
 
 
 
-
-
-//  --------------------------------------------------------------------------------------------------------------------
-    /**
-     *
-     */
-    handleExtendedActivityData_: function handleExtendedActivityData_() {
-env.debugMode>0   && console.warn(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
-
-        if (_.isUndefined(window.pageView)) {
-            return;
-        }
-
-// without var -> global scope (window.activityType)
-        activityType = pageView.activity().get('type');
-//        var activityType = pageView.activity().get('type');
-
-        // Skip manual activities
-        if (activityType === 'Manual') {
-env.debugMode>0   && console.log("--- StravistiX.js skip Manual activity: " + activityType);
-            return;
-        }
-
-
-
-
-
-        this.activityProcessor_.setActivityType(activityType);
-env.debugMode>0   && console.warn("--- StravistiX.js Getting activity data and analysing... ");
-
-
-
-//  ------------------------------------
-        this.activityProcessor_.getAnalysisData(
-            this.activityId_,
-            this.userSettings_.userGender,
-            this.userSettings_.userRestHr,
-            this.userSettings_.userMaxHr,
-            this.userSettings_.userFTP,
-
-            function getAnalysisData (analysisData) { // Callback when analysis data has been computed
-env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
-
-                var extendedActivityDataModifier = null;
-                var basicInfos = {
-                    activityName: this.vacuumProcessor_.getActivityName(),
-                    activityTime: this.vacuumProcessor_.getActivityTime()
-                }
-
-
-                // write activity type on page for all except Ride/Run activities
-//                if ( (activityType !== "Ride") && (activityType !== "Run") ) {
-//                        var html = '<div  style="padding: 0px 0px 0px 0px;background: #FFFFFF;font-size: 9px;color: rgb(103, 103, 103);">&nbsp&nbsp&nbspActivity type: '+window.pageView.activity().attributes.type+'</div>';
-//                        $('.inset').parent().children().first().before(html);
-        var html = '';
-        if (this.isPremium_)    html += '<div  style="line-height:90%; padding: 0px 0px 0px 22px;';
-        else            html += '<div  style="line-height:90%; padding: 0px 0px 0px 0px;';
-                html += 'font-size: 8px;color: rgb(180, 180, 180);">Activity type:   - <strong>'+window.pageView.activity().attributes.type+'</strong> -</div>';
-                    $(".js-activity-privacy").after(html);
-//                    $('.title').after(html);
-//                }
-
-
-env.debugMode>0   && console.log("--- StravistiX.js switch (activityType): " + activityType);
-                switch (activityType) {
-
-
-
-                    case 'Ride':
-                        extendedActivityDataModifier = new CyclingExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_, basicInfos);
-                        break;
-
-
-                    case 'Run':
-                        extendedActivityDataModifier = new RunningExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_, basicInfos);
-                        break;
-
-
-                    case 'StationaryOther':
-                    // for Workout, Rowing,...
-                        extendedActivityDataModifier = new GenericExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_, basicInfos);
-                        break;
-
-
-                    case 'Swim':
-                    // for Swimming,...
-                        extendedActivityDataModifier = new GenericExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_, basicInfos);
-                        break;
-
-
-                    default:
-                        // extendedActivityDataModifier = new GenericExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_); // DELAYED_FOR_TESTING
-                        var html = '<p style="padding: 10px;background: #FFF0A0;font-size: 12px;color: rgb(103, 103, 103);">StraTistiX don\'t support <strong>Extended Data Features</strong> for this type of activity at the moment.</br></p>';
-                        $('.inline-stats.section').parent().children().last().after(html);
-                        break;
-                }// switch
-
-                if (extendedActivityDataModifier) {
-                    extendedActivityDataModifier.modify();
-                                                        
-                }
-
-            }.bind(this)  // getAnalysisData                    //!?!? check !?!?
-        );// this.activityProcessor_.getAnalysisData    //!?!? check !?!?
-//  ------------------------------------
-
-
-
-        // Send opened activity type to ga for stats
-        var updatedToEvent = {
-            categorie: 'Analyse',
-            action: 'openedActivityType',
-            name: activityType
-        };
-        _spTrack('send', 'event', updatedToEvent.categorie, updatedToEvent.action, updatedToEvent.name);
-    },// handleExtendedActivityData
-    /**
-     *
-     */
-//  --------------------------------------------------------------------------------------------------------------------
-
-
-
-
     /**
      *
      */
@@ -1144,7 +1037,129 @@ env.debugMode>0   && console.log("Cookie 'stravistix_daily_connection_done' not 
 env.debugMode>0   && console.log("Cookie 'stravistix_daily_connection_done' exist, DO NOT TRACK IncomingConnection");
 
         }
-    }
+    },
+
+
+
+
+
+//  --------------------------------------------------------------------------------------------------------------------
+    /**
+     *
+     */
+    handleExtendedActivityData_: function handleExtendedActivityData_() {
+env.debugMode>0   && console.warn(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+
+        if (_.isUndefined(window.pageView)) {
+            return;
+        }
+
+// without var -> global scope (window.activityType)
+        activityType = pageView.activity().get('type');		// move into "// first get basic about athlete and activity" section
+//        var activityType = pageView.activity().get('type');
+
+        // Skip manual activities
+        if (activityType === 'Manual') {
+env.debugMode>0   && console.log("--- StravistiX.js skip Manual activity: " + activityType);
+            return;
+        }
+
+
+
+        this.activityProcessor_.setActivityType(activityType);
+env.debugMode>0   && console.warn("--- StravistiX.js Getting activity data and analysing... ");
+
+
+
+
+
+//  ------------------------------------
+        this.activityProcessor_.getAnalysisData(
+            this.activityId_,
+            this.userSettings_.userGender,
+            this.userSettings_.userRestHr,
+            this.userSettings_.userMaxHr,
+            this.userSettings_.userFTP,
+
+            function getAnalysisData (analysisData) { // Callback when analysis data has been computed
+env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+
+                var extendedActivityDataModifier = null;
+                var basicInfos = {
+//                    activityName: this.vacuumProcessor_.getActivityName(),
+//                    activityTime: this.vacuumProcessor_.getActivityTime()
+                    activityName: this.activityName_,
+                    activityTime: this.activityTime_
+                }
+
+                // write activity type on page for all except Ride/Run activities
+	        	var html = '';
+    	    	if (this.isPremium_)    html += '<div  style="line-height:90%; padding: 0px 0px 0px 22px;';
+        		else            		html += '<div  style="line-height:90%; padding: 0px 0px 0px 0px;';
+                html += 'font-size: 8px;color: rgb(180, 180, 180);">Activity type:   - <strong>'+window.pageView.activity().attributes.type+'</strong> -</div>';
+                $(".js-activity-privacy").after(html);
+
+env.debugMode>0   && console.log("--- StravistiX.js switch (activityType): " + activityType);
+                switch (activityType) {
+
+
+                    case 'Ride':
+                        extendedActivityDataModifier = new CyclingExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_, basicInfos);
+                        break;
+
+
+                    case 'Run':
+                        extendedActivityDataModifier = new RunningExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_, basicInfos);
+                        break;
+
+
+                    case 'StationaryOther':
+                    // for Workout, Rowing,...
+                        extendedActivityDataModifier = new GenericExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_, basicInfos);
+                        break;
+
+
+                    case 'Swim':
+                    // for Swimming,...
+                        extendedActivityDataModifier = new GenericExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_, basicInfos);
+                        break;
+
+
+                    default:
+                        // extendedActivityDataModifier = new GenericExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_); // DELAYED_FOR_TESTING
+                        var html = '<p style="padding: 10px;background: #FFF0A0;font-size: 12px;color: rgb(103, 103, 103);">StraTistiX don\'t support <strong>Extended Data Features</strong> for this type of activity at the moment.</br></p>';
+                        $('.inline-stats.section').parent().children().last().after(html);
+                        break;
+
+
+                }// switch
+
+                if (extendedActivityDataModifier) {
+                    extendedActivityDataModifier.modify();
+                }
+
+            }.bind(this)  // getAnalysisData
+        );// this.activityProcessor_.getAnalysisData
+//  ------------------------------------
+
+
+
+
+
+        // Send opened activity type to ga for stats
+        var updatedToEvent = {
+            categorie: 'Analyse',
+            action: 'openedActivityType',
+            name: activityType
+        };
+        _spTrack('send', 'event', updatedToEvent.categorie, updatedToEvent.action, updatedToEvent.name);
+    }// handleExtendedActivityData
+    /**
+     *
+     */
+//  --------------------------------------------------------------------------------------------------------------------
+
+
 
 
 

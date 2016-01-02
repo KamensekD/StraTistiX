@@ -6,7 +6,7 @@ function SegmentProcessor(vacuumProcessor, segmentId) {
     this.segmentId_ = segmentId;
 }
 
-SegmentProcessor.cachePrefix = 'stravistix_nearbySegments_';
+SegmentProcessor.cachePrefix = 'StraTistiX_nearbySegments_';
 
 /**
  * Define prototype

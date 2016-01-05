@@ -289,6 +289,9 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 		$('#extendedStatsButton').click(function() {
 
 			$.fancybox({
+				'autoSize' : false,
+				'fitToView'	: true,
+				'maxWidth'	: 1150,
 				'width': '100%',
 				'height': '100%',
 				'autoScale': true,

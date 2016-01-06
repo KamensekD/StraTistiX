@@ -111,6 +111,9 @@ Row: (on trainer)
 https://www.strava.com/activities/269549200     StationaryOther (HR, cadence)
 
 
+Backcountry Ski
+~~~~~~~~~~~~~~~~~
+https://www.strava.com/activities/463519034
 
 
 
@@ -196,6 +199,8 @@ env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee
         this.activityId_                = this.vacuumProcessor_.getActivityId();
         this.activityName_              = this.vacuumProcessor_.getActivityName();
         this.activityTime_              = this.vacuumProcessor_.getActivityTime();
+
+		this.activityType_				= this.vacuumProcessor_.getActivityType();
 
 
 
@@ -1054,9 +1059,12 @@ env.debugMode>0   && console.warn(' > (f: StravistiX.js) >   ' + arguments.calle
             return;
         }
 
-// without var -> global scope (window.activityType)
-        activityType = pageView.activity().get('type');		// move into "// first get basic about athlete and activity" section
-//        var activityType = pageView.activity().get('type');
+
+
+		activityType = this.activityType_.type;
+		activitySubType = this.activityType_.subtype;
+
+
 
         // Skip manual activities
         if (activityType === 'Manual') {
@@ -1123,6 +1131,18 @@ env.debugMode>0   && console.log("--- StravistiX.js switch (activityType): " + a
                     // for Swimming,...
                         extendedActivityDataModifier = new GenericExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_, basicInfos);
                         break;
+
+
+
+                    case 'Other':
+                    // for example Backcountry ski,...
+		                switch (activitySubType) {
+				            case 'Backcountry Ski':
+                        	extendedActivityDataModifier = new RunningExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_, basicInfos);
+	                        break;
+						}//switch
+                        break;
+
 
 
                     default:

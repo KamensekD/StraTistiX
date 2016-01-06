@@ -184,6 +184,29 @@ if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.cal
 
 
 
+    /**
+     *  ...
+     *  @returns ActivityType and ActivitySubType
+     */
+    getActivityType: function getActivityType() {
+if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
+
+		// get activity main type
+        activityType = pageView.activity().get('type');
+
+		// get activity sub type
+//		var tmp=$(".title:contains('"+currentAthlete.get('display_name')+"')").text().split(String.fromCharCode(10)+String.fromCharCode(8211)+String.fromCharCode(10));
+		var tmp=$(".title:contains('"+window.pageView.activityAthlete().attributes.display_name+"')").text().split(String.fromCharCode(10)+String.fromCharCode(8211)+String.fromCharCode(10));
+		activitySubType = tmp[tmp.length-1].slice(0, -1);
+
+		return {
+        	type: 		activityType,
+        	subtype: 	activitySubType
+    	};
+    },
+
+
+
 
 
 

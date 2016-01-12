@@ -190,19 +190,40 @@ env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee
         this.activityProcessor_         = new ActivityProcessor(this.vacuumProcessor_, this.userSettings_.userHrrZones, this.userSettings_.zones);
 
 
-// first get basic info about athlete
+		// first get basic info about athlete
         this.athleteId_                 = this.vacuumProcessor_.getAthleteId();
         this.athleteName_               = this.vacuumProcessor_.getAthleteName();
         this.isPremium_                 = this.vacuumProcessor_.getPremiumStatus();
         this.isPro_                     = this.vacuumProcessor_.getProStatus();
 
-// get basic activity info only if we're on activity page
+
+
 	if (window.location.pathname.match(/^\/activities/)) {
-        this.athleteIdAuthorOfActivity_ = this.vacuumProcessor_.getAthleteIdAuthorOfActivity();
+env.debugMode>0   && console.warn("----------------------------   Activity Page");
+
+
+
+		// get basic activity info only if we're on activity page
+//        this.athleteIdAuthorOfActivity_ = this.vacuumProcessor_.getAthleteIdAuthorOfActivity();
+        this.activityAthleteId_ = this.vacuumProcessor_.getAthleteIdAuthorOfActivity();
         this.activityId_                = this.vacuumProcessor_.getActivityId();
         this.activityName_              = this.vacuumProcessor_.getActivityName();
         this.activityTime_              = this.vacuumProcessor_.getActivityTime();
 		this.activityType_				= this.vacuumProcessor_.getActivityType();
+
+if (env.debugMode>0 && (typeof pageView !== 'undefined')) console.warn( "Activity: " + pageView.activity().get('type') + " (" + pageView.activity().get('id') + ")" );
+if (env.debugMode>0 && (typeof pageView !== 'undefined')) if( pageView.activityAthlete() != null ) console.warn( "Athlete:  " + pageView.activityAthlete().get('display_name') + " (" + pageView.activityAthlete().get('id') + ")" );
+env.debugMode>0   && console.warn("-----------------------");
+
+
+
+	} else if (window.location.pathname.match(/^\/segments/)) {
+env.debugMode>0   && console.warn("-----------------------        Segments Page");
+
+
+
+	} else {
+env.debugMode>0   && console.warn("-----------------------");
 	}
 
 
@@ -212,10 +233,6 @@ env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee
     
 
 
-env.debugMode>0   && console.log("--------------------");
-if (env.debugMode && (typeof pageView !== 'undefined')) console.warn( "Activity: " + pageView.activity().get('type') + " (" + pageView.activity().get('id') + ")" );
-if (env.debugMode && (typeof pageView !== 'undefined')) if( pageView.activityAthlete() != null ) console.warn( "Athlete:  " + pageView.activityAthlete().get('display_name') + " (" + pageView.activityAthlete().get('id') + ")" );
-env.debugMode>0   && console.log("--------------------");
 } // StravistiX
 
 
@@ -516,7 +533,7 @@ env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee
             return;
         }
 
-        var remoteLinksModifier = new RemoteLinksModifier(this.userSettings_.highLightStravistiXFeature, this.appResources_, (this.athleteIdAuthorOfActivity_ === this.athleteId_), this.userSettings_.customMapboxStyle);
+        var remoteLinksModifier = new RemoteLinksModifier(this.userSettings_.highLightStravistiXFeature, this.appResources_, (this.activityAthleteId_ === this.athleteId_), this.userSettings_.customMapboxStyle);
         remoteLinksModifier.modify();
     },
 
@@ -764,7 +781,7 @@ env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee
             return;
         }
 
-        var bikeOdoProcessor = new BikeOdoProcessor(this.vacuumProcessor_, this.athleteIdAuthorOfActivity_);
+        var bikeOdoProcessor = new BikeOdoProcessor(this.vacuumProcessor_, this.activityAthleteId_);
         bikeOdoProcessor.getBikeOdoOfAthlete(function(bikeOdoArray) {
 
             var activityBikeOdoModifier = new ActivityBikeOdoModifier(bikeOdoArray, bikeOdoProcessor.getCacheKey());
@@ -796,7 +813,7 @@ env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee
         }
 
         // Only for own activities
-        if (this.athleteId_ != this.athleteIdAuthorOfActivity_) {
+        if (this.athleteId_ != this.activityAthleteId_) {
             return;
         }
 
@@ -1115,24 +1132,24 @@ env.debugMode>0   && console.log("--- StravistiX.js switch (activityType): " + a
 
 
                     case 'Ride':
-                        extendedActivityDataModifier = new CyclingExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_, basicInfos);
+                        extendedActivityDataModifier = new CyclingExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.activityAthleteId_, basicInfos);
                         break;
 
 
                     case 'Run':
-                        extendedActivityDataModifier = new RunningExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_, basicInfos);
+                        extendedActivityDataModifier = new RunningExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.activityAthleteId_, basicInfos);
                         break;
 
 
                     case 'StationaryOther':
                     // for Workout, Rowing,...
-                        extendedActivityDataModifier = new GenericExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_, basicInfos);
+                        extendedActivityDataModifier = new GenericExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.activityAthleteId_, basicInfos);
                         break;
 
 
                     case 'Swim':
                     // for Swimming,...
-                        extendedActivityDataModifier = new GenericExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_, basicInfos);
+                        extendedActivityDataModifier = new GenericExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.activityAthleteId_, basicInfos);
                         break;
 
 
@@ -1141,7 +1158,7 @@ env.debugMode>0   && console.log("--- StravistiX.js switch (activityType): " + a
                     // for example Backcountry ski,...
 		                switch (activitySubType) {
 				            case 'Backcountry Ski':
-                        	extendedActivityDataModifier = new RunningExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_, basicInfos);
+                        	extendedActivityDataModifier = new RunningExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.activityAthleteId_, basicInfos);
 	                        break;
 						}//switch
                         break;
@@ -1149,7 +1166,7 @@ env.debugMode>0   && console.log("--- StravistiX.js switch (activityType): " + a
 
 
                     default:
-                        // extendedActivityDataModifier = new GenericExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.athleteIdAuthorOfActivity_); // DELAYED_FOR_TESTING
+                        // extendedActivityDataModifier = new GenericExtendedActivityDataModifier(analysisData, this.appResources_, this.userSettings_, this.athleteId_, this.activityAthleteId_); // DELAYED_FOR_TESTING
                         var html = '<p style="padding: 10px;background: #FFF0A0;font-size: 12px;color: rgb(103, 103, 103);">StraTistiX don\'t support <strong>Extended Data Features</strong> for this type of activity at the moment.</br></p>';
                         $('.inline-stats.section').parent().children().last().after(html);
                         break;

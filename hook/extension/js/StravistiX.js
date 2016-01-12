@@ -190,17 +190,20 @@ env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee
         this.activityProcessor_         = new ActivityProcessor(this.vacuumProcessor_, this.userSettings_.userHrrZones, this.userSettings_.zones);
 
 
-// first get basic about athlete and activity
+// first get basic info about athlete
         this.athleteId_                 = this.vacuumProcessor_.getAthleteId();
         this.athleteName_               = this.vacuumProcessor_.getAthleteName();
-        this.athleteIdAuthorOfActivity_ = this.vacuumProcessor_.getAthleteIdAuthorOfActivity();
         this.isPremium_                 = this.vacuumProcessor_.getPremiumStatus();
         this.isPro_                     = this.vacuumProcessor_.getProStatus();
+
+// get basic activity info only if we're on activity page
+	if (window.location.pathname.match(/^\/activities/)) {
+        this.athleteIdAuthorOfActivity_ = this.vacuumProcessor_.getAthleteIdAuthorOfActivity();
         this.activityId_                = this.vacuumProcessor_.getActivityId();
         this.activityName_              = this.vacuumProcessor_.getActivityName();
         this.activityTime_              = this.vacuumProcessor_.getActivityTime();
-
 		this.activityType_				= this.vacuumProcessor_.getActivityType();
+	}
 
 
 
@@ -332,7 +335,7 @@ env.debugMode>0   && console.warn(' > (f: StravistiX.js) >   FINAL   < ' + argum
 
 
 
-    }, //_init
+    }, // init_
     /**
      *
      */

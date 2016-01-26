@@ -77,7 +77,7 @@ var PaceDataView = AbstractDataView.extend(function(base) {
             this.insertContentAtGridPosition(2, 4, (this.paceData.upperQuartileSpeed * speedUnitFactor).toFixed(1), '75% Quartile Speed', speedUnitPerhour, 'displayAdvancedSpeedData');
 
 			if (this.paceData.standardDeviationSpeed) this.insertContentAtGridPosition(1, 5, (this.paceData.standardDeviationSpeed * speedUnitFactor).toFixed(1), 'Std Deviation &sigma;', speedUnitPerhour, 'displayAdvancedSpeedData');
-            this.insertContentAtGridPosition(2, 5, this.paceData.percentile99Speed.toFixed(1), '99% percentile Speed', this.units, 'displayAdvancedSpeedData');
+            this.insertContentAtGridPosition(2, 5, this.paceData.percentile99Speed.toFixed(1), '99% percentile Speed', speedUnitPerhour, 'displayAdvancedSpeedData');
 
 
 

@@ -266,7 +266,7 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 			html += '<td>UP<br>'
 				+(this.analysisData_.gradeData.upFlatDownInMeters.up / this.analysisData_.gradeData.upFlatDownInMeters.total * 100).toFixed(0)
 				+' / '+(this.analysisData_.gradeData.upFlatDownInSeconds.up / this.analysisData_.gradeData.upFlatDownInSeconds.total * 100).toFixed(0)+'</td>';
-			html += '<td>UPgrade avg<br>'+this.analysisData_.gradeData.upAvgGradeEstimate.toFixed(1)+'% (est.)</td></tr>';
+			html += '<td>avgGradeUP<br>'+this.analysisData_.gradeData.upAvgGradeEstimate.toFixed(1)+'% (est.)</td></tr>';
 		};
 
 		html += '</table></a></div>';

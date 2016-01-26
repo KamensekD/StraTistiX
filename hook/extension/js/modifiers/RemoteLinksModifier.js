@@ -84,7 +84,7 @@ RemoteLinksModifier.prototype = {
                  htmlRemoteView += "</span></li>";
 			}
 			//
-            // mapflipper
+            // mapflipper (main view)			*** check   https://regex101.com/r/yA9jX1/1
             //
             else if (this[2] == 'mapflipper') {
 
@@ -92,15 +92,15 @@ RemoteLinksModifier.prototype = {
 
                 htmlRemoteView += "<span style='color: #333; padding-left: 30px'>";
 
-                htmlRemoteView += '<img onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)\\.png/,\'http://tile.openstreetmap.org/$1/$2/$3.png\');})},1000)}"   title="Open Street Map" width="20px" src="' + this[6]+ '"/>';
+                htmlRemoteView += '<img onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)(.*)?png/,\'http://tile.openstreetmap.org/$1/$2/$3.png\');})},1000)}"   title="Open Street Map" width="20px" src="' + this[6]+ '"/>';
 
-                htmlRemoteView += '&nbsp<img onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)\\.png/,\'https://tile.thunderforest.com/cycle/$1/$2/$3.png\');})},1000)}"   title="Open Cycle Map" width="20px" src="' + this[3]+ '"/>';
+                htmlRemoteView += '&nbsp<img onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)(.*)?png/,\'https://tile.thunderforest.com/cycle/$1/$2/$3.png\');})},1000)}"   title="Open Cycle Map" width="20px" src="' + this[3]+ '"/>';
 
-                htmlRemoteView += '<img onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)\\.png/,\'https://tile.thunderforest.com/landscape/$1/$2/$3.png\');})},1000)}"   title="Open Cycle Map Landscape" width="20px" src="' + this[4]+ '"/>';
+                htmlRemoteView += '<img onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)(.*)?png/,\'https://tile.thunderforest.com/landscape/$1/$2/$3.png\');})},1000)}"   title="Open Cycle Map Landscape" width="20px" src="' + this[4]+ '"/>';
 
-                htmlRemoteView += '<img onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)\\.png/,\'https://tile.thunderforest.com/outdoors/$1/$2/$3.png\');})},1000)}"   title="Open Cycle Map Outdoors" width="20px" src="' + this[5]+ '"/>';
+                htmlRemoteView += '<img onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)(.*)?png/,\'https://tile.thunderforest.com/outdoors/$1/$2/$3.png\');})},1000)}"   title="Open Cycle Map Outdoors" width="20px" src="' + this[5]+ '"/>';
 
-                htmlRemoteView += '&nbsp<img onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)\\.png/,\'https://tiles.wmflabs.org/hikebike/$1/$2/$3.png\');})},1000)}"   title="Hike Bike Map" width="20px" src="' + this[8]+ '"/>';
+                htmlRemoteView += '&nbsp<img onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)(.*)?png/,\'https://tiles.wmflabs.org/hikebike/$1/$2/$3.png\');})},1000)}"   title="Hike Bike Map" width="20px" src="' + this[8]+ '"/>';
                 htmlRemoteView += "</span></li>";
 
                 htmlRemoteView += "<span style='color: #333; padding-left: 30px'>";
@@ -368,7 +368,7 @@ RemoteLinksModifier.prototype = {
         $.each(remoteViewSegmentLinksArray, function() {
             htmlRemoteViewS += "<li>";
 			//
-            // mapflipper
+            // mapflipper (Segment view)
             //
             if (this[2] == 'mapflipper') {
                 htmlRemoteViewS += '<li><a title="Click here to disable MapFlipper!" data-menu="" style="color: #333; padding-bottom: 0px; vertical-align:middle" onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){};document.getElementById(\'map-type-control\').getElementsByTagName(\'li\')[1].getElementsByTagName(\'a\')[0].click();document.getElementById(\'map-type-control\').getElementsByTagName(\'li\')[1].getElementsByTagName(\'a\')[0].click()}">' + this[0] + '</a></li>';
@@ -379,15 +379,15 @@ RemoteLinksModifier.prototype = {
 
 				htmlRemoteViewS += '<span id="show_in_GM"></span>';
 
-                htmlRemoteViewS += '<img style="vertical-align:middle" onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)\\.png/,\'http://tile.openstreetmap.org/$1/$2/$3.png\');})},1000)}"   title="Open Street Map" width="24px" src="' + this[6]+ '"/>';
+                htmlRemoteViewS += '<img style="vertical-align:middle" onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)(.*)?png/,\'http://tile.openstreetmap.org/$1/$2/$3.png\');})},1000)}"   title="Open Street Map" width="24px" src="' + this[6]+ '"/>';
 
-                htmlRemoteViewS += '<img style="vertical-align:middle" onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)\\.png/,\'https://tile.thunderforest.com/cycle/$1/$2/$3.png\');})},1000)}"   title="Open Cycle Map" width="24px" src="' + this[3]+ '"/>';
+                htmlRemoteViewS += '<img style="vertical-align:middle" onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)(.*)?png/,\'https://tile.thunderforest.com/cycle/$1/$2/$3.png\');})},1000)}"   title="Open Cycle Map" width="24px" src="' + this[3]+ '"/>';
 
-                htmlRemoteViewS += '<img style="vertical-align:middle" onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)\\.png/,\'https://tile.thunderforest.com/landscape/$1/$2/$3.png\');})},1000)}"   title="Open Cycle Map Landscape" width="24px" src="' + this[4]+ '"/>';
+                htmlRemoteViewS += '<img style="vertical-align:middle" onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)(.*)?png/,\'https://tile.thunderforest.com/landscape/$1/$2/$3.png\');})},1000)}"   title="Open Cycle Map Landscape" width="24px" src="' + this[4]+ '"/>';
 
-                htmlRemoteViewS += '<img style="vertical-align:middle" onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)\\.png/,\'https://tile.thunderforest.com/outdoors/$1/$2/$3.png\');})},1000)}"   title="Open Cycle Map Outdoors" width="24px" src="' + this[5]+ '"/>';
+                htmlRemoteViewS += '<img style="vertical-align:middle" onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)(.*)?png/,\'https://tile.thunderforest.com/outdoors/$1/$2/$3.png\');})},1000)}"   title="Open Cycle Map Outdoors" width="24px" src="' + this[5]+ '"/>';
 
-                htmlRemoteViewS += '<img style="vertical-align:middle" onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)\\.png/,\'https://tiles.wmflabs.org/hikebike/$1/$2/$3.png\');})},1000)}"   title="Hike Bike Map" width="24px" src="' + this[8]+ '"/>';
+                htmlRemoteViewS += '<img style="vertical-align:middle" onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)(.*)?png/,\'https://tiles.wmflabs.org/hikebike/$1/$2/$3.png\');})},1000)}"   title="Hike Bike Map" width="24px" src="' + this[8]+ '"/>';
                 htmlRemoteViewS += "</span></li>";
 
                 htmlRemoteViewS += "<span style='color: #333; padding-left: 30px'>";
@@ -447,7 +447,7 @@ RemoteLinksModifier.prototype = {
         $.each(remoteCreateSegmentLinksArray, function() {
             htmlRemoteViewS += "<li>";
 			//
-            // mapflipper
+            // mapflipper (Create segment view)
             //
             if (this[2] == 'mapflipper') {
                 htmlRemoteViewS += '<br><li><a title="Click here to disable MapFlipper and reset to satellite view!" data-menu="" style="color: #333; padding-bottom: 0px; vertical-align:middle" onclick="{vvmf_on=0;try{clearInterval(vv_t)}catch(e){}};$(\'div[title~=\\\'Show\\\']\')[0].click(); setTimeout(function(){$(\'div[title~=\\\'Show\\\']\')[2].click()},200);">' + this[0] + '</a>&nbsp';
@@ -456,15 +456,15 @@ RemoteLinksModifier.prototype = {
 
                 htmlRemoteViewS += "<span style='color: #333; padding-left: 20px; vertical-align:middle'>";
 
-                htmlRemoteViewS += '<img style="vertical-align:middle" onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)\\.png/,\'http://tile.openstreetmap.org/$1/$2/$3.png\');})},1000)}"   title="Open Street Map" width="24px" src="' + this[6]+ '"/>';
+                htmlRemoteViewS += '<img style="vertical-align:middle" onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)(.*)?png/,\'http://tile.openstreetmap.org/$1/$2/$3.png\');})},1000)}"   title="Open Street Map" width="24px" src="' + this[6]+ '"/>';
 
-                htmlRemoteViewS += '<img style="vertical-align:middle" onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)\\.png/,\'https://tile.thunderforest.com/cycle/$1/$2/$3.png\');})},1000)}"   title="Open Cycle Map" width="24px" src="' + this[3]+ '"/>';
+                htmlRemoteViewS += '<img style="vertical-align:middle" onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)(.*)?png/,\'https://tile.thunderforest.com/cycle/$1/$2/$3.png\');})},1000)}"   title="Open Cycle Map" width="24px" src="' + this[3]+ '"/>';
 
-                htmlRemoteViewS += '<img style="vertical-align:middle" onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)\\.png/,\'https://tile.thunderforest.com/landscape/$1/$2/$3.png\');})},1000)}"   title="Open Cycle Map Landscape" width="24px" src="' + this[4]+ '"/>';
+                htmlRemoteViewS += '<img style="vertical-align:middle" onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)(.*)?png/,\'https://tile.thunderforest.com/landscape/$1/$2/$3.png\');})},1000)}"   title="Open Cycle Map Landscape" width="24px" src="' + this[4]+ '"/>';
 
-                htmlRemoteViewS += '<img style="vertical-align:middle" onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)\\.png/,\'https://tile.thunderforest.com/outdoors/$1/$2/$3.png\');})},1000)}"   title="Open Cycle Map Outdoors" width="24px" src="' + this[5]+ '"/>';
+                htmlRemoteViewS += '<img style="vertical-align:middle" onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)(.*)?png/,\'https://tile.thunderforest.com/outdoors/$1/$2/$3.png\');})},1000)}"   title="Open Cycle Map Outdoors" width="24px" src="' + this[5]+ '"/>';
 
-                htmlRemoteViewS += '<img style="vertical-align:middle" onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)\\.png/,\'https://tiles.wmflabs.org/hikebike/$1/$2/$3.png\');})},1000)}"   title="Hike Bike Map" width="24px" src="' + this[8]+ '"/>';
+                htmlRemoteViewS += '<img style="vertical-align:middle" onclick="if(window.mf_on==1){mf_on=0;try{clearInterval(mf)}catch(e){}}{mf_on=1;mf=setInterval(function() {d3.selectAll(\'#map_canvas img, #map-canvas img\').attr(\'src\',function(d){return this.src.replace(/.*\\/([0-9]*)\\/([0-9]*)\\/([0-9]*)(.*)?png/,\'https://tiles.wmflabs.org/hikebike/$1/$2/$3.png\');})},1000)}"   title="Hike Bike Map" width="24px" src="' + this[8]+ '"/>';
 
                 htmlRemoteViewS += "&nbsp&nbsp&nbsp*<font size=-4> Click VV to enable!</font></span></li>";
 

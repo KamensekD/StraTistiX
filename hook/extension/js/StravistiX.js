@@ -1075,7 +1075,7 @@ env.debugMode>0   && console.log("Cookie 'stravistix_daily_connection_done' exis
     handleExtendedActivityData_: function handleExtendedActivityData_() {
 env.debugMode>0   && console.warn(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
-        if (_.isUndefined(window.pageView)) {
+        if (_.isUndefined(window.pageView)) {	// check if Strava's activity data is available; if it is not -> exit
             return;
         }
 

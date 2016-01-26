@@ -538,7 +538,7 @@ if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.cal
 if (env.debugMode) console.log('>>>(f: VacuumProcessor.js) >   Try to read  -Activity '+this.getActivityId()+' Streams-  from cache/sessionStorage (' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + ')' )
       var cache = sessionStorage.getItem(VacuumProcessor.cachePrefix + this.getActivityId());
       if (cache) {
-if (env.debugMode) console.error('...   FOUND in cache - using cached Activity Streams   ...' );
+if (env.debugMode) console.error('...   Streams FOUND in cache - using cached Activity Streams   ...' );
 
 
             cache = JSON.parse(cache);
@@ -550,7 +550,7 @@ if (env.debugMode) console.error('...   FOUND in cache - using cached Activity S
             
 
       } else {
-if (env.debugMode) console.error('...   NOT in cache - getting Activity Streams from Strava   ...');
+if (env.debugMode) console.error('...   Streams NOT in cache - getting Activity Streams from Strava (async)   ...');
 //      }
 
 
@@ -558,6 +558,8 @@ if (env.debugMode) console.error('...   NOT in cache - getting Activity Streams 
         var url = "/activities/" + this.getActivityId() + "/streams";  // get all available streams for activity
 
         $.ajax(url).done( function ajax_done (jsonResponse) {
+
+if (env.debugMode) console.error('...   ajax_done - got back Activity Streams from Strava (async)   ...');
 
             var hasPowerMeter = true;
 
@@ -571,7 +573,14 @@ if (env.debugMode) console.error('...   NOT in cache - getting Activity Streams 
 if (env.debugMode) console.log('<<<(f: VacuumProcessor.js) >   Try to write  -Activity '+pageView.activityId()+' Streams-  to cache < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
             globalActivityStreams	= jsonResponse;						// set globalActivityStreams
+//            activityStreams	= jsonResponse;						// set globalActivityStreams
         	globalActivityStatsMap	= this.getActivityCommonStats();	// set globalActivityStatsMap
+//			activityCommonStats =  cacheResult.activityCommonStats;		// set globalActivityStatsMap from cache
+
+//		globalActivityStreams.altitude_smooth = ActivityProcessor.prototype.smoothAltitude_(globalActivityStreams, globalActivityStatsMap.elevation);
+// ??? if you do this here, you get error "Uncaught TypeError: Cannot read property '1' of undefined" in ActivityProcessor.js:989
+//														            deltaAltitude = altitudeArray[i] - altitudeArray[i - 1];	(   gradeData_: function gradeData_(...   )
+
 
             	var result = {
                     activityCommonStats:	globalActivityStatsMap,
@@ -732,6 +741,85 @@ if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.cal
             callback(bikeOdoArray);
         });
     },
+
+
+
+
+/// copied here from ActivityProcessor.js
+    /**
+     *
+     */
+    smoothAltitude_: function smoothAltitude(activityStream, stravaElevation) {
+if (env.debugMode) console.warn(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
+        var activityAltitudeArray = activityStream.altitude;
+        var distanceArray = activityStream.distance;  // for smoothing by distance
+//        var timeArray = activityStream.time;  // for smoothing by time
+
+//        if (!activityStream.altitude) {
+//            return null;
+//        }
+
+        var activityAltitudeArray = activityStream.altitude;
+        var distanceArray = activityStream.distance;
+        //  var timeArray = activityStream.time;  // for smoothing by time
+        var velocityArray = activityStream.velocity_smooth;
+        var smoothing;
+        var altitudeArray;
+        while (ActivityProcessor.smoothingH - ActivityProcessor.smoothingL >= 0.1) {    // max difference - defines how closely we should try to aproach Strava's elevation estimate
+            smoothing = ActivityProcessor.smoothingL + (ActivityProcessor.smoothingH - ActivityProcessor.smoothingL) / 2;
+            altitudeArray = this.lowPassDataSmoothing_(activityAltitudeArray, distanceArray, smoothing);    // smoothing by distance
+//            altitudeArray = this.lowPassDataSmoothing_(activityAltitudeArray, timeArray, smoothing);  // smoothing by time
+            var totalElevation = 0;
+            for (var i = 0; i < altitudeArray.length; i++) { // Loop on samples
+//                if (i > 0 && velocityArray[i] * 3.6 > ActivityProcessor.movingThresholdKph) {
+                    var elevationDiff = altitudeArray[i] - altitudeArray[i - 1];
+                    if (elevationDiff > 0) {
+                        totalElevation += elevationDiff;
+                    }
+//                }
+            }
+
+if (env.debugMode) console.log("          ...Altitude smoothing factor:" + smoothing.toFixed(2) + "   Strava Elev.: " + stravaElevation + "   Smoothed: " + totalElevation.toFixed(2) );
+            if (totalElevation < stravaElevation) { // might not always work as intended, as Strava elevation is too high estimate...
+                ActivityProcessor.smoothingH = smoothing;
+            } else {
+                ActivityProcessor.smoothingL = smoothing;
+            }
+        }
+        ActivityProcessor.smoothing = smoothing;
+        return altitudeArray;
+    },
+
+
+
+    /**
+     *
+     */
+    lowPassDataSmoothing_: function lowPassDataSmoothing_(data, distance, smoothing) {
+if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
+        // Below algorithm is applied in this method
+        // http://phrogz.net/js/framerate-independent-low-pass-filter.html
+        // value += (currentValue - value) / (smoothing / timeSinceLastSample);
+        // it is adapted for stability - if (smoothing / timeSinceLastSample) is less then 1, set it to 1 -> no smoothing for that sample
+        if (data && distance) {
+            var smooth_factor = 0;
+            var result = [];
+            result[0] = data[0];
+            for (i = 1, max = data.length; i < max; i++) {
+                if (smoothing === 0) {
+                    result[i] = data[i];
+                } else {
+                    smooth_factor = smoothing / (distance[i] - distance[i - 1]);
+                    // only apply filter if smooth_factor > 1, else this leads to instability !!!
+                    result[i] = result[i - 1] + (data[i] - result[i - 1]) / (smooth_factor > 1 ? smooth_factor : 1); // low limit smooth_factor to 1!!!
+                    // result[i] = result[i - 1] + (data[i] - result[i - 1]) / ( smooth_factor ); // no stability check
+                }
+            }
+            return result;
+        }
+    }
+
+
 
 
 

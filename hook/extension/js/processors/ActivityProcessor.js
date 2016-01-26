@@ -115,34 +115,50 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
             console.error('No activity type set for ActivityProcessor');
         }
 
+// no caching for analysis data (too much problems
+/*
         // Find in cache first if data exist
 if (env.debugMode) console.log('>>>(f: ActivityProcessor.js) >   Try to read  -Analysis Data-  from cache/localStorage (' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + ')' )
         var cacheResult = JSON.parse(localStorage.getItem(ActivityProcessor.cachePrefix + activityId));
                 if (cacheResult) {
-if (env.debugMode) console.error('...   FOUND in cache - using cached Analysis Data   ...' );
+if (env.debugMode) console.error('...   Analysis FOUND in cache - using cached Analysis Data   ...' );
                 } else {
-if (env.debugMode) console.error('...   NOT in cache - calculating Analysis Data   ...' );
+if (env.debugMode) console.error('...   Analysis NOT in cache - calculating Analysis Data   ...' );
                 }
-
+*/
                 
 //
 // got back cached analysis here	now we have to also read streams and statsmap from cache or strava !!! *****
 //
+///*
+
+
+//        this.vacuumProcessor_.getActivityStream( function getActivityStream( activityStatsMap, activityStream, athleteWeight, hasPowerMeter ) {}); // Get stream on page
+		
+//        }.bind(this));	// this.vacuumProcessor_.getActivityStream
+//*/
+
+// no caching for analysis data (too much problems
+/*
         if (!_.isNull(cacheResult) && env.useActivityStreamCache) {
 if (env.debugMode) console.log("Using existing activity cache in non debug mode: " + JSON.stringify(cacheResult));
 
             globalActivityStatsMap	= cacheResult.activityCommonStats;		// set globalActivityStatsMap from cache
+			activityCommonStats		= cacheResult.activityCommonStats;		// set globalActivityStatsMap from cache
             callback(cacheResult.analysisData);
             return;
         }
-
+*/
 
 //
-// Else no cache... then call VacuumProcessor for getting data, compute them and cache them
+// Else no cache... then call VacuumProcessor for getting data, compute them and // *not* cache them
 //
         userFTP = parseInt(userFTP);
 if (env.debugMode) console.warn('Executing   VacuumProcessor_.getActivityStream   from   ActivityProcessor.js');
 		// -------------------------------------------------        
+
+		globalActivityStatsMap	= this.vacuumProcessor_.getActivityCommonStats();	// set globalActivityStatsMap
+
         this.vacuumProcessor_.getActivityStream( function getActivityStream( activityStatsMap, activityStream, athleteWeight, hasPowerMeter ) { // Get stream on page
 
 
@@ -151,6 +167,7 @@ if (env.debugMode) console.warn('Executing   VacuumProcessor_.getActivityStream 
 			//
 //            globalActivityStreams	= activityStream;		// set globalActivityStreams from cache
 //            globalActivityStatsMap	= activityStatsMap;		// set globalActivityStatsMap from cache
+  //			activityCommonStats		= cacheResult.activityCommonStats;		// set globalActivityStatsMap from cache
             //
             //
 

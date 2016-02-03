@@ -542,7 +542,10 @@ if (env.debugMode) console.error('...   Streams FOUND in cache - using cached Ac
 
 
             cache = JSON.parse(cache);
+		if (typeof StravaStreams == "undefined") {	// don't reset the StravaStreams global variable from cache!
+//        if (Object.getOwnPropertyNames(StravaStreams).length==0) {
             StravaStreams=cache.stream;								// set StravaStreams from cache
+        }
 //            StravaActivityCommonStats=cache.activityCommonStats;	// set StravaActivityCommonStats from cache
 //            callback(cache.activityCommonStats, cache.stream, cache.athleteWeight, cache.hasPowerMeter);
             callback( cache.activityCommonStats, cache.stream, cache.athleteWeight, cache.hasPowerMeter);
@@ -603,8 +606,7 @@ if (env.debugMode) console.log('<<<(f: VacuumProcessor.js) >   Try to write  -Ac
 
 
                 sessionStorage.setItem(VacuumProcessor.cachePrefix + this.getActivityId(), JSON.stringify(result));
-if (env.debugMode) console.log('   > Written streams to cache/sessionstorage' );
-if (env.debugMode) console.log("\nWritten streams to cache/sessionstorage: " + VacuumProcessor.cachePrefix + this.getActivityId() + "\n\n" + JSON.stringify(result1) + "\n\n\n");
+if (env.debugMode) console.log("\nWritten Activity Common Stats and Streams to cache/sessionstorage: " + VacuumProcessor.cachePrefix + this.getActivityId() + "\n\n" + JSON.stringify(result1) + "\n\n");
 				result=null; result1=null// Memory clean
             } catch (err) {
                 console.warn(err);

@@ -182,7 +182,9 @@ if (env.debugMode) console.warn('Executing   VacuumProcessor_.getActivityStream 
                 analysisData: this.computeAnalysisData_(userGender, userRestHr, userMaxHr, userFTP, athleteWeight, hasPowerMeter, activityStatsMap, activityStream)
             };
 
+if (env.debugMode) console.log("\n\nActivity Common Stats and Analysis Data for ActivityID " + activityId + ":\n" + JSON.stringify(result) + "\n\n\n");
 
+/*
 if (env.debugMode) console.log('<<<(f: ActivityProcessor.js) >   Try to write  -Analysis Data-  to cache/localStorage (' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + ')' )
 
             try {
@@ -192,7 +194,8 @@ if (env.debugMode) console.log('<<<(f: ActivityProcessor.js) >   Try to write  -
                 localStorage.clear();
             }
 if (env.debugMode) console.log("\nWritten to cache/localstorage: " + ActivityProcessor.cachePrefix + activityId + "\n\n" + JSON.stringify(result) + "\n\n\n");
-            
+*/            
+
             callback(result.analysisData);
 
         }.bind(this));	// this.vacuumProcessor_.getActivityStream
@@ -275,6 +278,8 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         // Time Cadence
         // Crank revolution
         var cadenceData = this.cadenceData_(activityStream.cadence, activityStream.velocity_smooth, activityStatsMap, activityStream.time);
+// just temporary replace cadence with TRIMPPerHourpertime 
+//        var cadenceData = this.cadenceData_(activityStream.TRIMPPerHourpertime, activityStream.velocity_smooth, activityStatsMap, activityStream.time);
 
 
         // Avg grade
@@ -642,7 +647,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         }
 
 
-
+/*
         // if no velocity data, or very low average velocity
         // compute heartrate stats "the old way" - this is for activities either without GPS data or with GPS data, but done on (more or less) same spot
         if ( _.isEmpty(velocityArray) || ( velocity_avg < velocity_avgThreshold ) ) {
@@ -688,7 +693,6 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 
                 // TRIMP += durationInMinutes * heartRateReserveAvg * Math.pow(0.64, TRIMPGenderFactor * heartRateReserveAvg);
                 TRIMP += durationInMinutes * heartRateReserveAvg * 0.64 * Math.exp(TRIMPGenderFactor * heartRateReserveAvg);
-                                                                
                 // Count Heart Rate Reserve distribution
                 zoneId = this.getHrrZoneId(hrrZonesCount, heartRateReserveAvg * 100);
 
@@ -738,10 +742,14 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         } else {
         //
         // "NEW" WAY of calculating HR stats - only for "moving" part of activity
-
+*/
 
 
         var TRIMP = 0;
+		var TRIMPpertime = [];
+        TRIMPpertime[0] = 0;
+		var TRIMPPerHourpertime = [];	// use for TRIMP distribution graph
+        TRIMPPerHourpertime[0] = 0;
         var TRIMPGenderFactor = (userGender == 'men') ? 1.92 : 1.67;
         var aRPEeGenderFactor = (userGender == 'men') ? 25 : 20;
         var hrrSecondsCount = 0;
@@ -762,8 +770,20 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         }
 
         for (var i = 0; i < heartRateArray.length; i++) { // Loop on samples
-            if ( ( velocityArray[i] * 3.6 > ActivityProcessor.movingThresholdKph ) && i > 0 ) {
-                // Compute heartrate data while moving from now
+
+// after consideration removing "moving only" trimp calculation
+//
+// calculation TRIMP "only for moving" might not be right -> it is lowering your actual TRIMP and
+// making your TRIMPPerHour appear bigger.
+// Consider 2x 2.5 minute very hard run with 5 minutes pause in between (10 minutes workout) and compare it to
+//          2x 2.5 minute very hard run with no pause (5 minutes workout).
+// both runs will give you similar TRIMP; first one might be a bit bigger, but not much, since in pause HR is low
+// If you don't count in "pause time", you'll get a lot bigger TRIMPPerHour for first run, because for similar TRIMP
+// you'll divide with a lot shorter time, but in fact second run would "feel" a lot harder
+
+              // Compute heartrate data while moving from now
+//			if ( ( velocityArray[i] * 3.6 > ActivityProcessor.movingThresholdKph ) && i > 0 ) {
+            if ( i > 0 ) {
                 durationInSeconds = (timeArray[i] - timeArray[i - 1]); // Getting deltaTime in seconds (current sample and previous one)
                 // average over time
                 hrSum += this.valueForSum_(heartRateArray[i], heartRateArray[i - 1], durationInSeconds);
@@ -777,7 +797,10 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
                 heartRateReserveAvg = Helper.heartRateReserveFromHeartrate(hr, userMaxHr, userRestHr); //(hr - userSettings.userRestHr) / (userSettings.userMaxHr - userSettings.userRestHr);
                 durationInMinutes = durationInSeconds / 60;
 
+				TRIMPprev = TRIMP; // previous TRIMP value for calculation of TRIMPPerHourpertime
                 TRIMP += durationInMinutes * heartRateReserveAvg * 0.64 * Math.exp(TRIMPGenderFactor * heartRateReserveAvg);
+				TRIMPpertime[i]=TRIMP;
+				TRIMPPerHourpertime[i]=Math.round(   (TRIMP-TRIMPprev) * 60 * 60 / durationInSeconds  *10 )/10; // only 1 decimal place
 
                 // Count Heart Rate Reserve distribution
                 zoneId = this.getHrrZoneId(hrrZonesCount, heartRateReserveAvg * 100);
@@ -802,10 +825,16 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         var TRIMPPerHour = TRIMP / hrrSecondsCount * 60 * 60;
         var percentiles = Helper.weightedPercentiles(heartRateArrayMoving, heartRateArrayMovingDuration, [0.25, 0.5, 0.75]);
 
-        } //if
+//        } //if "the new way of TRIMP"
+
+	StravaStreams.TRIMPpertime=TRIMPpertime;
+	StravaStreams.TRIMPPerHourpertime=TRIMPPerHourpertime;
+
 
         return {
             'TRIMP': TRIMP,
+//            'TRIMPpertime': TRIMPpertime,
+//            'TRIMPPerHourpertime': TRIMPPerHourpertime,
 //              'TRIMP_hr': TRIMP_hr,
 //              'aRPEe': Math.round((TRIMP_hr / aRPEeGenderFactor)*10)/10,
                 'aRPEe': Math.round((TRIMPPerHour / aRPEeGenderFactor)*10)/10,

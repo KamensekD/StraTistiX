@@ -142,7 +142,7 @@ html+='<span style="font-size: 20px;font-family:verdana;line-height:0px;color: r
 html+='</div>';
 html+='</span>';
 html+='<span style="display: inline-block; vertical-align:middle">';
-html+='<canvas id="TRIMPchart" width="300" height="100"></canvas>';
+html+='<canvas id="TRIMPchart" width="300" height="100"  title="minutes spent in\neach aRPEe Zone"></canvas>';
 html+='</span>';
 html+='</div>';
 
@@ -192,17 +192,17 @@ var myDataMinutes=[
 
 
 var DATApie = [ 
-    { value: myData[0], color: "rgb(86,122,172)", highlight: "#555555", label: "1 [NIL]" },
-    { value: myData[1], color: "rgb(11,127,22)",  highlight: "#555555", label: "2 [R]" },
-    { value: myData[2], color: "rgb(133,195,0)",  highlight: "#555555", label: "3 [ER]" },
-    { value: myData[3], color: "rgb(255,244,0)",  highlight: "#555555", label: "4 [LM]" },
-    { value: myData[4], color: "rgb(255,190,0)",  highlight: "#555555", label: "5 [M]" },
-    { value: myData[5], color: "rgb(255,110,0)",  highlight: "#555555", label: "5.5 [UM]" },
-    { value: myData[6], color: "rgb(255,11,0)",   highlight: "#555555", label: "6 [H]" },
-    { value: myData[7], color: "rgb(222,0,0)",    highlight: "#555555", label: "7 [VH]" },
-    { value: myData[8], color: "rgb(190,0,0)",    highlight: "#555555", label: "8 [EH]" },
-    { value: myData[9], color: "rgb(166,0,0)",    highlight: "#555555", label: "9 [HaH]" },
-    { value: myData[10],color: "rgb(128,0,0)",    highlight: "#555555", label: "9+ [DeaD]" }
+    { value: myData[0], color: "rgb(86,122,172)", highlight: "rgba(220,220,220,0.75)", label: "1 [NIL]" },
+    { value: myData[1], color: "rgb(11,127,22)",  highlight: "rgba(220,220,220,0.75)", label: "2 [R]" },
+    { value: myData[2], color: "rgb(133,195,0)",  highlight: "rgba(220,220,220,0.75)", label: "3 [ER]" },
+    { value: myData[3], color: "rgb(255,244,0)",  highlight: "rgba(220,220,220,0.75)", label: "4 [LM]" },
+    { value: myData[4], color: "rgb(255,190,0)",  highlight: "rgba(220,220,220,0.75)", label: "5 [M]" },
+    { value: myData[5], color: "rgb(255,110,0)",  highlight: "rgba(220,220,220,0.75)", label: "5.5 [UM]" },
+    { value: myData[6], color: "rgb(255,11,0)",   highlight: "rgba(220,220,220,0.75)", label: "6 [H]" },
+    { value: myData[7], color: "rgb(222,0,0)",    highlight: "rgba(220,220,220,0.75)", label: "7 [VH]" },
+    { value: myData[8], color: "rgb(190,0,0)",    highlight: "rgba(220,220,220,0.75)", label: "8 [EH]" },
+    { value: myData[9], color: "rgb(166,0,0)",    highlight: "rgba(220,220,220,0.75)", label: "9 [HaH]" },
+    { value: myData[10],color: "rgb(128,0,0)",    highlight: "rgba(220,220,220,0.75)", label: "9+ [DeaD]" }
 ];
 
 
@@ -212,11 +212,12 @@ var DATAchart = {
         {
             label: "aRPEe Zones distribution in minutes",
 			fillColor: "rgba(220,180,180,0.2)",
-            strokeColor: "rgba(220,180,180,1)",
-            pointColor: "rgba(220,120,120,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(220,120,120,1)",
+            highlightFill: "rgba(220,220,220,0.75)",
+//            strokeColor: "rgba(220,180,180,1)",
+//            pointColor: "rgba(220,120,120,1)",
+//            pointStrokeColor: "#fff",
+//            pointHighlightFill: "#fff",
+//            pointHighlightStroke: "rgba(220,120,120,1)",
             data: myDataMinutes
         }
     ]
@@ -252,7 +253,21 @@ myTRIMPpie = new Chart(CTXpie).Doughnut(DATApie, myOPTpie);
 myTRIMPchart = new Chart(CTXchart).Bar(DATAchart, myOPTchart);
 //myTRIMPchart = new Chart(CTXchart).Line(DATAchart, myOPTchart);
 
-	
+// set custom bar's colors
+    myTRIMPchart.datasets[0].bars[0].fillColor = "rgb(86,122,172)";
+    myTRIMPchart.datasets[0].bars[1].fillColor = "rgb(11,127,22)"; 
+    myTRIMPchart.datasets[0].bars[2].fillColor = "rgb(133,195,0)"; 
+    myTRIMPchart.datasets[0].bars[3].fillColor = "rgb(255,244,0)"; 
+    myTRIMPchart.datasets[0].bars[4].fillColor = "rgb(255,190,0)"; 
+    myTRIMPchart.datasets[0].bars[5].fillColor = "rgb(255,110,0)"; 
+    myTRIMPchart.datasets[0].bars[6].fillColor = "rgb(255,11,0)";
+    myTRIMPchart.datasets[0].bars[7].fillColor = "rgb(222,0,0)";
+    myTRIMPchart.datasets[0].bars[8].fillColor = "rgb(190,0,0)";
+    myTRIMPchart.datasets[0].bars[9].fillColor = "rgb(166,0,0)";
+    myTRIMPchart.datasets[0].bars[10].fillColor ="rgb(128,0,0)";
+    myTRIMPchart.update();
+
+
 			function myRPE(val,full,wid){
 			if (env.debugMode) console.log("Execute myRPE");
 			// *** for women use correction factor!!! MAX TRIM for man is 4.37/min (262/h) and for woman 3.4/min (204/h) !!!

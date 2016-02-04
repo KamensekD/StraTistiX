@@ -72,7 +72,7 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 
 
 		// print TRIMP and aRPEe Score under inline-stats section
-		var html = '<div style="font-size: 15px; padding: 10px 0px 10px 0px; border-bottom: 0px; margin-bottom:4px;" id="histats">';
+		var html = '<div style="font-size: 15px; padding: 10px 0px 10px 0px; border-bottom: 0px solid #ccc; border-top: 1px solid #ccc; margin-bottom:4px;" id="histats">';
 
 		if (this.analysisData_.heartRateData != null) {
 			HRnote = "\n\n* Depends heavily on appropriate user MaxHR ("+this.analysisData_.heartRateData.MaxHr+") and RestHR ("+this.analysisData_.heartRateData.RestHr+") settings!";
@@ -114,17 +114,17 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 			var aRPEe=this.analysisData_.heartRateData.aRPEe;
 
 //			html+= '<div style="border-bottom: 1px solid #ccc; padding-bottom: 5px;">';
-			html+= '<div style="padding-bottom: 5px;">';
-			html+='<table style="margin:0px;" title="'+RPEnote+RPEnote1+HRnote+RPEnote2+RPEnote3+'"><tr><td width=50px style="padding:0px;">';
+			html+= '<div style="border-bottom: 0px solid #ccc;">';
+			html+='<table style="margin:0px;" title="'+RPEnote+RPEnote1+HRnote+RPEnote2+RPEnote3+'"><tr><td width=50px style="padding:0px;border-bottom: 0px;">';
 			html+='<img src="' + this.appResources_.aRPEeIcon + '" style="padding-top:4px"></td>';
-			html+='<td style="padding:0px;"><font style="font-size: 14px; vertical-align: middle;">';
+			html+='<td style="padding:0px;border-bottom: 0px;"><font style="font-size: 14px; vertical-align: middle;">';
 //			aRPEe=1;
 			if (aRPEe >= 9.5){	html+='<font style="color: rgb(128,0,0);"[DeaD]</font> Have You really had survived THAT!?!';
 			} else if (aRPEe >= 8.5) {	html+='<font style="color: rgb(128,0,0);">[HaH]</font> Hard as Hell!';
 			} else if (aRPEe >= 7.5) {	html+='<font style="color: rgb(204,0,0);">[EH]</font> Extremely Hard';
 			} else if (aRPEe >= 6.5) {	html+='<font style="color: rgb(255,0,0);">[VH]</font> Very Hard';
-			} else if (aRPEe >= 5.8) {	html+='<font style="color: rgb(255,51,0);">[H]</font> Hard';
-			} else if (aRPEe >= 5.3) {	html+='<font style="color: rgb(255,153,0);">[UM]</font> Upper Medium';
+			} else if (aRPEe >= 5.75){	html+='<font style="color: rgb(255,51,0);">[H]</font> Hard';
+			} else if (aRPEe >= 5.25){	html+='<font style="color: rgb(255,153,0);">[UM]</font> Upper Medium';
 			} else if (aRPEe >= 4.5) {	html+='<font style="color: rgb(255,192,0);">[M\]</font> Medium';
 			} else if (aRPEe >= 3.5) {	html+='<font style="color: rgb(200,200,0);">[LM]</font> Lower Medium';
 			} else if (aRPEe >= 2.5) {	html+='<font style="color: rgb(146,208,80);">[ER]</font> Easy-Recovery';
@@ -134,9 +134,125 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
                     
 			html+='</font></strong></td></tr></table></div>';
 
+html+='<div class="TRIMPcharts" align=left style="padding-bottom: 5px;border-bottom: 1px solid #ccc;">';
+html+='<span style="display: inline-block; vertical-align:">';
+html+='<canvas id="TRIMPpie" width="120" height="100"  title="% of Time spent in\neach aRPEe Zone"></canvas>';
+html+='<div class="donut-inner" style="margin-top: -61px; margin-left: 50px;">';
+html+='<span style="font-size: 20px;font-family:verdana;line-height:0px;color: rgba(100,100,100,0.5);">%</span>';
+html+='</div>';
+html+='</span>';
+html+='<span style="display: inline-block; vertical-align:middle">';
+html+='<canvas id="TRIMPchart" width="300" height="100"></canvas>';
+html+='</span>';
+html+='</div>';
+
 			$('.inline-stats.section').first().next().after(html);
 
+var CTXpie   = document.getElementById("TRIMPpie").getContext("2d");
+var CTXchart = document.getElementById("TRIMPchart").getContext("2d");
 
+
+//    chart online test
+//    http://jsfiddle.net/t3fjkmf1/
+//    http://jsfiddle.net/t3fjkmf1/7/
+
+
+var myData=[
+    Math.round( StravaStreams.TRIMPPerHourZones[0].percentDistrib ),
+    Math.round( StravaStreams.TRIMPPerHourZones[1].percentDistrib ),
+    Math.round( StravaStreams.TRIMPPerHourZones[2].percentDistrib ),
+    Math.round( StravaStreams.TRIMPPerHourZones[3].percentDistrib ),
+    Math.round( StravaStreams.TRIMPPerHourZones[4].percentDistrib ),
+    Math.round( StravaStreams.TRIMPPerHourZones[5].percentDistrib ),
+    Math.round( StravaStreams.TRIMPPerHourZones[6].percentDistrib ),
+    Math.round( StravaStreams.TRIMPPerHourZones[7].percentDistrib ),
+    Math.round( StravaStreams.TRIMPPerHourZones[8].percentDistrib ),
+    Math.round( StravaStreams.TRIMPPerHourZones[9].percentDistrib ),
+    Math.round( StravaStreams.TRIMPPerHourZones[10].percentDistrib)
+];
+
+var myDataMinutes=[
+    Math.round( StravaStreams.TRIMPPerHourZones[0].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
+    Math.round( StravaStreams.TRIMPPerHourZones[1].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
+    Math.round( StravaStreams.TRIMPPerHourZones[2].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
+    Math.round( StravaStreams.TRIMPPerHourZones[3].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
+    Math.round( StravaStreams.TRIMPPerHourZones[4].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
+    Math.round( StravaStreams.TRIMPPerHourZones[5].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
+    Math.round( StravaStreams.TRIMPPerHourZones[6].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
+    Math.round( StravaStreams.TRIMPPerHourZones[7].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
+    Math.round( StravaStreams.TRIMPPerHourZones[8].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
+    Math.round( StravaStreams.TRIMPPerHourZones[9].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
+    Math.round( StravaStreams.TRIMPPerHourZones[10].percentDistrib * globalActivityStatsMap.elapsedTime/6000)
+];
+
+// test data for chart
+//myData=[30,20,30,40,50,55,50,40,30,20,30];
+//myData=[5,10,15,10,5,10,5,10,15,10,5];
+//myData=[5,10,5,10,15,10,15,10,5,10,5];
+
+
+var DATApie = [ 
+    { value: myData[0], color: "rgb(86,122,172)", highlight: "#555555", label: "1 [NIL]" },
+    { value: myData[1], color: "rgb(11,127,22)",  highlight: "#555555", label: "2 [R]" },
+    { value: myData[2], color: "rgb(133,195,0)",  highlight: "#555555", label: "3 [ER]" },
+    { value: myData[3], color: "rgb(255,244,0)",  highlight: "#555555", label: "4 [LM]" },
+    { value: myData[4], color: "rgb(255,190,0)",  highlight: "#555555", label: "5 [M]" },
+    { value: myData[5], color: "rgb(255,110,0)",  highlight: "#555555", label: "5.5 [UM]" },
+    { value: myData[6], color: "rgb(255,11,0)",   highlight: "#555555", label: "6 [H]" },
+    { value: myData[7], color: "rgb(222,0,0)",    highlight: "#555555", label: "7 [VH]" },
+    { value: myData[8], color: "rgb(190,0,0)",    highlight: "#555555", label: "8 [EH]" },
+    { value: myData[9], color: "rgb(166,0,0)",    highlight: "#555555", label: "9 [HaH]" },
+    { value: myData[10],color: "rgb(128,0,0)",    highlight: "#555555", label: "9+ [DeaD]" }
+];
+
+
+var DATAchart = {
+    labels: ["1", "2", "3", "4", "5", "5.5", "6", "7", "8", "9", "9+"],
+    datasets: [
+        {
+            label: "aRPEe Zones distribution in minutes",
+			fillColor: "rgba(220,180,180,0.2)",
+            strokeColor: "rgba(220,180,180,1)",
+            pointColor: "rgba(220,120,120,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,120,120,1)",
+            data: myDataMinutes
+        }
+    ]
+};
+
+
+
+var myOPTpie = { 
+    responsive : false, 
+    percentageInnerCutout : 33,
+    tooltipFontSize: 10,
+    tooltipFontFamily : "Verdana",
+    segmentStrokeWidth : 1,
+    showScale : false,
+  tooltipTemplate: "<%if (label){%><%=label%>: <%}%><%= value %>%",
+} 
+
+var myOPTchart = { 
+//    multiTooltipTemplate: "<%= datasetLabel %> - <%= value %>",
+    responsive : false, 
+    pointDot : true,
+    tooltipFontSize: 10,
+    tooltipFontFamily : "Verdana",
+    scaleFontSize : 6,
+    scaleFontFamily : "Verdana",
+    barValueSpacing : 2,
+  tooltipTemplate: "<%if (label){%><%=label%>: <%}%><%= value %> min",
+} 
+
+
+myTRIMPpie = new Chart(CTXpie).Doughnut(DATApie, myOPTpie);
+//myTRIMPpie = new Chart(CTXpie).PolarArea(DATApie, myOPTpie);
+myTRIMPchart = new Chart(CTXchart).Bar(DATAchart, myOPTchart);
+//myTRIMPchart = new Chart(CTXchart).Line(DATAchart, myOPTchart);
+
+	
 			function myRPE(val,full,wid){
 			if (env.debugMode) console.log("Execute myRPE");
 			// *** for women use correction factor!!! MAX TRIM for man is 4.37/min (262/h) and for woman 3.4/min (204/h) !!!

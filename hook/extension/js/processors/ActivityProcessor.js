@@ -278,8 +278,6 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         // Time Cadence
         // Crank revolution
         var cadenceData = this.cadenceData_(activityStream.cadence, activityStream.velocity_smooth, activityStatsMap, activityStream.time);
-// just temporary replace cadence with TRIMPPerHourpertime 
-//        var cadenceData = this.cadenceData_(activityStream.TRIMPPerHourpertime, activityStream.velocity_smooth, activityStatsMap, activityStream.time);
 
 
         // Avg grade
@@ -746,17 +744,37 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 
 
         var TRIMP = 0;
-		var TRIMPpertime = [];
-        TRIMPpertime[0] = 0;
-		var TRIMPPerHourpertime = [];	// use for TRIMP distribution graph
-        TRIMPPerHourpertime[0] = 0;
+		var TRIMPArray = [];
+        
+        TRIMPArray[0] = 0;
+		var TRIMPPerHourArray = [];	// use for TRIMP distribution graph
+        TRIMPPerHourArray[0] = 0;
+        
 //        var TRIMPGenderFactor = (userGender == 'men') ? 1.92 : 1.67;
         var TRIMPGenderFactor = (pageView._activityAthlete.attributes.gender == 'F') ? 1.67 : 1.92;
 //        var aRPEeGenderFactor = (userGender == 'men') ? 25 : 20;
         var aRPEeGenderFactor = (pageView._activityAthlete.attributes.gender == 'F') ? 20 : 25;
+
+    // define TRIMPPerHour zones
+	this.zones.TRIMPPerHour = [
+		{from: 0,                      to: 1.5 *aRPEeGenderFactor},
+		{from: 1.5 *aRPEeGenderFactor, to: 2.5 *aRPEeGenderFactor},
+		{from: 2.5 *aRPEeGenderFactor, to: 3.5 *aRPEeGenderFactor},
+		{from: 3.5 *aRPEeGenderFactor, to: 4.5 *aRPEeGenderFactor},
+		{from: 4.5 *aRPEeGenderFactor, to: 5.25*aRPEeGenderFactor},
+		{from: 5.25*aRPEeGenderFactor, to: 5.75*aRPEeGenderFactor},
+		{from: 5.75*aRPEeGenderFactor, to: 6.5 *aRPEeGenderFactor},
+		{from: 6.5 *aRPEeGenderFactor, to: 7.5 *aRPEeGenderFactor},
+		{from: 7.5 *aRPEeGenderFactor, to: 8.5 *aRPEeGenderFactor},
+		{from: 8.5 *aRPEeGenderFactor, to: 9.5 *aRPEeGenderFactor},
+		{from: 9.5 *aRPEeGenderFactor, to: 999}
+	];
+
+
         var hrrSecondsCount = 0;
         var hrrZonesCount = Object.keys(this.userHrrZones_).length;
         var hr, heartRateReserveAvg, durationInSeconds, durationInMinutes, zoneId;
+        var TRIMPPerHourZoneId;
         var hrSum = 0;
         var heartRateArrayMoving = [];
         var heartRateArrayMovingDuration = [];
@@ -770,6 +788,12 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
             this.userHrrZones_[zone]['s'] = 0;
             this.userHrrZones_[zone]['percentDistrib'] = null;
         }
+        
+        var TRIMPPerHourZones = this.prepareZonesForDistribComputation(this.zones.TRIMPPerHour);
+        var durationInSeconds = 0;
+        var TRIMPPerHourArrayMoving = [];
+        var TRIMPPerHourArrayDuration = [];
+
 
         for (var i = 0; i < heartRateArray.length; i++) { // Loop on samples
 
@@ -799,10 +823,10 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
                 heartRateReserveAvg = Helper.heartRateReserveFromHeartrate(hr, userMaxHr, userRestHr); //(hr - userSettings.userRestHr) / (userSettings.userMaxHr - userSettings.userRestHr);
                 durationInMinutes = durationInSeconds / 60;
 
-				TRIMPprev = TRIMP; // previous TRIMP value for calculation of TRIMPPerHourpertime
+				TRIMPprev = TRIMP; // previous TRIMP value for calculation of TRIMPPerHourArray
                 TRIMP += durationInMinutes * heartRateReserveAvg * 0.64 * Math.exp(TRIMPGenderFactor * heartRateReserveAvg);
-				TRIMPpertime[i]=TRIMP;
-				TRIMPPerHourpertime[i]=Math.round(   (TRIMP-TRIMPprev) * 60 * 60 / durationInSeconds  *10 )/10; // only 1 decimal place
+				TRIMPArray[i]=TRIMP;
+				TRIMPPerHourArray[i]=Math.round(   (TRIMP-TRIMPprev) * 60 * 60 / durationInSeconds  *1 )/1; // only 0 decimal place
 
                 // Count Heart Rate Reserve distribution
                 zoneId = this.getHrrZoneId(hrrZonesCount, heartRateReserveAvg * 100);
@@ -810,6 +834,13 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
                 if (!_.isUndefined(zoneId)) {
                     this.userHrrZones_[zoneId]['s'] += durationInSeconds;
                 }
+                
+                // Count TRIMPPerHour distribution
+                TRIMPPerHourZoneId = this.getZoneId(this.zones.TRIMPPerHour, TRIMPPerHourArray[i]);
+                if (!_.isUndefined(TRIMPPerHourZoneId)) {
+                    TRIMPPerHourZones[zoneId]['s'] += durationInSeconds;
+                }
+
             }
         }
 
@@ -819,24 +850,31 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 
         // Update zone distribution percentage
         userHrrZones_ = this.finalizeDistribComputationZones(this.userHrrZones_);
+        TRIMPPerHourZones = this.finalizeDistribComputationZones(TRIMPPerHourZones);
+
+        var percentiles = Helper.weightedPercentiles(heartRateArrayMoving, heartRateArrayMovingDuration, [0.25, 0.5, 0.75]);
+        var percentilesTRIMPPerHour = Helper.weightedPercentiles(TRIMPPerHourArray, heartRateArrayMovingDuration, [ 0.25, 0.5, 0.75]);
+
+
+
 
 // check VacuumProcessor
         activityStatsMap.averageHeartRate = hrSum / hrrSecondsCount;
         activityStatsMap.maxHeartRate = heartRateArraySorted[heartRateArraySorted.length - 1];
-
         var TRIMPPerHour = TRIMP / hrrSecondsCount * 60 * 60;
-        var percentiles = Helper.weightedPercentiles(heartRateArrayMoving, heartRateArrayMovingDuration, [0.25, 0.5, 0.75]);
+
 
 //        } //if "the new way of TRIMP"
 
-	StravaStreams.TRIMPpertime=TRIMPpertime;
-	StravaStreams.TRIMPPerHourpertime=TRIMPPerHourpertime;
+	StravaStreams.TRIMPArray=TRIMPArray;
+	StravaStreams.TRIMPPerHourArray=TRIMPPerHourArray;
+	StravaStreams.TRIMPPerHourZones=TRIMPPerHourZones;
 
 
         return {
             'TRIMP': TRIMP,
-//            'TRIMPpertime': TRIMPpertime,
-//            'TRIMPPerHourpertime': TRIMPPerHourpertime,
+//            'TRIMPArray': TRIMPArray,
+//            'TRIMPPerHourArray': TRIMPPerHourArray,
 //              'TRIMP_hr': TRIMP_hr,
 //              'aRPEe': Math.round((TRIMP_hr / aRPEeGenderFactor)*10)/10,
                 'aRPEe': Math.round((TRIMPPerHour / aRPEeGenderFactor)*10)/10,

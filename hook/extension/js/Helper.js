@@ -79,8 +79,20 @@ helperDebug>2   && console.log(' > > (f:  Helper.js) >   ' + arguments.callee.to
 Helper.weightedPercentiles = function weightedPercentiles(values, weights, percentiles) {
 helperDebug>0   && console.log(' > > (f:  Helper.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
     // inspired from https://en.wikipedia.org/wiki/Weighted_median and https://en.wikipedia.org/wiki/Percentile#Definition_of_the_Weighted_Percentile_method
+    //
+    // percentiles to be calculated should be given from lowest to highest,
+    // otherwise any lower percentile after higher one won't be calculated properly!
+    //
+    // example:   Helper.weightedPercentiles([1,2,3,4,5,6,7,8,9,10] , [1,1,1,1,1,1,1,1,1,1], [ 0 , 0.5 , 1])  returns  [1, 5, 10]
+    //            Helper.weightedPercentiles(_.range(1,101) , Array(100).fill(1) , [ 0.25 , 0.5 , 0.75])      returns  [25, 50, 75]
+    //            Helper.weightedPercentiles([1,2,3,4,5] , [1,1,1,1,1], [ 0.5 ])                              returns  [3]
+    //            Helper.weightedPercentiles([1,2,3,4,5] , [2,1,1,1,1], [ 0.5 ])                              returns  [2]
+    //
+
     var list = [];
     var tot = 0;
+
+    // prepare sorted list of values with weights and calculate total weight
     for (var i = 0; i < values.length; i++) {
         list.push({ value : values[i], weight : weights[i]});
         tot += weights[i];
@@ -88,20 +100,26 @@ helperDebug>0   && console.log(' > > (f:  Helper.js) >   ' + arguments.callee.to
     list.sort(function(a, b) {
         return a.value - b.value;
     });
-    var result = [];
-    for (var i = 0; i < percentiles.length; i++) {
-        result.push(0);
+
+	// prepare empty results array
+    var result = Array(percentiles.length).fill(0);
+
+    // prepare percentile target values
+    var percentiletargets = [];
+    for (var j = 0; j < percentiles.length; j++) {
+    	percentiletargets[j] = percentiles[j] * tot;
     }
 
-    var cur = 0;
+    var cur=0;
+	j = 0;
     for (var i = 0; i < list.length; i++) {
-        for (var j = 0; j < percentiles.length; j++) {
-            // found the sample matching the percentile
-            if (cur < percentiles[j] * tot && (cur + list[i].weight) > (percentiles[j] - 0.00001) * tot) {
-                result[j] = list[i].value;
-            }
-        }
+        // loop through list to find sample matching percentile target values
         cur += list[i].weight;
+        if (cur >= percentiletargets[j] ) {	// target reached?
+            result[j] = list[i].value;      // save result
+            j++;	// next target
+        }
+        if (j==percentiles.length) break;   // if last target reached, exit loop
     }
 
     return result;

@@ -750,8 +750,10 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         TRIMPpertime[0] = 0;
 		var TRIMPPerHourpertime = [];	// use for TRIMP distribution graph
         TRIMPPerHourpertime[0] = 0;
-        var TRIMPGenderFactor = (userGender == 'men') ? 1.92 : 1.67;
-        var aRPEeGenderFactor = (userGender == 'men') ? 25 : 20;
+//        var TRIMPGenderFactor = (userGender == 'men') ? 1.92 : 1.67;
+        var TRIMPGenderFactor = (pageView._activityAthlete.attributes.gender == 'F') ? 1.67 : 1.92;
+//        var aRPEeGenderFactor = (userGender == 'men') ? 25 : 20;
+        var aRPEeGenderFactor = (pageView._activityAthlete.attributes.gender == 'F') ? 20 : 25;
         var hrrSecondsCount = 0;
         var hrrZonesCount = Object.keys(this.userHrrZones_).length;
         var hr, heartRateReserveAvg, durationInSeconds, durationInMinutes, zoneId;

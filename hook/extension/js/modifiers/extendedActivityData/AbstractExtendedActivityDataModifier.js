@@ -103,7 +103,7 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 			html = '<div id="RPE" style="margin-bottom:2px;" title="'+RPEnote+RPEnote1+HRnote+RPEnote2+RPEnote3+'">';
 			html += '<div id="RPEgauge"><div id="RPEgauge1"><div id="RPEtxt"></div></div></div><div id="RPElin"></div></div><font size=-3></font>';
 			html += '<style>';
-			html += '#RPE {height: 6px;position: relative;padding: 0px;border: 2px solid #333;background: linear-gradient(to right, #77E, green, yellow, orange, #F00, #C00, #900);border-radius: 2px;box-shadow: 1px 1px 1px #888;}';
+			html += '#RPE {height: 6px;position: relative;padding: 0px;border: 2px solid #333;background: linear-gradient(to right, #77E, green, yellow, orange, #F00, #A00, #500);border-radius: 2px;box-shadow: 1px 1px 1px #888;}';
 			html += '#RPEgauge {position: relative;top: -4px;width: 0px;height: 0px;border-left: 0px solid transparent;border-right: 10px solid transparent;border-top: 11px solid #633; box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.100);}';
 			html += '#RPEgauge1 {position: relative;top: -9px;width: 0px;height: 0px;border-left: 0px solid transparent;border-right: 4px solid transparent;border-top: 5px solid #EEE;}';
 			html += '#RPEtxt {position: relative;left: 0px;top: -20Px; color: #000000;text-align:center;font-family: sans-serif;font-size: 9px;font-weight: bold;}';
@@ -119,20 +119,21 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 			html+='<img src="' + this.appResources_.aRPEeIcon + '" style="padding-top:4px"></td>';
 			html+='<td style="padding:0px;border-bottom: 0px;"><font style="font-size: 14px; vertical-align: middle;">';
 //			aRPEe=1;
-			if (aRPEe >= 9.5){	html+='<font style="color: rgb(128,0,0);"[DeaD]</font> Have You really had survived THAT!?!';
-			} else if (aRPEe >= 8.5) {	html+='<font style="color: rgb(128,0,0);">[HaH]</font> Hard as Hell!';
-			} else if (aRPEe >= 7.5) {	html+='<font style="color: rgb(204,0,0);">[EH]</font> Extremely Hard';
-			} else if (aRPEe >= 6.5) {	html+='<font style="color: rgb(255,0,0);">[VH]</font> Very Hard';
-			} else if (aRPEe >= 5.75){	html+='<font style="color: rgb(255,51,0);">[H]</font> Hard';
-			} else if (aRPEe >= 5.25){	html+='<font style="color: rgb(255,153,0);">[UM]</font> Upper Medium';
-			} else if (aRPEe >= 4.5) {	html+='<font style="color: rgb(255,192,0);">[M\]</font> Medium';
-			} else if (aRPEe >= 3.5) {	html+='<font style="color: rgb(200,200,0);">[LM]</font> Lower Medium';
-			} else if (aRPEe >= 2.5) {	html+='<font style="color: rgb(146,208,80);">[ER]</font> Easy-Recovery';
-			} else if (aRPEe >= 1.5) {	html+='<font style="color: rgb(0,176,80);">[R]</font> Recovery';
-			} else {	html+='<font style="color: rgb(79,129,189);">[NIL]</font> You really consider THAT a Workout?!';
+			if (aRPEe >= 9.5){	html+='<font style="color: rgb(50,0,0);"[DeaD]</font> Have You really had survived THAT!?!';
+			} else if (aRPEe >= 8.5) {	html+='<font style="color: rgb(100,0,0);">[HaH]</font> Hard as Hell!';
+			} else if (aRPEe >= 7.5) {	html+='<font style="color: rgb(150,0,0);">[EH]</font> Extremely Hard';
+			} else if (aRPEe >= 6.5) {	html+='<font style="color: rgb(200,0,0);">[VH]</font> Very Hard';
+			} else if (aRPEe >= 5.75){	html+='<font style="color: rgb(255,11,0);">[H]</font> Hard';
+			} else if (aRPEe >= 5.25){	html+='<font style="color: rgb(255,111,0);">[UM]</font> Upper Medium';
+			} else if (aRPEe >= 4.5) {	html+='<font style="color: rgb(255,190,0);">[M\]</font> Medium';
+			} else if (aRPEe >= 3.5) {	html+='<font style="color: rgb(220,220,0);">[LM]</font> Lower Medium';
+			} else if (aRPEe >= 2.5) {	html+='<font style="color: rgb(133,195,0);">[ER]</font> Easy-Recovery';
+			} else if (aRPEe >= 1.5) {	html+='<font style="color: rgb(11,127,22);">[R]</font> Recovery';
+			} else {	html+='<font style="color: rgb(86,122,172);">[NIL]</font> You really consider THAT a Workout?!';
 			}
                     
 			html+='</font></strong></td></tr></table></div>';
+
 
 html+='<div class="TRIMPcharts" align=left style="padding-bottom: 5px;border-bottom: 1px solid #ccc;">';
 html+='<span style="display: inline-block; vertical-align:">';
@@ -142,7 +143,7 @@ html+='<span style="font-size: 20px;font-family:verdana;line-height:0px;color: r
 html+='</div>';
 html+='</span>';
 html+='<span style="display: inline-block; vertical-align:middle">';
-html+='<canvas id="TRIMPchart" width="300" height="100"  title="minutes spent in\neach aRPEe Zone"></canvas>';
+html+='<canvas id="TRIMPchart" width="320" height="110"  title="minutes spent in\neach aRPEe Zone"></canvas>';
 html+='</span>';
 html+='</div>';
 
@@ -199,15 +200,15 @@ var DATApie = [
     { value: myData[4], color: "rgb(255,190,0)",  highlight: "rgba(220,220,220,0.75)", label: "5 [M]" },
     { value: myData[5], color: "rgb(255,110,0)",  highlight: "rgba(220,220,220,0.75)", label: "5.5 [UM]" },
     { value: myData[6], color: "rgb(255,11,0)",   highlight: "rgba(220,220,220,0.75)", label: "6 [H]" },
-    { value: myData[7], color: "rgb(222,0,0)",    highlight: "rgba(220,220,220,0.75)", label: "7 [VH]" },
-    { value: myData[8], color: "rgb(190,0,0)",    highlight: "rgba(220,220,220,0.75)", label: "8 [EH]" },
-    { value: myData[9], color: "rgb(166,0,0)",    highlight: "rgba(220,220,220,0.75)", label: "9 [HaH]" },
-    { value: myData[10],color: "rgb(128,0,0)",    highlight: "rgba(220,220,220,0.75)", label: "9+ [DeaD]" }
+    { value: myData[7], color: "rgb(200,0,0)",    highlight: "rgba(220,220,220,0.75)", label: "7 [VH]" },
+    { value: myData[8], color: "rgb(150,0,0)",    highlight: "rgba(220,220,220,0.75)", label: "8 [EH]" },
+    { value: myData[9], color: "rgb(100,0,0)",    highlight: "rgba(220,220,220,0.75)", label: "9 [HaH]" },
+    { value: myData[10],color: "rgb(50,0,0)",    highlight: "rgba(220,220,220,0.75)", label: "9+ [DeaD]" }
 ];
 
 
 var DATAchart = {
-    labels: ["1", "2", "3", "4", "5", "5.5", "6", "7", "8", "9", "9+"],
+    labels: ["NIL", "R", "ER", "LM", "M", "UM", "H", "VH", "EH", "HaH", "DeaD"],
     datasets: [
         {
             label: "aRPEe Zones distribution in minutes",
@@ -241,7 +242,7 @@ var myOPTchart = {
     pointDot : true,
     tooltipFontSize: 10,
     tooltipFontFamily : "Verdana",
-    scaleFontSize : 6,
+    scaleFontSize : 7,
     scaleFontFamily : "Verdana",
     barValueSpacing : 2,
   tooltipTemplate: "<%if (label){%><%=label%>: <%}%><%= value %> min",
@@ -261,10 +262,10 @@ myTRIMPchart = new Chart(CTXchart).Bar(DATAchart, myOPTchart);
     myTRIMPchart.datasets[0].bars[4].fillColor = "rgb(255,190,0)"; 
     myTRIMPchart.datasets[0].bars[5].fillColor = "rgb(255,110,0)"; 
     myTRIMPchart.datasets[0].bars[6].fillColor = "rgb(255,11,0)";
-    myTRIMPchart.datasets[0].bars[7].fillColor = "rgb(222,0,0)";
-    myTRIMPchart.datasets[0].bars[8].fillColor = "rgb(190,0,0)";
-    myTRIMPchart.datasets[0].bars[9].fillColor = "rgb(166,0,0)";
-    myTRIMPchart.datasets[0].bars[10].fillColor ="rgb(128,0,0)";
+    myTRIMPchart.datasets[0].bars[7].fillColor = "rgb(200,0,0)";
+    myTRIMPchart.datasets[0].bars[8].fillColor = "rgb(150,0,0)";
+    myTRIMPchart.datasets[0].bars[9].fillColor = "rgb(100,0,0)";
+    myTRIMPchart.datasets[0].bars[10].fillColor ="rgb(50,0,0)";
     myTRIMPchart.update();
 
 

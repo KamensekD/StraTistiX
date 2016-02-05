@@ -425,7 +425,7 @@ env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee
 env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
 //        var title = 'StraTistiX updated/installed to <strong>v' + this.appResources_.extVersion + '</strong>';
-        var title = 'StraTistiX recently added/updated/fixed features - v2.3.0';
+        var title = 'StraTistiX recently updated to v2.3.0';
         var message = '';
     message += "<font size=+1>"
         message += "- NEW <strong/>graphic aRPEe Zones</strong/> (~TRIMP/hour) % and minute distribution!<br/>"
@@ -464,7 +464,6 @@ env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee
         message += "- Moved some leftside links to menu, reordered menu a bit<br>"
         message += "- Changed HR related computations from total to moving time<br>"
         message += "- Filtering altitude for gain computations<br>"
-        message += "<br>* Credits for many of new features go to <a href=https://github.com/tazmanska>tomasz.terlecki / tazmanska</a> and <a href=https://github.com/glandais>Gabriel Landais / glandais</a> !"
 
 //        message += "</h4>";
 //        message += "<h4><strong>BUGFIXES:</strong></h4><h5>";

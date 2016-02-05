@@ -167,7 +167,7 @@ pageView.streams().attributes.altitude
 this.lightboxdata.title
 pageView.lightboxData()
 pageView.lightboxData().title
-
+http://www.html5rocks.com/en/tutorials/developertools/async-call-stack/
 this.version	??? v2.2
 ?activityProcessor.activityStream      - streams					   - accessible if not cached
 ?activityProcessor.activityStatsMap    - common stats (from vacuum) - accessible if not cached
@@ -425,26 +425,32 @@ env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee
 env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
 //        var title = 'StraTistiX updated/installed to <strong>v' + this.appResources_.extVersion + '</strong>';
-        var title = 'StraTistiX recently added/updated/fixed features - v2.2.4';
+        var title = 'StraTistiX recently added/updated/fixed features - v2.3.0';
         var message = '';
     message += "<font size=+1>"
-        message += "- statistics now computed on <strong>weighted percentiles</strong><br/>"
-        message += "&nbsp&nbsp(might have big impact for activities with dynamic sampling period!)<br/>"
-        message += "- heart rate extended statistics now computed based on <strong>moving time</strong>, not total time<br/>"
-        message += "&nbsp&nbsp(still not quite sure, which method is better... might decide to include both in future)<br/>"
+        message += "- NEW <strong/>graphic aRPEe Zones</strong/> (~TRIMP/hour) % and minute distribution!<br/>"
+        message += "&nbsp&nbspNice visualisation of percent and minutes spent in different zones<br/>"
+        message += "- heart rate extended statistics returned to <strong/>total elapsed time</strong/>, from moving time<br/>"
+        message += "&nbsp&nbsp(after consideration and case analysis I decided it is better this way, sorry for inconvenience)<br/>"
+        message += "- <strong/>MapFlippers</strong/> working again after Strava's changes that made them unfunctional<br/>"
+        message += "- removed some caching, because it introduced more problems than gains (also fixes CSV export)<br/>"
+        message += "- more extended statistics view data<br/>"
+        message += "- fine-tuned some default zones<br/>"
+        message += "- Various less important additions and fixes"
+        message += ""
         message += "<br/>"
+        
+        message += "<br/></font>"
+        message += "<font size=+1><strong>From previous updates:</strong></font><br><font size=-1>";
         message += "- Added CSV export (for easy analysis in spreadsheet software)<br/>"
-        message += "- Added Ascent speed statistics (VAM) for cycling<br/>"
+        message += "- Added Ascent speed statistics (VAM)<br/>"
         message += "- Improved 'Best Splits' - click to highlight the part of activity they represent!<br/>"
         message += "- Improved elevation data accuracy while computing extended statistics.<br/>"
         message += "&nbsp&nbsp(Elevation data smoothed using low pass filter with gain matched to Strava's)<br/>"
         message += "- Added cadence, power and altitude data in overview table<br/>"
 		message += "- reordered and added some new data in extended statistics<br/>"
         message += "- Weather unis preferences<br/>"
-        message += "- Various smaller additions and fixes, <span style='text-decoration: underline'>sorry</span> for bigbug in 2.0.0.1 - settings menu not working :/<br/>"
-        
-        message += "<br/></font>"
-        message += "<font size=+1><strong>From previous updates:</strong></font><br><font size=-1>";
+        message += "- statistics now computed on <strong>weighted percentiles</strong><br/>"
         message += "- improved grade profile word description<br>"
         message += "- Added year progression (activity count, distance, elevation, time) table and chart<br>"
         message += "- Added 'Best Splits' (distance, time, elevation, hr,...) to biking activities<br>"
@@ -458,7 +464,6 @@ env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee
         message += "- Moved some leftside links to menu, reordered menu a bit<br>"
         message += "- Changed HR related computations from total to moving time<br>"
         message += "- Filtering altitude for gain computations<br>"
-        message += "- Various Fixes<br></font>"
         message += "<br>* Credits for many of new features go to <a href=https://github.com/tazmanska>tomasz.terlecki / tazmanska</a> and <a href=https://github.com/glandais>Gabriel Landais / glandais</a> !"
 
 //        message += "</h4>";

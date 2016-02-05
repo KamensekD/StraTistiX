@@ -124,52 +124,53 @@ https://www.strava.com/activities/463519034
 
 Console Activity Data Access examples:
 ================================================================================
-
+$.browser
 this
 this.parent
+document
+strava
+Strava
 
-$.browser
+env
 
-this.VacuumProcessor.prototype.getActivityCommonStats()
-this.VacuumProcessor.prototype.getActivityCommonStats().movingTime
-this.VacuumProcessor.prototype.getActivityCommonStats().elapsedTime
+*globals:
+RPENote
+StravaStreams
+StravaStreamsA
+globalActivityStatsMap
 
-activityProcessor.activityStream      - streams					   - accessible if not cached
-activityProcessor.activityStatsMap    - common stats (from vacuum) - accessible if not cached
 
-this.stravistiX			this.StravistiX
-this.stravistiX.userSettings_
-this.stravistiX.vacuumProcessor_.getActivityCommonStats()
-this.stravistiX.appResources_
+stravistiX                 this.stravistiX
+stravistiX.athleteName_
+stravistiX.userSettings_
+stravistiX.appResources_
+stravistiX.vacuumProcessor_.getActivityCommonStats()
+stravistiX.vacuumProcessor_.getActivityCommonStats().elapsedTime
+VacuumProcessor.prototype.getActivityCommonStats()
+VacuumProcessor.prototype.getActivityCommonStats().elapsedTime
 
-this.stravistiX.activityProcessor_
-this.stravistiX.activityProcessor_.zones			zone distribution (ascent, cadence, elevation, grade, pace, power, speed)
-this.stravistiX.activityProcessor_.userHrrZones_	zone distribution HRR
+stravistiX.activityProcessor_
+stravistiX.activityProcessor_.zones			zone distribution (ascent, cadence, elevation, grade, pace, power, speed)
+stravistiX.activityProcessor_.userHrrZones_	zone distribution HRR
 
-this.strava				this.Strava				this.StravaStreams
+Helper.hrPercentFromHeartrate(90,180)
 
-this.ActivityProcessor
-this.Helper
+activityName
+currentAthlete.attributes
+pageView.activityAthlete().attributes
+pageView.activity().attributes
+pageView
+pageView.streams().streamData.data.altitude
+pageView.streams().attributes.altitude
 
-this.RPEnote1
 
-this.VacuumProcessor
-
-this.activityName
-this.currentAthlete.attributes
-
-this.document
-
-this.env
-
-this.lightboxdata     pageView.lightboxData()     pageView.lightboxData().title
+this.lightboxdata.title
+pageView.lightboxData()
+pageView.lightboxData().title
 
 this.version	??? v2.2
-
-this.pageView     this.pageView.activity().attributes
-this.pageView.streams().streamData.data.altitude		=		this.pageView.streams().attributes.altitude
-
-
+?activityProcessor.activityStream      - streams					   - accessible if not cached
+?activityProcessor.activityStatsMap    - common stats (from vacuum) - accessible if not cached
 ================================================================================
 
 

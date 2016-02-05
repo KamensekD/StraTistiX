@@ -158,31 +158,31 @@ var CTXchart = document.getElementById("TRIMPchart").getContext("2d");
 
 
 var myData=[
-    Math.round( StravaStreams.TRIMPPerHourZones[0].percentDistrib ),
-    Math.round( StravaStreams.TRIMPPerHourZones[1].percentDistrib ),
-    Math.round( StravaStreams.TRIMPPerHourZones[2].percentDistrib ),
-    Math.round( StravaStreams.TRIMPPerHourZones[3].percentDistrib ),
-    Math.round( StravaStreams.TRIMPPerHourZones[4].percentDistrib ),
-    Math.round( StravaStreams.TRIMPPerHourZones[5].percentDistrib ),
-    Math.round( StravaStreams.TRIMPPerHourZones[6].percentDistrib ),
-    Math.round( StravaStreams.TRIMPPerHourZones[7].percentDistrib ),
-    Math.round( StravaStreams.TRIMPPerHourZones[8].percentDistrib ),
-    Math.round( StravaStreams.TRIMPPerHourZones[9].percentDistrib ),
-    Math.round( StravaStreams.TRIMPPerHourZones[10].percentDistrib)
+    Math.round( StravaStreamsA.TRIMPPerHourZones[0].percentDistrib ),
+    Math.round( StravaStreamsA.TRIMPPerHourZones[1].percentDistrib ),
+    Math.round( StravaStreamsA.TRIMPPerHourZones[2].percentDistrib ),
+    Math.round( StravaStreamsA.TRIMPPerHourZones[3].percentDistrib ),
+    Math.round( StravaStreamsA.TRIMPPerHourZones[4].percentDistrib ),
+    Math.round( StravaStreamsA.TRIMPPerHourZones[5].percentDistrib ),
+    Math.round( StravaStreamsA.TRIMPPerHourZones[6].percentDistrib ),
+    Math.round( StravaStreamsA.TRIMPPerHourZones[7].percentDistrib ),
+    Math.round( StravaStreamsA.TRIMPPerHourZones[8].percentDistrib ),
+    Math.round( StravaStreamsA.TRIMPPerHourZones[9].percentDistrib ),
+    Math.round( StravaStreamsA.TRIMPPerHourZones[10].percentDistrib)
 ];
 
 var myDataMinutes=[
-    Math.round( StravaStreams.TRIMPPerHourZones[0].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
-    Math.round( StravaStreams.TRIMPPerHourZones[1].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
-    Math.round( StravaStreams.TRIMPPerHourZones[2].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
-    Math.round( StravaStreams.TRIMPPerHourZones[3].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
-    Math.round( StravaStreams.TRIMPPerHourZones[4].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
-    Math.round( StravaStreams.TRIMPPerHourZones[5].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
-    Math.round( StravaStreams.TRIMPPerHourZones[6].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
-    Math.round( StravaStreams.TRIMPPerHourZones[7].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
-    Math.round( StravaStreams.TRIMPPerHourZones[8].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
-    Math.round( StravaStreams.TRIMPPerHourZones[9].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
-    Math.round( StravaStreams.TRIMPPerHourZones[10].percentDistrib * globalActivityStatsMap.elapsedTime/6000)
+    Math.round( StravaStreamsA.TRIMPPerHourZones[0].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
+    Math.round( StravaStreamsA.TRIMPPerHourZones[1].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
+    Math.round( StravaStreamsA.TRIMPPerHourZones[2].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
+    Math.round( StravaStreamsA.TRIMPPerHourZones[3].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
+    Math.round( StravaStreamsA.TRIMPPerHourZones[4].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
+    Math.round( StravaStreamsA.TRIMPPerHourZones[5].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
+    Math.round( StravaStreamsA.TRIMPPerHourZones[6].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
+    Math.round( StravaStreamsA.TRIMPPerHourZones[7].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
+    Math.round( StravaStreamsA.TRIMPPerHourZones[8].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
+    Math.round( StravaStreamsA.TRIMPPerHourZones[9].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
+    Math.round( StravaStreamsA.TRIMPPerHourZones[10].percentDistrib * globalActivityStatsMap.elapsedTime/6000)
 ];
 
 // test data for chart

@@ -872,7 +872,18 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 
 	StravaStreams.TRIMPArray=TRIMPArray;
 	StravaStreams.TRIMPPerHourArray=TRIMPPerHourArray;
-	StravaStreams.TRIMPPerHourZones=TRIMPPerHourZones;
+StravaStreamsA=[];
+	StravaStreamsA.TRIMPPerHourZones=TRIMPPerHourZones;	// !!! if all streams in "StravaStreams" are not the same length, CSV export doesn't work!!!
+
+/*
+check with this workouts:
+
+https://www.strava.com/activities/380222430/overview	-	race - have to refresh on activity page
+
+*/
+
+
+
 
 
         return {

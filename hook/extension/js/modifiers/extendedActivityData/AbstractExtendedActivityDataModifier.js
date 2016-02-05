@@ -75,16 +75,18 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 		var html = '<div style="font-size: 15px; padding: 10px 0px 10px 0px; border-bottom: 0px solid #ccc; border-top: 1px solid #ccc; margin-bottom:4px;" id="histats">';
 
 		if (this.analysisData_.heartRateData != null) {
-			HRnote = "\n\n* Depends heavily on appropriate user MaxHR ("+this.analysisData_.heartRateData.MaxHr+") and RestHR ("+this.analysisData_.heartRateData.RestHr+") settings!";
-			RPEnote  = "aRPEe score - Average RPE (Rated Perceived Exertion) Estimate is a simple\nnumber and short description of how hard Your workout was for Your Heart\n";
+			HRnote = "\n\n* Depends heavily on appropriate MaxHR ("+this.analysisData_.heartRateData.MaxHr+") and RestHR ("+this.analysisData_.heartRateData.RestHr+"), so set them right in Health Settings!";
+			HRnote+= "\n   ! when looking at other athlete's wokouts, note that calculations are done with YOUR HR settings !";
+			RPEnote  = "aRPEe score - Average RPE (Rated Perceived Exertion) Estimate\n";
+			RPEnote += "aRPEe = TRIMP/hr / n   (n=25 for Men and 20 for Women)\n";
+			RPEnote += "\naRPEe is a simple number with short description of how hard Your workout was for\nYour Heart (Might also seem a bit off for You as RPE is very user perception dependent)\n";
 			RPEnote1 = "\n   1\t[NIL]\tYou really consider THAT a Workout?!\n   2\t[R]\tRecovery\n   3\t[ER]\tEasy-Recovery\n   4\t[LM]\tLower Medium\n   5\t[M]\tMedium\n  5.5\t[UM]\tUpper Medium\n   6\t[H]\tHard\n   7\t[VH]\tVery Hard\n   8\t[EH]\tExtremely Hard\n   9\t[HaH]\tHard as Hell!\n   9+\t[DeaD]\tHave You really had survived THAT!?!";
-			RPEnote2 = "\n** Might seem off for You, as RPE is very user perception dependent.";
-			RPEnote3 = "\n*** aRPEe = TRIMP/hr / n   (for Men n=25, for Women n=20)\n\n-= (C) by Kamac - aRPEe concept and design by Dejan Kamensek, sLOVEnia =-";
+			RPEnote2 = "\n\n-= (C) by Kamac - aRPEe concept and design by Dejan Kamensek, sLOVEnia =-";
 
 			html += '<span style="color: #800 ;font-size: 18px;" title="HR based TRIMP (TRaining IMPulse)\nEstimation of TOTAL Training Load of the Workout'+HRnote+'">';
 			html += ' TRIMP: <strong>'+this.analysisData_.heartRateData.TRIMP.toFixed(0)+'</strong></span>';
 
-			html += '<span style="color: #800; font-size: 18px;" title="TRIMP/hour\nEstimation of Hourly AVERAGE Training Load of the Workout'+HRnote+'\n** Given the right HR settings, TRIMP/hr max for Men is 262 and for Women 204">';
+			html += '<span style="color: #800; font-size: 18px;" title="TRIMP/hour\nEstimation of Hourly AVERAGE Training Load of the Workout\n\n* Given the right HR settings, TRIMP/hr max is 262 for Men and 204 for Women'+HRnote+'">';
 			html += ' | <strong>'+this.analysisData_.heartRateData.TRIMPPerHour.toFixed(0)+'</strong>/hour';
 			html += '&nbsp</span>';
 
@@ -100,7 +102,7 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 		if (this.analysisData_.heartRateData != null) {
 
 			// prepare aRPEe gauge
-			html = '<div id="RPE" style="margin-bottom:2px;" title="'+RPEnote+RPEnote1+HRnote+RPEnote2+RPEnote3+'">';
+			html = '<div id="RPE" style="margin-bottom:2px;" title="'+RPEnote+RPEnote1+HRnote+RPEnote2+'">';
 			html += '<div id="RPEgauge"><div id="RPEgauge1"><div id="RPEtxt"></div></div></div><div id="RPElin"></div></div><font size=-3></font>';
 			html += '<style>';
 			html += '#RPE {height: 6px;position: relative;padding: 0px;border: 2px solid #333;background: linear-gradient(to right, #77E, rgb(86,122,172),rgb(11,127,22),rgb(133,195,0),rgb(255,244,0),rgb(255,190,0)   ,   rgb(255,11,0),rgb(200,0,0),rgb(150,0,0),rgb(100,0,0),rgb(50,0,0));border-radius: 2px;box-shadow: 1px 1px 1px #888;}';
@@ -115,7 +117,7 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 
 //			html+= '<div style="border-bottom: 1px solid #ccc; padding-bottom: 5px;">';
 			html+= '<div style="border-bottom: 0px solid #ccc;">';
-			html+='<table style="margin:0px;" title="'+RPEnote+RPEnote1+HRnote+RPEnote2+RPEnote3+'"><tr><td width=50px style="padding:0px;border-bottom: 0px;">';
+			html+='<table style="margin:0px;" title="'+RPEnote+RPEnote1+HRnote+RPEnote2+'"><tr><td width=50px style="padding:0px;border-bottom: 0px;">';
 			html+='<img src="' + this.appResources_.aRPEeIcon + '" style="padding-top:4px"></td>';
 			html+='<td style="padding:0px;border-bottom: 0px;"><font style="font-size: 14px; vertical-align: middle;">';
 //			aRPEe=1;
@@ -143,7 +145,7 @@ html+='<span style="font-size: 20px;font-family:verdana;line-height:0px;color: r
 html+='</div>';
 html+='</span>';
 html+='<span style="display: inline-block; vertical-align:middle">';
-html+='<canvas id="TRIMPchart" width="320" height="110"  title="minutes spent in\neach aRPEe Zone"></canvas>';
+html+='<canvas id="TRIMPchart" width="320" height="110"  title="Minutes spent in\neach aRPEe Zone"></canvas>';
 html+='</span>';
 html+='</div>';
 

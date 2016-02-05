@@ -121,9 +121,9 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 if (env.debugMode) console.log('>>>(f: ActivityProcessor.js) >   Try to read  -Analysis Data-  from cache/localStorage (' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + ')' )
         var cacheResult = JSON.parse(localStorage.getItem(ActivityProcessor.cachePrefix + activityId));
                 if (cacheResult) {
-if (env.debugMode) console.error('...   Analysis FOUND in cache - using cached Analysis Data   ...' );
+if (env.debugMode) console.info('...   Analysis FOUND in cache - using cached Analysis Data   ...' );
                 } else {
-if (env.debugMode) console.error('...   Analysis NOT in cache - calculating Analysis Data   ...' );
+if (env.debugMode) console.info('...   Analysis NOT in cache - calculating Analysis Data   ...' );
                 }
 */
                 

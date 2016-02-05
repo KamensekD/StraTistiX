@@ -388,7 +388,7 @@ env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee
         // Clear localstorage
         // Especially for activies data stored in cache
         localStorage.clear(); sessionStorage.clear();
-        console.error("Extension Has Updated ->   !!!   localstorage cleared   !!!");
+        console.info("Extension Has Updated ->   !!!   localstorage cleared   !!!");
 
 
         if (!window.location.pathname.match(/^\/dashboard/)) {

@@ -71,9 +71,9 @@ MenuModifier.prototype = {
 
 //  Release Notes and cache clear (right click)
     stravaMenuHtml += "<li id='release_notes' style='border-top: 1px solid #DDD; text-align: center;' oncontextmenu='return false;'><a style='font-style: italic;' href='" + this.appResources_.settingsLink + "#/releaseNotes' target='_blank'><img style='vertical-align:middle' src='" + this.appResources_.systemUpdatesIcon + "'/><span> StraTistiX <strong>v" + this.appResources_.extVersion + "</strong> release notes</span><br><span style='font-size:12px; background-color:; color: #fc4c02;'>. . . (rightclick to clear cache/localstorage) . . .</span></a></li>";
-    stravaMenuHtml += "<script>document.getElementById('release_notes').parentNode.onmousedown = function(event) { if (event.which == 3) {     console.error('!!!   localstorage manually cleared   !!!'); localStorage.clear(); sessionStorage.clear(); window.setTimeout(function(){StravistiX.prototype.handleUpdateRibbon_()}, 500);   }}</script>";
-//    stravaMenuHtml += "<script>document.getElementById('release_notes').parentNode.onmousedown = function(event) { if (event.which == 3) {    window.location.href = 'http://www.strava.com'; localStorage.clear();console.error('!!!   localstorage manually cleared   !!!');  }}</script>";
-//    stravaMenuHtml += "<script>document.getElementById('release_notes').parentNode.onmousedown = function(event) { if (event.which == 3) {     console.error('!!!   localstorage manually cleared   !!!'); stravistiX.handleExtensionHasJustUpdated_(); localStorage.clear();   }}</script>";
+    stravaMenuHtml += "<script>document.getElementById('release_notes').parentNode.onmousedown = function(event) { if (event.which == 3) {     console.info('!!!   localstorage manually cleared   !!!'); localStorage.clear(); sessionStorage.clear(); window.setTimeout(function(){StravistiX.prototype.handleUpdateRibbon_()}, 500);   }}</script>";
+//    stravaMenuHtml += "<script>document.getElementById('release_notes').parentNode.onmousedown = function(event) { if (event.which == 3) {    window.location.href = 'http://www.strava.com'; localStorage.clear();console.info('!!!   localstorage manually cleared   !!!');  }}</script>";
+//    stravaMenuHtml += "<script>document.getElementById('release_notes').parentNode.onmousedown = function(event) { if (event.which == 3) {     console.info('!!!   localstorage manually cleared   !!!'); stravistiX.handleExtensionHasJustUpdated_(); localStorage.clear();   }}</script>";
 
 
 //  Rate this fork

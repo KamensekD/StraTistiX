@@ -538,7 +538,7 @@ if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.cal
 if (env.debugMode) console.log('>>>(f: VacuumProcessor.js) >   Try to read  -Activity '+this.getActivityId()+' Streams-  from cache/sessionStorage (' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + ')' )
       var cache = sessionStorage.getItem(VacuumProcessor.cachePrefix + this.getActivityId());
       if (cache) {
-if (env.debugMode) console.error('...   Streams FOUND in cache - using cached Activity Streams   ...' );
+if (env.debugMode) console.info('...   Streams FOUND in cache - using cached Activity Streams   ...' );
 
 
             cache = JSON.parse(cache);
@@ -553,7 +553,7 @@ if (env.debugMode) console.error('...   Streams FOUND in cache - using cached Ac
             
 
       } else {
-if (env.debugMode) console.error('...   Streams NOT in cache - getting Activity Streams from Strava (async)   ...');
+if (env.debugMode) console.info('...   Streams NOT in cache - getting Activity Streams from Strava (async)   ...');
 //      }
 
 
@@ -562,7 +562,7 @@ if (env.debugMode) console.error('...   Streams NOT in cache - getting Activity 
 
         $.ajax(url).done( function ajax_done (jsonResponse) {
 
-if (env.debugMode) console.error('...   ajax_done - got back Activity Streams from Strava (async)   ...');
+if (env.debugMode) console.info('...   ajax_done - got back Activity Streams from Strava (async)   ...');
 
             var hasPowerMeter = true;
 

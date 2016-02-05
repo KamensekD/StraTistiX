@@ -103,9 +103,9 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 			html = '<div id="RPE" style="margin-bottom:2px;" title="'+RPEnote+RPEnote1+HRnote+RPEnote2+RPEnote3+'">';
 			html += '<div id="RPEgauge"><div id="RPEgauge1"><div id="RPEtxt"></div></div></div><div id="RPElin"></div></div><font size=-3></font>';
 			html += '<style>';
-			html += '#RPE {height: 6px;position: relative;padding: 0px;border: 2px solid #333;background: linear-gradient(to right, #77E, green, yellow, orange, #F00, #A00, #500);border-radius: 2px;box-shadow: 1px 1px 1px #888;}';
+			html += '#RPE {height: 6px;position: relative;padding: 0px;border: 2px solid #333;background: linear-gradient(to right, #77E, rgb(86,122,172),rgb(11,127,22),rgb(133,195,0),rgb(255,244,0),rgb(255,190,0)   ,   rgb(255,11,0),rgb(200,0,0),rgb(150,0,0),rgb(100,0,0),rgb(50,0,0));border-radius: 2px;box-shadow: 1px 1px 1px #888;}';
 			html += '#RPEgauge {position: relative;top: -4px;width: 0px;height: 0px;border-left: 0px solid transparent;border-right: 10px solid transparent;border-top: 11px solid #633; box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.100);}';
-			html += '#RPEgauge1 {position: relative;top: -9px;width: 0px;height: 0px;border-left: 0px solid transparent;border-right: 4px solid transparent;border-top: 5px solid #EEE;}';
+			html += '#RPEgauge1 {position: relative;top: -9px;width: 0px;height: 0px;border-left: 0px solid transparent;border-right: 4px solid transparent;border-top: 5px solid #C33;}';
 			html += '#RPEtxt {position: relative;left: 0px;top: -20Px; color: #000000;text-align:center;font-family: sans-serif;font-size: 9px;font-weight: bold;}';
 			html += '#RPElin {height: 3px;position: relative;top: -6px;left: 1px;background: #F00;}';
 			html += '</style>';
@@ -280,6 +280,21 @@ myTRIMPchart = new Chart(CTXchart).Bar(DATAchart, myOPTchart);
     			document.getElementById("RPEtxt").style.left=5-Math.round(getTextWidth(document.getElementById("RPEtxt").innerHTML, "8.5pt sans-serif")/2)+'px';
     			document.getElementById("RPElin").style.width=document.getElementById("RPE").style.width.slice(0,-2)*val/full+'px';
 //				console.log(getTextWidth(document.getElementById("RPEtxt").innerHTML, "6.5pt sans-serif"))
+
+			if (val >= 9.5){	        document.getElementById("RPElin").style.background="rgb(50,0,0)";
+			} else if (val >= 8.5) {	document.getElementById("RPElin").style.background="rgb(100,0,0)";
+			} else if (val >= 7.5) {	document.getElementById("RPElin").style.background="rgb(150,0,0)";
+			} else if (val >= 6.5) {	document.getElementById("RPElin").style.background="rgb(200,0,0)";
+			} else if (val >= 5.75){	document.getElementById("RPElin").style.background="rgb(255,11,0)";
+			} else if (val >= 5.25){	document.getElementById("RPElin").style.background="rgb(255,111,0)";
+			} else if (val >= 4.5) {	document.getElementById("RPElin").style.background="rgb(255,190,0)";
+			} else if (val >= 3.5) {	document.getElementById("RPElin").style.background="rgb(255,244,0)";
+			} else if (val >= 2.5) {	document.getElementById("RPElin").style.background="rgb(133,195,0)";
+			} else if (val >= 1.5) {	document.getElementById("RPElin").style.background="rgb(11,127,22)";
+			} else {                    document.getElementById("RPElin").style.background="rgb(86,122,172)";
+			}
+
+
 			};
 
 			function getTextWidth(text, font) {

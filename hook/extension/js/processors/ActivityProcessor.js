@@ -820,13 +820,17 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 
                 // Compute TRIMP
                 hr = (heartRateArray[i] + heartRateArray[i - 1]) / 2; // Getting HR avg between current sample and previous one.
-                heartRateReserveAvg = Helper.heartRateReserveFromHeartrate(hr, userMaxHr, userRestHr); //(hr - userSettings.userRestHr) / (userSettings.userMaxHr - userSettings.userRestHr);
+                heartRateReserveAvg = Helper.heartRateReserveFromHeartrate(hr, userMaxHr, userRestHr);
+                //(hr - userSettings.userRestHr) / (userSettings.userMaxHr - userSettings.userRestHr);
+                if (heartRateReserveAvg<0) heartRateReserveAvg=0;	// don't let HRR lower than zero (errors in HRM measurments could result into this)
+				if (heartRateReserveAvg>1) heartRateReserveAvg=1;	// also don't let HRR greater than 1 (100%)
+				// HRR can't "legaly" be less than 0% nor more than 100% - if it is, either HR zones are not set correctly or because of HRM measurement problem
                 durationInMinutes = durationInSeconds / 60;
 
-				TRIMPprev = TRIMP; // previous TRIMP value for calculation of TRIMPPerHourArray
+				TRIMPprev = TRIMP; // save previous TRIMP value for calculation of TRIMPPerHourArray
                 TRIMP += durationInMinutes * heartRateReserveAvg * 0.64 * Math.exp(TRIMPGenderFactor * heartRateReserveAvg);
 				TRIMPArray[i]=TRIMP;
-				TRIMPPerHourArray[i]=Math.round(   (TRIMP-TRIMPprev) * 60 * 60 / durationInSeconds  *1 )/1; // only 0 decimal place
+				TRIMPPerHourArray[i]=Math.round(   (TRIMP-TRIMPprev) * 60 * 60 / durationInSeconds  *10 )/10; // only 1 decimal place
 
                 // Count Heart Rate Reserve distribution
                 zoneId = this.getHrrZoneId(hrrZonesCount, heartRateReserveAvg * 100);
@@ -838,7 +842,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
                 // Count TRIMPPerHour distribution
                 TRIMPPerHourZoneId = this.getZoneId(this.zones.TRIMPPerHour, TRIMPPerHourArray[i]);
                 if (!_.isUndefined(TRIMPPerHourZoneId)) {
-                    TRIMPPerHourZones[zoneId]['s'] += durationInSeconds;
+                    TRIMPPerHourZones[TRIMPPerHourZoneId]['s'] += durationInSeconds;
                 }
 
             }

@@ -1,4 +1,4 @@
-//if (env.debugMode) console.warn('Begin     StravistiX.js');
+//env.debugMode>0   && console.info('Begin     StravistiX.js');
 //  \--- this line should't be here, because then BestSplits and Updated message don't work. No idea why?!?!?
 /**
  *   StravistiX is responsible of linking processors with modfiers and user settings/health data
@@ -199,7 +199,7 @@ env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee
 
 
 	if (window.location.pathname.match(/^\/activities/)) {
-env.debugMode>0   && console.warn("----------------------------   Activity Page");
+env.debugMode>0   && console.debug("----------------------------   Activity Page");
 
 
 
@@ -211,19 +211,19 @@ env.debugMode>0   && console.warn("----------------------------   Activity Page"
         this.activityTime_              = this.vacuumProcessor_.getActivityTime();
 		this.activityType_				= this.vacuumProcessor_.getActivityType();
 
-if (env.debugMode>0 && (typeof pageView !== 'undefined')) console.warn( "Activity: " + pageView.activity().get('type') + " (" + pageView.activity().get('id') + ")" );
-if (env.debugMode>0 && (typeof pageView !== 'undefined')) if( pageView.activityAthlete() != null ) console.warn( "Athlete:  " + pageView.activityAthlete().get('display_name') + " (" + pageView.activityAthlete().get('id') + ")" );
-env.debugMode>0   && console.warn("-----------------------");
+if (env.debugMode>0 && (typeof pageView !== 'undefined')) console.debug( "Activity: " + pageView.activity().get('type') + " (" + pageView.activity().get('id') + ")" );
+if (env.debugMode>0 && (typeof pageView !== 'undefined')) if( pageView.activityAthlete() != null ) console.debug( "Athlete:  " + pageView.activityAthlete().get('display_name') + " (" + pageView.activityAthlete().get('id') + ")" );
+env.debugMode>0   && console.debug("-----------------------");
 
 
 
 	} else if (window.location.pathname.match(/^\/segments/)) {
-env.debugMode>0   && console.warn("-----------------------        Segments Page");
+env.debugMode>0   && console.debug("-----------------------        Segments Page");
 
 
 
 	} else {
-env.debugMode>0   && console.warn("-----------------------");
+env.debugMode>0   && console.debug("-----------------------");
 	}
 
 
@@ -295,7 +295,7 @@ env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee
 
 
         // Common
-env.debugMode>0   && console.warn('\n > (f: StravistiX.js) >   COMMON   < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + '\n\n')
+env.debugMode>0   && console.debug('\n > (f: StravistiX.js) >   COMMON   < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + '\n\n')
         this.handleMenu_();
         this.handleRemoteLinks_();
         this.handleWindyTyModifier_();
@@ -321,7 +321,7 @@ env.debugMode>0   && console.warn('\n > (f: StravistiX.js) >   COMMON   < ' + ar
 
 
         // Bike
-env.debugMode>0   && console.warn(' > (f: StravistiX.js) >   BIKE   < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.debug(' > (f: StravistiX.js) >   BIKE   < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
         this.handleNearbySegments_();
         this.handleActivityBikeOdo_();
         this.handleActivitySegmentTimeComparison_();
@@ -330,7 +330,7 @@ env.debugMode>0   && console.warn(' > (f: StravistiX.js) >   BIKE   < ' + argume
 
 
         // Run
-env.debugMode>0   && console.warn(' > (f: StravistiX.js) >   RUN   < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.debug(' > (f: StravistiX.js) >   RUN   < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
         this.handleRunningGradeAdjustedPace_();
         this.handleRunningHeartRate_();
         this.handleMoveFooterOutofWay_();
@@ -338,7 +338,7 @@ env.debugMode>0   && console.warn(' > (f: StravistiX.js) >   RUN   < ' + argumen
 
 
         // All activities
-env.debugMode>0   && console.warn(' > (f: StravistiX.js) >   ALL   < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.debug(' > (f: StravistiX.js) >   ALL   < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
         this.handleActivityQRCodeDisplay_();
         this.handleVirtualPartner_();
         this.handleAthletesStats();
@@ -346,7 +346,7 @@ env.debugMode>0   && console.warn(' > (f: StravistiX.js) >   ALL   < ' + argumen
 
 
         // Must be done at the end
-env.debugMode>0   && console.warn(' > (f: StravistiX.js) >   FINAL   < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.debug(' > (f: StravistiX.js) >   FINAL   < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
         this.handleTrackTodayIncommingConnection_();
         this.handleGoogleMapsComeBackModifier();
 
@@ -1073,7 +1073,7 @@ env.debugMode>0   && console.log("Cookie 'stravistix_daily_connection_done' exis
      *
      */
     handleExtendedActivityData_: function handleExtendedActivityData_() {
-env.debugMode>0   && console.warn(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
+env.debugMode>0   && console.debug(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
         if (_.isUndefined(window.pageView)) {	// check if Strava's activity data is available; if it is not -> exit
             return;
@@ -1095,7 +1095,7 @@ env.debugMode>0   && console.log("--- StravistiX.js skip Manual activity: " + ac
 
 
         this.activityProcessor_.setActivityType(activityType);
-env.debugMode>0   && console.warn("--- StravistiX.js Getting activity data and analysing... ");
+env.debugMode>0   && console.debug("--- StravistiX.js Getting activity data and analysing... ");
 
 
 
@@ -1127,7 +1127,7 @@ env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee
                 html += 'font-size: 8px;color: rgb(180, 180, 180);">Activity type:   - <strong>'+window.pageView.activity().attributes.type+'</strong> -</div>';
                 $(".js-activity-privacy").after(html);
 
-env.debugMode>0   && console.log("--- StravistiX.js switch (activityType): " + activityType);
+env.debugMode>0   && console.info("--- StravistiX.js switch (activityType): " + activityType);
                 switch (activityType) {
 
 
@@ -1207,4 +1207,4 @@ env.debugMode>0   && console.log("--- StravistiX.js switch (activityType): " + a
 
 
 
-env.debugMode>0   && console.warn('End       StravistiX.js');
+env.debugMode>0   && console.info('End       StravistiX.js');

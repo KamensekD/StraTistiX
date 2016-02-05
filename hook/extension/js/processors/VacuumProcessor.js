@@ -1,4 +1,4 @@
-if (env.debugMode) console.warn('Begin     VacuumProcessor.js');
+if (env.debugMode) console.info('Begin     VacuumProcessor.js');
 /**
  *   Contructor
  */
@@ -33,7 +33,7 @@ if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.cal
                 athleteId = currentAthlete.id;
             }
         } catch (err) {
-if (env.debugMode) console.warn(err);
+if (env.debugMode) console.info(err);
         }
 
         return athleteId;
@@ -53,7 +53,7 @@ if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.cal
                 athleteName = currentAthlete.get('display_name');
             }
         } catch (err) {
-if (env.debugMode) console.warn(err);
+if (env.debugMode) console.info(err);
         }
 
         return athleteName;
@@ -98,7 +98,7 @@ if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.cal
                 premiumStatus = currentAthlete.attributes.premium;
             }
         } catch (err) {
-if (env.debugMode) console.warn(err);
+if (env.debugMode) console.info(err);
         }
 
         return premiumStatus;
@@ -129,7 +129,7 @@ if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.cal
 
             }
         } catch (err) {
-if (env.debugMode) console.warn(err);
+if (env.debugMode) console.info(err);
         }
 
         return proStatus;
@@ -295,7 +295,7 @@ if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.cal
 // if (elapsedTimeRaw.length<11) elapsedTime = VacuumProcessor.prototype.formatActivityDataValue_(   elapsedTimeRaw   , true, false, false, false);
 
         if (isNaN(elapsedTime)) {
-if (env.debugMode) console.warn("Can't get elapsed time - probably 'race'");
+if (env.debugMode) console.info("Can't get elapsed time - probably 'race'");
 		// if 'race' elapsed and moving time are swapped on Strava overview screen
         // Get Elapsed Time
         elapsedTime = this.formatActivityDataValue_(
@@ -388,7 +388,7 @@ if (env.debugMode) console.warn("Can't get elapsed time - probably 'race'");
 			}
 
         if (typeof averageSpeed === 'undefined') {
-if (env.debugMode) console.warn("Can't get average speed... tryin' to get pace");
+if (env.debugMode) console.debug("Can't get average speed... tryin' to get pace");
             averageSpeed = this.formatActivityDataValue_(			// If no average speed availabe, try to get pace instead and transform to speed
                 $('[class*="inline-stats section"]').children().first().next().next().children().text()
 //                $('[data-glossary-term*=definition-moving-time]').parent().parent().first().next().children().text()
@@ -535,7 +535,7 @@ env.debugMode>1   && console.log(' > (f: VacuumProcessor.js) >   ' + arguments.c
     getActivityStream: function getActivityStream(callback) {
 if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
-if (env.debugMode) console.log('>>>(f: VacuumProcessor.js) >   Try to read  -Activity '+this.getActivityId()+' Streams-  from cache/sessionStorage (' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + ')' )
+if (env.debugMode) console.info('>>>(f: VacuumProcessor.js) >   Try to read  -Activity '+this.getActivityId()+' Streams-  from cache/sessionStorage (' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + ')' )
       var cache = sessionStorage.getItem(VacuumProcessor.cachePrefix + this.getActivityId());
       if (cache) {
 if (env.debugMode) console.info('...   Streams FOUND in cache - using cached Activity Streams   ...' );
@@ -752,7 +752,7 @@ if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.cal
      *
      */
     smoothAltitude_: function smoothAltitude(activityStream, stravaElevation) {
-if (env.debugMode) console.warn(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
+if (env.debugMode) console.info(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
         var activityAltitudeArray = activityStream.altitude;
         var distanceArray = activityStream.distance;  // for smoothing by distance
 //        var timeArray = activityStream.time;  // for smoothing by time
@@ -831,4 +831,4 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 
 
 
-if (env.debugMode) console.warn('End       VacuumProcessor.js');
+if (env.debugMode) console.info('End       VacuumProcessor.js');

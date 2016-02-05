@@ -1,4 +1,4 @@
-if (env.debugMode) console.warn('Begin     ActivityProcessor.js');
+if (env.debugMode) console.info('Begin     ActivityProcessor.js');
 /**
  *   Contructor
  */
@@ -154,7 +154,7 @@ if (env.debugMode) console.log("Using existing activity cache in non debug mode:
 // Else no cache... then call VacuumProcessor for getting data, compute them and // *not* cache them
 //
         userFTP = parseInt(userFTP);
-if (env.debugMode) console.warn('Executing   VacuumProcessor_.getActivityStream   from   ActivityProcessor.js');
+if (env.debugMode) console.info('Executing   VacuumProcessor_.getActivityStream   from   ActivityProcessor.js');
 		// -------------------------------------------------        
 
 		globalActivityStatsMap	= this.vacuumProcessor_.getActivityCommonStats();	// set globalActivityStatsMap
@@ -182,7 +182,8 @@ if (env.debugMode) console.warn('Executing   VacuumProcessor_.getActivityStream 
                 analysisData: this.computeAnalysisData_(userGender, userRestHr, userMaxHr, userFTP, athleteWeight, hasPowerMeter, activityStatsMap, activityStream)
             };
 
-if (env.debugMode) console.log("\n\nActivity Common Stats and Analysis Data for ActivityID " + activityId + ":\n" + JSON.stringify(result) + "\n\n\n");
+if (env.debugMode) console.log("\n\nActivity Common Stats and Analysis Data for ActivityID " + activityId + "\n");
+//if (env.debugMode) console.log("\n\nActivity Common Stats and Analysis Data for ActivityID " + activityId + ":\n" + JSON.stringify(result) + "\n\n\n");
 
 /*
 if (env.debugMode) console.log('<<<(f: ActivityProcessor.js) >   Try to write  -Analysis Data-  to cache/localStorage (' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + ')' )
@@ -1456,7 +1457,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
      *
      */
     smoothAltitude_: function smoothAltitude(activityStream, stravaElevation) {
-if (env.debugMode) console.warn(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
+if (env.debugMode) console.debug(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
         var activityAltitudeArray = activityStream.altitude;
         var distanceArray = activityStream.distance;  // for smoothing by distance
 //        var timeArray = activityStream.time;  // for smoothing by time
@@ -1533,4 +1534,4 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 
 
 
-if (env.debugMode) console.warn('End       ActivityProcessor.js');
+if (env.debugMode) console.info('End       ActivityProcessor.js');

@@ -97,7 +97,7 @@ MenuModifier.prototype = {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 function(position) {
-        			if (env.debugMode) console.log("Position: "+position.coords.longitude+","+position.coords.latitude);
+        			if (env.debugMode) console.debug("Position: "+position.coords.longitude+","+position.coords.latitude);
                     $('#splus_menu_heatmap').find('a').attr('href', 'http://labs.strava.com/heatmap/#12/' + position.coords.longitude + '/' + position.coords.latitude + '/gray/both');
                 },
                 function(error) {

@@ -1,5 +1,5 @@
 var env = {
-    buildNumber: 230, // v2.3.0 release
+    buildNumber: 231, // v2.3.1 release
 //    based on ThomasChampagne's v2.2.1
     preview: false, // Must be false in release
     analyticsTrackingID: 'UA-62527089-1', 	// my "Release" Google Analytics Code

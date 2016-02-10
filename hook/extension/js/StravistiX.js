@@ -425,14 +425,14 @@ env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee
 env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
 //        var title = 'StraTistiX updated/installed to <strong>v' + this.appResources_.extVersion + '</strong>';
-        var title = 'StraTistiX recently updated to v2.3.0';
+        var title = 'StraTistiX recently updated to v2.3.1';
         var message = '';
     message += "<font size=+1>"
         message += "- NEW <strong/>graphic aRPEe Zones</strong/> (~TRIMP/hour) % and minute distribution!<br/>"
         message += "&nbsp&nbspNice visualization of percent and minutes spent in different zones<br/>"
         message += "- heart rate extended statistics returned to <strong/>total elapsed time</strong/>, from moving time<br/>"
         message += "&nbsp&nbsp(after consideration and case analysis I decided it is better this way, sorry for inconvenience)<br/>"
-        message += "- <strong/>MapFlippers</strong/> working again after Strava's changes that made them unfunctional<br/>"
+        message += "- <strong/>MapFlippers</strong/> working again after Strava's changes that made them unfunctional (again)<br/>"
         message += "- removed some caching, because it introduced more problems than gains (also fixes CSV export)<br/>"
         message += "- more extended statistics view data<br/>"
         message += "- fine-tuned some default zones<br/>"

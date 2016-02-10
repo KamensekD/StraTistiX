@@ -167,12 +167,12 @@ pageView.streams().attributes.altitude
 this.lightboxdata.title
 pageView.lightboxData()
 pageView.lightboxData().title
-http://www.html5rocks.com/en/tutorials/developertools/async-call-stack/
+
 this.version	??? v2.2
 ?activityProcessor.activityStream      - streams					   - accessible if not cached
 ?activityProcessor.activityStatsMap    - common stats (from vacuum) - accessible if not cached
 ================================================================================
-
+http://www.html5rocks.com/en/tutorials/developertools/async-call-stack/
 
 
 
@@ -855,6 +855,9 @@ env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee
         var self = this;
 
         // TODO Implement cache here: get stream from cache if exist
+        //
+        // it loads streams from cache again here!!!
+        //
         this.vacuumProcessor_.getActivityStream(function(activityCommonStats, jsonResponse, athleteWeight, hasPowerMeter) {
             Helper.getFromStorage(self.extensionId_, StorageManager.storageSyncType, 'bestSplitsConfiguration', function(response) {
 //                var activityBestSplitsModifier = new ActivityBestSplitsModifier(self.userSettings_, jsonResponse, activityCommonStats, hasPowerMeter, response.data, function(splitsConfiguration) {

@@ -1,11 +1,9 @@
-[![Stories in Ready](https://badge.waffle.io/thomaschampagne/stravistix.png?label=ready&title=Ready)](http://waffle.io/thomaschampagne/stravistix)
-[![Join the chat at https://gitter.im/thomaschampagne/stravistix](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/thomaschampagne/stravistix?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-Install StravistiX from Chrome Store
+Install StraTistiX from Chrome Store
 ==========
-Go to http://bitly.com/stravistix
+Go to http://goo.gl/8Ss6Sg
 
 Install/Develop from sources
-==========
+======
 **Requirements**
 * You need [**node package manager and nodejs**](http://nodejs.org/) to fetch nodejs dependencies and distribute the extension.
 
@@ -20,7 +18,7 @@ You can now load extension from **chrome://extensions** chrome tab:
 
 * Open new tab and type **chrome://extensions** then enter
 * Tick **Developer Mode** checkbox
-* Click **Load Unpacked Extension** button, then choose **hook/extension/** folder (this is where you have **manifest.json** file)
+* Click **Load Unpacked Extension** button, then choose **hook/extension/** folder (this is where **manifest.json** file is)
 * You can develop in !
 
 ## Create distribution folder 
@@ -33,14 +31,4 @@ This will create **dist/** folder. This folder is used for a release.
 ```
 node make build
 ```
-This will create zip archive of **dist/** folder in **builds/StravistiX\_vX.X.X\_[date].zip**
-
-## Clean 
-```
-node make clean
-```
-This will clean builds/, dist/ and node_modules/ folders
-
-## Code Editor and Indentation plugin used
-
-[**Sublime Text 3**](http://www.sublimetext.com/3) code editor with [**Sublime-HTMLPrettify**](https://github.com/victorporof/Sublime-HTMLPrettify) plugin for code indentation have been used in this project
+This will create zip archive of **dist/** folder in **builds/StraTistiX\_vX.X.X\_[date].zip**

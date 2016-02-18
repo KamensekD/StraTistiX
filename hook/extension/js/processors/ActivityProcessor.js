@@ -173,7 +173,7 @@ if (env.debugMode) console.info('Executing   VacuumProcessor_.getActivityStream 
 
 
             // Append altitude_smooth to fetched strava activity stream before compute analysis data on
-            if (typeof activityStream.altitude !== 'undefined') {
+            if ( (typeof activityStream.altitude !== 'undefined') && (typeof activityStream.distance !== 'undefined') ) {	// skip if no altitude or distance data
                     activityStream.altitude_smooth = this.smoothAltitude_(activityStream, activityStatsMap.elevation);
                 }
 
@@ -1462,9 +1462,9 @@ if (env.debugMode) console.debug(' > (f: ActivityProcessor.js) >   ' + arguments
         var distanceArray = activityStream.distance;  // for smoothing by distance
 //        var timeArray = activityStream.time;  // for smoothing by time
 
-//        if (!activityStream.altitude) {
-//            return null;
-//        }
+        if (!activityStream.altitude || !activityStream.distance) {	// if altitude or distance stream not available (case in some trainer workouts
+            return null;                                            // skip altitude smoothing
+        }
 
         var activityAltitudeArray = activityStream.altitude;
         var distanceArray = activityStream.distance;

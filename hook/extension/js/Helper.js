@@ -367,7 +367,7 @@ helperDebug>0   && console.log(' > > (f:  Helper.js) >   ' + arguments.callee.to
 	for (val of Keys) {
 		if (typeof StravaStreams[Keys[index]] !== 'undefined') {
 			KeysExp[index1++]=Keys[index];
-			Sizes[index]= (typeof StravaStreams[Keys[index]][0].length === 'undefined') ? 1 : (StravaStreams[val][0]).length;
+			Sizes[index]= (typeof StravaStreams[Keys[index]].length === 'undefined') ? 1 : (StravaStreams[val].length);
 			console.log(index+1+": "+val+" ("+Sizes[index++]+")");
 		} else index++;
 //		console.log(index+1+": "+val+" ("+Sizes[index++]+")");

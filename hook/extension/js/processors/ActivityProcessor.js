@@ -849,7 +849,10 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
             }
         }
 
-        var heartRateArraySorted = heartRateArray.sort(function(a, b) {
+//        var heartRateArraySorted = heartRateArray.sort(function(a, b) {	// this way "heartRateArraySorted" references the same "heartRateArray" object!
+//		var heartRateArraySorted = $.extend(true,{},heartRateArray);	// copy array to new object, not only reference! * this makes list object, not array
+		var heartRateArraySorted = heartRateArray.concat();		        // get copy of array (hr stream)
+        heartRateArraySorted.sort(function(a, b) {
             return a - b;
         });
 

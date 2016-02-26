@@ -384,22 +384,33 @@ myTRIMPchart = new Chart(CTXchart).Bar(DATAchart, myOPTchart);
 		};
 
 		if (this.analysisData_.cadenceData != null ) {
-			html += '<tr style="color: rgb(231,125,222)"><td>Cadence</td>';
-			html += '<td><strong>'+this.analysisData_.cadenceData.averageCadenceMoving.toFixed(1)+'</strong> rpm</td>';
-			html += '<td><strong>'+this.analysisData_.cadenceData.lowerQuartileCadence.toFixed(1)+'</strong> rpm</td>';
-			html += '<td><strong>'+this.analysisData_.cadenceData.medianCadence.toFixed(1)+'</strong> rpm</td>';
-			html += '<td><strong>'+this.analysisData_.cadenceData.upperQuartileCadence.toFixed(1)+'</strong> rpm</td>';
+			html += '<tr style="color: rgb(231,125,222)"><td>Cadence [rpm]</td>';
+			html += '<td><strong>'+this.analysisData_.cadenceData.averageCadenceMoving.toFixed(1)+'</strong></td>';
+			html += '<td><strong>'+this.analysisData_.cadenceData.lowerQuartileCadence.toFixed(1)+'</strong></td>';
+			html += '<td><strong>'+this.analysisData_.cadenceData.medianCadence.toFixed(1)+'</strong></td>';
+			html += '<td><strong>'+this.analysisData_.cadenceData.upperQuartileCadence.toFixed(1)+'</strong></td>';
 			html += '<td><strong>'+this.analysisData_.cadenceData.maxCadence.toFixed(1)+'</strong> rpm</td></tr>';
+		};
+
+		if (this.analysisData_.elevationData != null && this.analysisData_.gradeData != null ) {
+			if (this.analysisData_.elevationData.ascentSpeed.avg>0) {
+				html += '<tr style="color: rgb(44,0,204)"><td>VAM [vm/s]</td>';
+				html += '<td><strong>'+this.analysisData_.elevationData.ascentSpeed.avg.toFixed(0)+'</strong></td>';
+				html += '<td><strong>'+this.analysisData_.elevationData.ascentSpeed.lowerQuartile+'</strong></td>';
+				html += '<td><strong>'+this.analysisData_.elevationData.ascentSpeed.median+'</strong></td>';
+				html += '<td><strong>'+this.analysisData_.elevationData.ascentSpeed.upperQuartile+'</strong></td>';
+				html += '<td><div style="line-height:0.9em;"><font style="font-size:8px">ascent time<br></font><font style="font-size:11px">'+Helper.secondsToHHMMSS(this.analysisData_.elevationData.ascentTimeOverGradeClimbingLimit)+'</div></font></td></tr>';
+			}
 		};
 
 		if (this.analysisData_.gradeData != null ) {
 //		if (this.analysisData_.gradeData != null && !(this.analysisData_.gradeData.lowerQuartileGrade == 0 && this.analysisData_.gradeData.upperQuartileGrade == 0)) {
-			html += '<tr style="color: rgb(20,120,20)"><td>Grade<strong></td>';
+			html += '<tr style="color: rgb(20,120,20)"><td>Grade [%]<strong></td>';
 			html += '<td><strong>'+this.analysisData_.gradeData.avgGrade.toFixed(1);
-			html += '<td><strong>'+this.analysisData_.gradeData.lowerQuartileGrade.toFixed(1)+'</strong>%</td>';
-			html += '<td><strong>'+this.analysisData_.gradeData.medianGrade.toFixed(1)+'</strong>%</td>';
-			html += '<td><strong>'+this.analysisData_.gradeData.upperQuartileGrade.toFixed(1)+'</strong>%</td>';
-			html += '<td><strong>'+this.analysisData_.gradeData.maxGrade.toFixed(1)+'</strong>%</td></tr>';
+			html += '<td><strong>'+this.analysisData_.gradeData.lowerQuartileGrade.toFixed(1)+'</strong></td>';
+			html += '<td><strong>'+this.analysisData_.gradeData.medianGrade.toFixed(1)+'</strong></td>';
+			html += '<td><strong>'+this.analysisData_.gradeData.upperQuartileGrade.toFixed(1)+'</strong></td>';
+			html += '<td><strong>'+this.analysisData_.gradeData.minGrade.toFixed(1)+" / "+this.analysisData_.gradeData.maxGrade.toFixed(1)+'</strong></td></tr>';
 
 			html += '<tr style="color: rgb(20,120,20)"><td><strong>'+this.analysisData_.gradeData.gradeProfile+'</strong><br>';
 			html += '<font style="font-size:10px">';

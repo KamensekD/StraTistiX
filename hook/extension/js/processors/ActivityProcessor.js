@@ -1065,9 +1065,6 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         var upFlatDownInMeters 				= { up: 0, flat: 0, down: 0, total: 0 };
         var upFlatDownAltitudeInMeters 		= { climbed: 0, lost: 0, ignore: 0,  ballance: 0 };   // altitude meters climbed, lost, altitude ballance
 
-        var maxGrade = _.max(gradeArray);
-//        var minGrade = _.min(gradeArray);
-
         var upFlatDownSpeed = { up: 0, flat: 0, down: 0 };   // Currently deals with avg speed/pace
 
 
@@ -1185,6 +1182,10 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 
         var percentiles = Helper.weightedPercentiles(gradeArrayMoving, gradeArrayMovingDistance, [0.25, 0.5, 0.75]);
 
+		// calculate this AFTER smoothing/filtering !!!
+        var maxGrade = _.max(gradeArray);
+        var minGrade = _.min(gradeArray);
+
 
 
         // "Compute" grade profile word description
@@ -1291,6 +1292,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
             'upFlatDownSpeed': upFlatDownSpeed,
             'gradeProfile': gradeProfile,
             'maxGrade': maxGrade,
+            'minGrade': minGrade,
             'minAlt': minAlt,
             'maxAlt': maxAlt
         };

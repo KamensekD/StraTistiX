@@ -39,7 +39,6 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 
 // has to be done here, so that it works for all types of activities, not only cycling and running
 			// Add Show extended statistics to page
-//            this.placeSummaryPanel(function() {});
             this.placeExtendedStatsButton(function() {
 	        if (env.debugMode) console.log("Execute placeExtendedStatsButton");
             });
@@ -54,7 +53,6 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
         placeSummaryPanel: function(panelAdded) {
         if (env.debugMode) console.log("Execute placeSummaryPanel");
 
-//            this.makeSummaryGrid(2, 4);
             this.makeSummaryGrid(2, 2);
 
             this.insertContentSummaryGridContent();
@@ -115,7 +113,6 @@ var AbstractExtendedActivityDataModifier = Fiber.extend(function(base) {
 			// Add aRPEe to page
 			var aRPEe=this.analysisData_.heartRateData.aRPEe;
 
-//			html+= '<div style="border-bottom: 1px solid #ccc; padding-bottom: 5px;">';
 			html+= '<div style="border-bottom: 0px solid #ccc;">';
 			html+='<table style="margin:0px;" title="'+RPEnote+RPEnote1+HRnote+RPEnote2+'"><tr><td width=50px style="padding:0px;border-bottom: 0px;">';
 			html+='<img src="' + this.appResources_.aRPEeIcon + '" style="padding-top:4px"></td>';
@@ -161,31 +158,31 @@ var CTXchart = document.getElementById("TRIMPchart").getContext("2d");
 
 
 var myData=[
-    Math.round( StravaStreamsA.TRIMPPerHourZones[0].percentDistrib ),
-    Math.round( StravaStreamsA.TRIMPPerHourZones[1].percentDistrib ),
-    Math.round( StravaStreamsA.TRIMPPerHourZones[2].percentDistrib ),
-    Math.round( StravaStreamsA.TRIMPPerHourZones[3].percentDistrib ),
-    Math.round( StravaStreamsA.TRIMPPerHourZones[4].percentDistrib ),
-    Math.round( StravaStreamsA.TRIMPPerHourZones[5].percentDistrib ),
-    Math.round( StravaStreamsA.TRIMPPerHourZones[6].percentDistrib ),
-    Math.round( StravaStreamsA.TRIMPPerHourZones[7].percentDistrib ),
-    Math.round( StravaStreamsA.TRIMPPerHourZones[8].percentDistrib ),
-    Math.round( StravaStreamsA.TRIMPPerHourZones[9].percentDistrib ),
-    Math.round( StravaStreamsA.TRIMPPerHourZones[10].percentDistrib)
+    Math.round( globalActivityAnalysisData.heartRateData.TRIMPPerHourZones[0].percentDistrib ),
+    Math.round( globalActivityAnalysisData.heartRateData.TRIMPPerHourZones[1].percentDistrib ),
+    Math.round( globalActivityAnalysisData.heartRateData.TRIMPPerHourZones[2].percentDistrib ),
+    Math.round( globalActivityAnalysisData.heartRateData.TRIMPPerHourZones[3].percentDistrib ),
+    Math.round( globalActivityAnalysisData.heartRateData.TRIMPPerHourZones[4].percentDistrib ),
+    Math.round( globalActivityAnalysisData.heartRateData.TRIMPPerHourZones[5].percentDistrib ),
+    Math.round( globalActivityAnalysisData.heartRateData.TRIMPPerHourZones[6].percentDistrib ),
+    Math.round( globalActivityAnalysisData.heartRateData.TRIMPPerHourZones[7].percentDistrib ),
+    Math.round( globalActivityAnalysisData.heartRateData.TRIMPPerHourZones[8].percentDistrib ),
+    Math.round( globalActivityAnalysisData.heartRateData.TRIMPPerHourZones[9].percentDistrib ),
+    Math.round( globalActivityAnalysisData.heartRateData.TRIMPPerHourZones[10].percentDistrib)
 ];
 
 var myDataMinutes=[
-    Math.round( StravaStreamsA.TRIMPPerHourZones[0].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
-    Math.round( StravaStreamsA.TRIMPPerHourZones[1].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
-    Math.round( StravaStreamsA.TRIMPPerHourZones[2].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
-    Math.round( StravaStreamsA.TRIMPPerHourZones[3].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
-    Math.round( StravaStreamsA.TRIMPPerHourZones[4].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
-    Math.round( StravaStreamsA.TRIMPPerHourZones[5].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
-    Math.round( StravaStreamsA.TRIMPPerHourZones[6].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
-    Math.round( StravaStreamsA.TRIMPPerHourZones[7].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
-    Math.round( StravaStreamsA.TRIMPPerHourZones[8].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
-    Math.round( StravaStreamsA.TRIMPPerHourZones[9].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
-    Math.round( StravaStreamsA.TRIMPPerHourZones[10].percentDistrib * globalActivityStatsMap.elapsedTime/6000)
+    Math.round( globalActivityAnalysisData.heartRateData.TRIMPPerHourZones[0].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
+    Math.round( globalActivityAnalysisData.heartRateData.TRIMPPerHourZones[1].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
+    Math.round( globalActivityAnalysisData.heartRateData.TRIMPPerHourZones[2].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
+    Math.round( globalActivityAnalysisData.heartRateData.TRIMPPerHourZones[3].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
+    Math.round( globalActivityAnalysisData.heartRateData.TRIMPPerHourZones[4].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
+    Math.round( globalActivityAnalysisData.heartRateData.TRIMPPerHourZones[5].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
+    Math.round( globalActivityAnalysisData.heartRateData.TRIMPPerHourZones[6].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
+    Math.round( globalActivityAnalysisData.heartRateData.TRIMPPerHourZones[7].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
+    Math.round( globalActivityAnalysisData.heartRateData.TRIMPPerHourZones[8].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
+    Math.round( globalActivityAnalysisData.heartRateData.TRIMPPerHourZones[9].percentDistrib * globalActivityStatsMap.elapsedTime/6000),
+    Math.round( globalActivityAnalysisData.heartRateData.TRIMPPerHourZones[10].percentDistrib * globalActivityStatsMap.elapsedTime/6000)
 ];
 
 // test data for chart
@@ -514,26 +511,6 @@ myTRIMPchart = new Chart(CTXchart).Bar(DATAchart, myOPTchart);
 
         insertContentSummaryGridContent: function() {
        	if (env.debugMode) console.log("Execute insertContentSummaryGridContent");
-/*
-            // Insert summary data
-            var moveRatio = '-';
-            if (this.analysisData_.moveRatio && this.userSettings_.displayActivityRatio) {
-                moveRatio = this.analysisData_.moveRatio.toFixed(2);
-            }
-            this.insertContentAtGridPosition(0, 0, moveRatio, 'Move Ratio', '', 'displayActivityRatio');
-*/
-            // ...
-/*
-            var TRIMP = activityHeartRateReserve = '-';
-            var activityHeartRateReserveUnit = '%';
-            if (this.analysisData_.heartRateData && this.userSettings_.displayAdvancedHrData) {
-                TRIMP = this.analysisData_.heartRateData.TRIMP.toFixed(0) + ' <span class="summarySubGridTitle">(' + this.analysisData_.heartRateData.TRIMPPerHour.toFixed(0) + ' / hour)</span>';
-                activityHeartRateReserve = this.analysisData_.heartRateData.activityHeartRateReserve.toFixed(0);
-                activityHeartRateReserveUnit = '%  <span class="summarySubGridTitle">(Max: ' + this.analysisData_.heartRateData.activityHeartRateReserveMax.toFixed(0) + '% @ ' + this.analysisData_.heartRateData.maxHeartRate + 'bpm)</span>';
-            }
-            this.insertContentAtGridPosition(0, 1, TRIMP, 'TRaining IMPulse', '', 'displayAdvancedHrData');
-            this.insertContentAtGridPosition(1, 1, activityHeartRateReserve, 'Heart Rate Reserve Avg', activityHeartRateReserveUnit, 'displayAdvancedHrData');
-*/
             // ...
             var climbTime = '-';
             var climbTimeExtra = '';

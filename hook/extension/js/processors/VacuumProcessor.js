@@ -160,7 +160,6 @@ if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.cal
         // Get Activity Name
 // without var -> global scope (window.activityName)
         activityName = actStatsContainer.find('.marginless.activity-name').text();
-//        var activityName = actStatsContainer.find('.marginless.activity-name').text();
         return activityName;
     },
 
@@ -178,7 +177,6 @@ if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.cal
         // Get Activity Time
 // without var -> global scope (window.activityTime)
         activityTime = actStatsContainer.find('time').text();
-//        var activityTime = actStatsContainer.find('time').text();
         return activityTime;
     },
 
@@ -195,7 +193,6 @@ if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.cal
         activityType = pageView.activity().get('type');
 
 		// get activity sub type
-//		var tmp=$(".title:contains('"+currentAthlete.get('display_name')+"')").text().split(String.fromCharCode(10)+String.fromCharCode(8211)+String.fromCharCode(10));
 		var tmp=$(".title:contains('"+window.pageView.activityAthlete().attributes.display_name+"')").text().split(String.fromCharCode(10)+String.fromCharCode(8211)+String.fromCharCode(10));
 		activitySubType = tmp[tmp.length-1].slice(0, -1);
 
@@ -245,7 +242,6 @@ if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.cal
         // Get Distance
 // without var -> global scope (window.distance)
         distance = this.formatActivityDataValue_(
-//        var distance = this.formatActivityDataValue_(
             actStatsContainer.find('.inline-stats.section').children().first().text(),
             false, false, true, false);
 
@@ -279,43 +275,6 @@ if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.cal
         }
 
 
-
-/*  old code
-
-        // Get Elapsed Time
-// without var -> global scope (window.elapsedTime)
-        var elapsedTimeRaw=$('[data-glossary-term*=definition-elapsed-time]').parent().next().text();
-
-//        var elapsedTime = this.formatActivityDataValue_(
-//            $('[data-glossary-term*=definition-elapsed-time]').parent().parent().children().last().text(),	// bugfix
-
-		if (elapsedTimeRaw.length<11) elapsedTime = this.formatActivityDataValue_(   elapsedTimeRaw   , true, false, false, false);
-
-// elapsedTimeRaw=$('[data-glossary-term*=definition-elapsed-time]').parent().next().text()
-// if (elapsedTimeRaw.length<11) elapsedTime = VacuumProcessor.prototype.formatActivityDataValue_(   elapsedTimeRaw   , true, false, false, false);
-
-        if (isNaN(elapsedTime)) {
-if (env.debugMode) console.info("Can't get elapsed time - probably 'race'");
-		// if 'race' elapsed and moving time are swapped on Strava overview screen
-        // Get Elapsed Time
-        elapsedTime = this.formatActivityDataValue_(
-            $('[data-glossary-term*=definition-elapsed-time]').parent().first().prev().text()
-            , true, false, false, false);
-
-        movingTime = this.formatActivityDataValue_(
-            $('[data-glossary-term*=definition-moving-time]').parent().next().text()
-            , true, false, false, false);
-	      } else
-	      {
-        // Get Moving Time
-        movingTime = this.formatActivityDataValue_(
-            $('[data-glossary-term*=definition-moving-time]').parent().first().next().text()
-            , true, false, false, false);
-				}
-
-*/
-
-
         // Get Elevation
 		switch (window.activityType) {
       case 'Ride':
@@ -326,7 +285,6 @@ if (env.debugMode) console.info("Can't get elapsed time - probably 'race'");
     	case 'Run':
      		var elevation = this.formatActivityDataValue_(
           	$('[class*="section more-stats"]').children().children().first().next().text(),
-//          var test = $('[class*="section more-stats"]').children().children().first().next().text();
             false, false, false, false);
         break;
       default:
@@ -356,7 +314,6 @@ if (env.debugMode) console.info("Can't get elapsed time - probably 'race'");
     	case 'Run':
      		var calories = this.formatActivityDataValue_(
           	$('[class*="section more-stats"]').children().children().first().next().next().next().text(),
-//          var test = $('[class*="section more-stats"]').children().children().first().next().next().next().text();
             false, false, false, false);
         break;
       default:
@@ -375,9 +332,8 @@ if (env.debugMode) console.info("Can't get elapsed time - probably 'race'");
         // Get Average speed
 		switch (window.activityType) {
       case 'Ride':
-// without var -> global scope (window.averageSpeed)		// preveri pravilnost!
+// without var -> global scope (window.averageSpeed)		// TODO preveri pravilnost!
         averageSpeed = this.formatActivityDataValue_(
-//        var averageSpeed = this.formatActivityDataValue_(
             actStatsContainer.find('.section.more-stats').find('.unstyled').children().first().next().children().first().children().first().next().text(),
             false, false, false, false);
 				break;
@@ -404,31 +360,7 @@ if (env.debugMode) console.debug("Can't get average speed... tryin' to get pace"
             averageSpeed = averageSpeed / speedFactor; // Always give PKH here
 
 
-
         // Get Average and Max Heartrate			*** done in ActivityProcesor.js
-/*
-		switch (window.activityType) {
-			var maxHeartRate = ;
-      case 'Ride':
-      case 'StationaryOther':
-     		var averageHeartRate = this.formatActivityDataValue_(
-            actStatsContainer.find('.section.more-stats').find('.unstyled').children().first().next().next().children().first().children().first().next().has('abbr').text(),
-            false, false, false, false);
-//        var maxHeartRate = this.formatActivityDataValue_(
-//            actStatsContainer.find('.section.more-stats').find('.unstyled').children().first().next().next().children().first().children().first().next().next().text(),
-//            false, false, false, false);
-				break;
-    	case 'Run':
-     		var averageHeartRate = this.formatActivityDataValue_(
-          $('[class*=gap]').next().text(),
-//          var test =  $('[class*=gap]').next().text();
-            false, false, false, false);
-        break;
-      default:
-        break;
-			}
-*/
-
 
 
         // Create activityData Map ( ActivityStatsMap )
@@ -464,7 +396,6 @@ if (env.debugMode) console.debug("Can't get average speed... tryin' to get pace"
      * @returns formated/cleaned activity data
      */
     formatActivityDataValue_: function formatActivityDataValue_(dataIn, parsingTime, parsingElevation, parsingDistance, parsingEnergy) {
-//if (env.debugMode) console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 env.debugMode>1   && console.log(' > (f: VacuumProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
 
@@ -478,24 +409,6 @@ env.debugMode>1   && console.log(' > (f: VacuumProcessor.js) >   ' + arguments.c
         cleanData = cleanData.replace('/', '');					// remove slash     (for Pace /km)
         cleanData = cleanData.replace(/\s/g, '').trim('string');
         cleanData = cleanData.replace(/[\n\r]/g, '');
-
-/*
-       var cleanData = dataIn.toLowerCase();
-        cleanData = cleanData.replace(new RegExp(/\s/g), '');
-        cleanData = cleanData.replace(new RegExp(/[aáâaäa]/g), '');
-        cleanData = cleanData.replace(new RegExp(/a/g), '');
-        cleanData = cleanData.replace(new RegExp(/ç/g), '');
-        cleanData = cleanData.replace(new RegExp(/[eéeë]/g), '');
-        cleanData = cleanData.replace(new RegExp(/[iíîi]/g), '');
-        cleanData = cleanData.replace(new RegExp(/n/g), '');
-        cleanData = cleanData.replace(new RegExp(/[oóôoö]/g), '');
-        cleanData = cleanData.replace(new RegExp(/o/g), "o");
-        cleanData = cleanData.replace(new RegExp(/[uúuü]/g), '');
-        cleanData = cleanData.replace(new RegExp(/[ýy]/g), '');
-        cleanData = cleanData.replace(/\s/g, '').trim('string');
-        cleanData = cleanData.replace(/[\n\r]/g, '');
-        cleanData = cleanData.replace(/([a-z]|[A-Z])+/g, '').trim();
-*/
 
 
 				if (parsingDistance && (cleanData.indexOf("m") != -1)) {	// ce je m
@@ -543,18 +456,14 @@ if (env.debugMode) console.info('...   Streams FOUND in cache - using cached Act
 
             cache = JSON.parse(cache);
 		if (typeof StravaStreams == "undefined") {	// don't reset the StravaStreams global variable from cache!
-//        if (Object.getOwnPropertyNames(StravaStreams).length==0) {
             StravaStreams=cache.stream;								// set StravaStreams from cache
         }
-//            StravaActivityCommonStats=cache.activityCommonStats;	// set StravaActivityCommonStats from cache
-//            callback(cache.activityCommonStats, cache.stream, cache.athleteWeight, cache.hasPowerMeter);
             callback( cache.activityCommonStats, cache.stream, cache.athleteWeight, cache.hasPowerMeter);
             return;
             
 
       } else {
 if (env.debugMode) console.info('...   Streams NOT in cache - getting Activity Streams from Strava (async)   ...');
-//      }
 
 
 //        var url = "/activities/" + this.getActivityId() + "/streams?stream_types[]=watts_calc&stream_types[]=watts&stream_types[]=velocity_smooth&stream_types[]=time&stream_types[]=distance&stream_types[]=cadence&stream_types[]=heartrate&stream_types[]=grade_smooth&stream_types[]=altitude&stream_types[]=latlng";
@@ -576,14 +485,7 @@ if (env.debugMode) console.info('...   ajax_done - got back Activity Streams fro
 if (env.debugMode) console.log('<<<(f: VacuumProcessor.js) >   Try to write  -Activity '+pageView.activityId()+' Streams-  to cache < ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
             globalActivityStreams	= jsonResponse;						// set globalActivityStreams
-//            activityStreams	= jsonResponse;						// set globalActivityStreams
         	globalActivityStatsMap	= this.getActivityCommonStats();	// set globalActivityStatsMap
-//			activityCommonStats =  cacheResult.activityCommonStats;		// set globalActivityStatsMap from cache
-
-//		globalActivityStreams.altitude_smooth = ActivityProcessor.prototype.smoothAltitude_(globalActivityStreams, globalActivityStatsMap.elevation);
-// ??? if you do this here, you get error "Uncaught TypeError: Cannot read property '1' of undefined" in ActivityProcessor.js:989
-//														            deltaAltitude = altitudeArray[i] - altitudeArray[i - 1];	(   gradeData_: function gradeData_(...   )
-
 
             	var result = {
                     activityCommonStats:	globalActivityStatsMap,
@@ -612,12 +514,6 @@ if (env.debugMode) console.log("\nWritten Activity Common Stats and Streams to c
                 console.warn(err);
                 sessionStorage.clear();
             }
-
-
-/*
- var full_array=[{t:1,x:0,y:10},{t:2,x:10,y:11},{t:3,x:20,y:13},{t:4,x:30,y:12},{t:5,x:40,y:11}];
-var simpl_array=simplify(full_array,0.1,1);
-*/
 
 
 	StravaStreams = jsonResponse;	// store original Strava streams JSON response in a global variable

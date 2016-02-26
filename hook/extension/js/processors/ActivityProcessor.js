@@ -10,10 +10,7 @@ function ActivityProcessor(vacuumProcessor, userHrrZones, zones) {
 }
 
 
-
 ActivityProcessor.cachePrefix = 'StraTistiX_activity_';
-
-
 
 // *** PUT SOME OF THIS STUFF IN CONFIGURABLE SETTINGS! ***
 ActivityProcessor.movingThresholdKph    = 1.5;  // 1.5 Kph   !!!   consider making this separate for biking and other activities   !!!
@@ -40,7 +37,6 @@ ActivityProcessor.smoothingH = 99;		// low and high limits
 
 
 
-
 // GRADE PROFILE "WORD" ESTIMATE parameters
 // note that "MinClimbed" doesn't mean total climbed min, but min climbed @ minimum "gradeClimbingLimit" !
 // so climbing at low grades doesn't count-in here !
@@ -63,7 +59,6 @@ ActivityProcessor.gradeProfileMostlyFlat_MaxAvgGradeEst1 = 2.0; // -OR- average 
 ActivityProcessor.gradeProfileMostlyFlat = 'MOSTLY FLAT';
 
 ActivityProcessor.gradeProfileAbitHilly_MinFlatPercentT = 33;   // if at least 33% of time is flat otherwise "almost flat" runs can be detected as hilly
-//ActivityProcessor.gradeProfileAbitHilly_MaxAvgGradeEst = 4.0;   // and average (estimated) grade of climbing% is less then 4.0%
 ActivityProcessor.gradeProfileAbitHilly_MaxDeltaH = 222;        //and at most 222m difference of highest and lowest altitude
 ActivityProcessor.gradeProfileAbitHilly = 'A BIT HILLY';
 
@@ -97,8 +92,6 @@ ActivityProcessor.prototype = {
 
 
 
-
-
     /**
      *
      */
@@ -119,44 +112,6 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
             console.error('No activity type set for ActivityProcessor');
         }
 
-// no caching for analysis data (too much problems
-/*
-        // Find in cache first if data exist
-if (env.debugMode) console.log('>>>(f: ActivityProcessor.js) >   Try to read  -Analysis Data-  from cache/localStorage (' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + ')' )
-        var cacheResult = JSON.parse(localStorage.getItem(ActivityProcessor.cachePrefix + activityId));
-                if (cacheResult) {
-if (env.debugMode) console.info('...   Analysis FOUND in cache - using cached Analysis Data   ...' );
-                } else {
-if (env.debugMode) console.info('...   Analysis NOT in cache - calculating Analysis Data   ...' );
-                }
-*/
-                
-//
-// got back cached analysis here	now we have to also read streams and statsmap from cache or strava !!! *****
-//
-///*
-
-
-//        this.vacuumProcessor_.getActivityStream( function getActivityStream( activityStatsMap, activityStream, athleteWeight, hasPowerMeter ) {}); // Get stream on page
-		
-//        }.bind(this));	// this.vacuumProcessor_.getActivityStream
-//*/
-
-// no caching for analysis data (too much problems
-/*
-        if (!_.isNull(cacheResult) && env.useActivityStreamCache) {
-if (env.debugMode) console.log("Using existing activity cache in non debug mode: " + JSON.stringify(cacheResult));
-
-            globalActivityStatsMap	= cacheResult.activityCommonStats;		// set globalActivityStatsMap from cache
-			activityCommonStats		= cacheResult.activityCommonStats;		// set globalActivityStatsMap from cache
-            callback(cacheResult.analysisData);
-            return;
-        }
-*/
-
-//
-// Else no cache... then call VacuumProcessor for getting data, compute them and // *not* cache them
-//
         userFTP = parseInt(userFTP);
 if (env.debugMode) console.info('Executing   VacuumProcessor_.getActivityStream   from   ActivityProcessor.js');
 		// -------------------------------------------------        
@@ -166,14 +121,8 @@ if (env.debugMode) console.info('Executing   VacuumProcessor_.getActivityStream 
         this.vacuumProcessor_.getActivityStream( function getActivityStream( activityStatsMap, activityStream, athleteWeight, hasPowerMeter ) { // Get stream on page
 
 
-			//
-			// got back cached streams and statsmap here
-			//
-//            globalActivityStreams	= activityStream;		// set globalActivityStreams from cache
-//            globalActivityStatsMap	= activityStatsMap;		// set globalActivityStatsMap from cache
-  //			activityCommonStats		= cacheResult.activityCommonStats;		// set globalActivityStatsMap from cache
-            //
-            //
+			// got back cached streams here
+            globalActivityStreams	= activityStream;		// set globalActivityStreams from cache
 
 
             // Append altitude_smooth to fetched strava activity stream before compute analysis data on
@@ -186,23 +135,11 @@ if (env.debugMode) console.info('Executing   VacuumProcessor_.getActivityStream 
                 analysisData: this.computeAnalysisData_(userGender, userRestHr, userMaxHr, userFTP, athleteWeight, hasPowerMeter, activityStatsMap, activityStream)
             };
 
-if (env.debugMode) console.log("\n*** Globally accessible globalActivityAnalysisData\n");
+if (env.debugMode) console.log("\n*** Create globally accessible globalActivityAnalysisData\n");
+    globalActivityAnalysisData=[];
 	globalActivityAnalysisData = result.analysisData;	// make analysis data globally accessible
 
 if (env.debugMode) console.log("\n\nActivity Common Stats and Analysis Data for ActivityID " + activityId + "\n");
-//if (env.debugMode) console.log("\n\nActivity Common Stats and Analysis Data for ActivityID " + activityId + ":\n" + JSON.stringify(result) + "\n\n\n");
-
-/*
-if (env.debugMode) console.log('<<<(f: ActivityProcessor.js) >   Try to write  -Analysis Data-  to cache/localStorage (' + arguments.callee.toString().match(/function ([^\(]+)/)[1] + ')' )
-
-            try {
-                localStorage.setItem(ActivityProcessor.cachePrefix + activityId, JSON.stringify(result)); // Cache the result to local storage
-            } catch (err) {
-                console.warn(err);
-                localStorage.clear();
-            }
-if (env.debugMode) console.log("\nWritten to cache/localstorage: " + ActivityProcessor.cachePrefix + activityId + "\n\n" + JSON.stringify(result) + "\n\n\n");
-*/            
 
             callback(result.analysisData);
 
@@ -212,9 +149,8 @@ if (env.debugMode) console.log("\nWritten to cache/localstorage: " + ActivityPro
 
 
 
-    /**
-     *
-     */
+
+
 // =================================================================================================
     computeAnalysisData_: function computeAnalysisData_(userGender, userRestHr, userMaxHr, userFTP, athleteWeight, hasPowerMeter, activityStatsMap, activityStream) {
 if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
@@ -258,14 +194,12 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         // Median Speed
         // Q3 Speed
         // Standard deviation Speed
-//        if (moveData) var speedData = moveData[0];
         var speedData = (_.isEmpty(moveData)) ? null : moveData[0];
 
         // Q1 Pace
         // Median Pace
         // Q3 Pace
         // Standard deviation Pace
-//        if (moveData) var paceData = moveData[1];
         var paceData = (_.isEmpty(moveData)) ? null : moveData[1];
 
         // Estimated Normalized power
@@ -287,18 +221,16 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         // Crank revolution
         var cadenceData = this.cadenceData_(activityStream.cadence, activityStream.velocity_smooth, activityStatsMap, activityStream.time);
 
-
         // Avg grade
         // Q1/Q2/Q3 grade
         activityStream.grade_filtered=activityStream.grade_smooth.concat(); // copy Strava's grade data to another array, that will be modified in "gradeData_"
         var gradeData = this.gradeData_(activityStream.grade_filtered, activityStream.velocity_smooth, activityStream.time, activityStream.distance, activityStream.altitude_smooth);
-//        var gradeData = this.gradeData_(activityStream.grade_smooth, activityStream.velocity_smooth, activityStream.time, activityStream.distance, activityStream.altitude);
 
         // Avg grade
         // Q1/Q2/Q3 grade
         var elevationData = this.elevationData_(activityStream, activityStatsMap);
 
-        // Return an array with all that shit...
+        // Return an array with all that analysis data...
         return {
             'moveRatio': moveRatio,
             'toughnessScore': toughnessScore,
@@ -312,6 +244,8 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         };
     },// computeAnalysisData
 // =================================================================================================
+
+
 
 
 
@@ -427,10 +361,10 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
      *     discrete integral
      */
     valueForSum_: function valueForSum_(currentValue, previousValue, delta) {
-//if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
-        
         return currentValue * delta - ((currentValue - previousValue) * delta) / 2;
     },
+
+
 
 
 
@@ -438,7 +372,6 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
     moveData_: function moveData_(activityStatsMap, velocityArray, timeArray) {
 if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
-//        if (!velocityArray) {
         if (_.isEmpty(velocityArray) || _.isEmpty(timeArray)) {
             return null;
         }
@@ -535,7 +468,6 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
             'upperQuartilePace': this.convertSpeedToPace(percentiles[2]),
             'percentile99Pace': this.convertSpeedToPace(percentiles[3]),
             'variancePace': this.convertSpeedToPace(varianceSpeed),
-//            'standardDeviationPace': this.convertSpeedToPace(standardDeviationSpeed),
             'paceZones': paceZones
         }];
     },
@@ -559,8 +491,6 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
     powerData_: function powerData_(athleteWeight, hasPowerMeter, userFTP, activityStatsMap, powerArray, velocityArray, timeArray) {
 if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
-//        if (_.isEmpty(powerArray) || _.isEmpty(velocityArray)) {
-//        if (_.isEmpty(powerArray) || _.isEmpty(velocityArray) || _.isEmpty(timeArray)) {
         if (_.isEmpty(powerArray) || _.isEmpty(timeArray)) {
             return null;
         }
@@ -653,105 +583,6 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
             return null;
         }
 
-
-/*
-        // if no velocity data, or very low average velocity
-        // compute heartrate stats "the old way" - this is for activities either without GPS data or with GPS data, but done on (more or less) same spot
-        if ( _.isEmpty(velocityArray) || ( velocity_avg < velocity_avgThreshold ) ) {
-        //
-        // "OLD" WAY of calculating HR stats - not only for "moving" part of activity
-
-
-
-        var TRIMP = 0;
-        var TRIMPGenderFactor = (userGender == 'men') ? 1.92 : 1.67;
-        var aRPEeGenderFactor = (userGender == 'men') ? 25 : 20;
-        var hrrSecondsCount = 0;
-        var hrrZonesCount = Object.keys(this.userHrrZones_).length;
-        var hr, heartRateReserveAvg, durationInSeconds, durationInMinutes, zoneId;
-        var hrSum = 0;
-        var hrCount = 0;
-// check VacuumProcessor
-        var maxHeartRate = Math.max.apply(Math, heartRateArray);
-        activityStatsMap.maxHeartRate=maxHeartRate;
-
-        // Find HR for each Hrr of each zones
-        for (var zone in this.userHrrZones_) {
-            this.userHrrZones_[zone]['fromHr'] = parseFloat(Helper.heartrateFromHeartRateReserve(this.userHrrZones_[zone]['fromHrr'], userMaxHr, userRestHr));
-            this.userHrrZones_[zone]['toHr'] = parseFloat(Helper.heartrateFromHeartRateReserve(this.userHrrZones_[zone]['toHrr'], userMaxHr, userRestHr));
-            this.userHrrZones_[zone]['fromHrr'] = parseFloat(this.userHrrZones_[zone]['fromHrr']);
-            this.userHrrZones_[zone]['toHrr'] = parseFloat(this.userHrrZones_[zone]['toHrr']);
-            this.userHrrZones_[zone]['s'] = 0;
-            this.userHrrZones_[zone]['percentDistrib'] = null;
-        }
-
-        for (var i = 0; i < heartRateArray.length; i++) { // Loop on samples
-
-            // Compute heartrate data
-            if (i > 0) {
-
-                hrSum += heartRateArray[i];
-
-                // Compute TRIMP
-                hr = (heartRateArray[i] + heartRateArray[i - 1]) / 2; // Getting HR avg between current sample and previous one.
-                heartRateReserveAvg = Helper.heartRateReserveFromHeartrate(hr, userMaxHr, userRestHr); //(hr - userSettings.userRestHr) / (userSettings.userMaxHr - userSettings.userRestHr);
-                durationInSeconds = (timeArray[i] - timeArray[i - 1]); // Getting deltaTime in seconds (current sample and previous one)
-                durationInMinutes = durationInSeconds / 60;
-
-                // TRIMP += durationInMinutes * heartRateReserveAvg * Math.pow(0.64, TRIMPGenderFactor * heartRateReserveAvg);
-                TRIMP += durationInMinutes * heartRateReserveAvg * 0.64 * Math.exp(TRIMPGenderFactor * heartRateReserveAvg);
-                // Count Heart Rate Reserve distribution
-                zoneId = this.getHrrZoneId(hrrZonesCount, heartRateReserveAvg * 100);
-
-                if (!_.isUndefined(zoneId)) {
-                    this.userHrrZones_[zoneId]['s'] += durationInSeconds;
-                }
-
-                hrrSecondsCount += durationInSeconds;
-                hrCount++;
-            }
-        }
-
-        var heartRateArraySorted = heartRateArray.sort(function(a, b) {
-            return a - b;
-        });
-
-        // Update zone distribution percentage
-        for (var zone in this.userHrrZones_) {
-            this.userHrrZones_[zone]['percentDistrib'] = ((this.userHrrZones_[zone]['s'] / hrrSecondsCount).toFixed(4) * 100);
-        }
-
-// check VacuumProcessor
-        activityStatsMap.averageHeartRate = Math.round((hrSum / hrCount)*10)/10;
-
-        TRIMP = Math.round(TRIMP*10)/10;
-// using of moving time sometimes results in too big TRIMP/hr numbers, but it mostly works OK for biking (Ride)
-// because moving time is detected a lot more reliable than for example in running uphill
-//      if (activityStatsMap.movingTime && (window.activityType == 'Ride')) {
-//              var TRIMP_hr = TRIMP/(activityStatsMap.movingTime/3600);
-//      }else{
-//              var TRIMP_hr = TRIMP/(activityStatsMap.elapsedTime/3600);
-//      }
-//      var TRIMP_hr = Math.round((TRIMP/(activityStatsMap.elapsedTime/3600))*10)/10;
-//
-// when calculating TRIMP, non-movin time HR should count in for TRIMP!
-
-        var TRIMPPerHour = TRIMP / hrrSecondsCount * 60 * 60;
-//        var TRIMP_hr = Math.round(TRIMPPerHour*10)/10;
-//        var percentiles = Helper.weightedPercentiles(heartRateArrayMoving, heartRateArrayMovingDuration, [ 0.25, 0.5, 0.75 ]);
-        var percentiles=[];
-        percentiles[0]=Helper.lowerQuartile(heartRateArraySorted);
-        percentiles[1]=Helper.median(heartRateArraySorted);
-        percentiles[2]=Helper.upperQuartile(heartRateArraySorted);
-
-
-
-        } else {
-        //
-        // "NEW" WAY of calculating HR stats - only for "moving" part of activity
-*/
-
-
         var TRIMP = 0;
 		var TRIMPArray = [];
         
@@ -759,10 +590,9 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 		var TRIMPPerHourArray = [];	// use for TRIMP distribution graph
         TRIMPPerHourArray[0] = 0;
         
-//        var TRIMPGenderFactor = (userGender == 'men') ? 1.92 : 1.67;
         var TRIMPGenderFactor = (pageView._activityAthlete.attributes.gender == 'F') ? 1.67 : 1.92;
-//        var aRPEeGenderFactor = (userGender == 'men') ? 25 : 20;
         var aRPEeGenderFactor = (pageView._activityAthlete.attributes.gender == 'F') ? 20 : 25;
+
 
     // define TRIMPPerHour zones
 	this.zones.TRIMPPerHour = [
@@ -816,7 +646,6 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 // If you don't count in "pause time", you'll get a lot bigger TRIMPPerHour for first run, because for similar TRIMP
 // you'll divide with a lot shorter time, but in fact second run would "feel" a lot harder
 
-              // Compute heartrate data while moving from now
 //			if ( ( velocityArray[i] * 3.6 > ActivityProcessor.movingThresholdKph ) && i > 0 ) {
             if ( i > 0 ) {
                 durationInSeconds = (timeArray[i] - timeArray[i - 1]); // Getting deltaTime in seconds (current sample and previous one)
@@ -830,7 +659,6 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
                 // Compute TRIMP
                 hr = (heartRateArray[i] + heartRateArray[i - 1]) / 2; // Getting HR avg between current sample and previous one.
                 heartRateReserveAvg = Helper.heartRateReserveFromHeartrate(hr, userMaxHr, userRestHr);
-                //(hr - userSettings.userRestHr) / (userSettings.userMaxHr - userSettings.userRestHr);
                 if (heartRateReserveAvg<0) heartRateReserveAvg=0;	// don't let HRR lower than zero (errors in HRM measurments could result into this)
 				if (heartRateReserveAvg>1) heartRateReserveAvg=1;	// also don't let HRR greater than 1 (100%)
 				// HRR can't "legaly" be less than 0% nor more than 100% - if it is, either HR zones are not set correctly or because of HRM measurement problem
@@ -855,7 +683,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
                 }
 
             }
-        }
+        } //for
 
 //        var heartRateArraySorted = heartRateArray.sort(function(a, b) {	// this way "heartRateArraySorted" references the same "heartRateArray" object!
 //		var heartRateArraySorted = $.extend(true,{},heartRateArray);	// copy array to new object, not only reference! * this makes list object, not array
@@ -880,21 +708,9 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         var TRIMPPerHour = TRIMP / hrrSecondsCount * 60 * 60;
 
 
-//        } //if "the new way of TRIMP"
 
 	StravaStreams.TRIMPArray=TRIMPArray;
 	StravaStreams.TRIMPPerHourArray=TRIMPPerHourArray;
-StravaStreamsA=[];
-	StravaStreamsA.TRIMPPerHourZones=TRIMPPerHourZones;	// !!! if all streams in "StravaStreams" are not the same length, CSV export doesn't work!!!
-
-/*
-check with this workouts:
-
-https://www.strava.com/activities/380222430/overview	-	race - have to refresh on activity page
-
-*/
-
-
 
 
 
@@ -902,23 +718,19 @@ https://www.strava.com/activities/380222430/overview	-	race - have to refresh on
             'TRIMP': TRIMP,
 //            'TRIMPArray': TRIMPArray,
 //            'TRIMPPerHourArray': TRIMPPerHourArray,
-//              'TRIMP_hr': TRIMP_hr,
-//              'aRPEe': Math.round((TRIMP_hr / aRPEeGenderFactor)*10)/10,
-                'aRPEe': Math.round((TRIMPPerHour / aRPEeGenderFactor)*10)/10,
+            'aRPEe': Math.round((TRIMPPerHour / aRPEeGenderFactor)*10)/10,
             'TRIMPPerHour': TRIMPPerHour,
+            'TRIMPPerHourZones': TRIMPPerHourZones,
             'hrrZones': this.userHrrZones_,
             'lowerQuartileHeartRate': percentiles[0],
             'medianHeartRate': percentiles[1],
             'upperQuartileHeartRate': percentiles[2],
-// check VacuumProcessor
             'averageHeartRate': activityStatsMap.averageHeartRate,
-//              'maxHeartRate': maxHeartRate,
-                'maxHeartRate': activityStatsMap.maxHeartRate,
- //          'activityHeartRateReserve': Helper.heartRateReserveFromHeartrate(activityStatsMap.averageHeartRate, userMaxHr, userRestHr) * 100,
-             'activityHeartRateReserve': Math.round((100*Helper.heartRateReserveFromHeartrate(activityStatsMap.averageHeartRate, userMaxHr, userRestHr))*10)/10,
+            'maxHeartRate': activityStatsMap.maxHeartRate,
+            'activityHeartRateReserve': Math.round((100*Helper.heartRateReserveFromHeartrate(activityStatsMap.averageHeartRate, userMaxHr, userRestHr))*10)/10,
             'activityHeartRateReserveMax': Helper.heartRateReserveFromHeartrate(activityStatsMap.maxHeartRate, userMaxHr, userRestHr) * 100,
-                'MaxHr':userMaxHr,
-                'RestHr':userRestHr
+            'MaxHr':userMaxHr,
+            'RestHr':userRestHr
         };
 
     },
@@ -945,8 +757,6 @@ https://www.strava.com/activities/380222430/overview	-	race - have to refresh on
     cadenceData_: function cadenceData_(cadenceArray, velocityArray, activityStatsMap, timeArray) { // TODO add cadence type here
 if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
 
-//        if (_.isUndefined(cadenceArray) || _.isUndefined(velocityArray)) {
-//        if (_.isEmpty(cadenceArray) || _.isEmpty(velocityArray) || _.isEmpty(timeArray)) {
         if (_.isEmpty(cadenceArray) || _.isEmpty(timeArray)) {
           return null;
         }
@@ -959,18 +769,15 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         var cadenceVarianceSumOnMoving = 0;
         var cadenceOnMoveSampleCount = 0;
         var movingSampleCount = 0;
-
-
-
         var cadenceZoneTyped;
+
+
         if (this.activityType === 'Ride') {
             cadenceZoneTyped = this.zones.cyclingCadence;
         } else if (this.activityType === 'Run') {
             cadenceZoneTyped = this.zones.runningCadence;
-        } else {
-        // !!!   cadence for other that Ride or Run -> use Ride cadence for now, in future make own zones   !!!
+        } else {  // !!!   cadence for other that Ride or Run -> use Ride cadence for now, TODO in future make own zones   !!!
             cadenceZoneTyped = this.zones.cyclingCadence;
-//            return null;
         }
 
         var cadenceZones = this.prepareZonesForDistribComputation(cadenceZoneTyped);
@@ -1048,12 +855,9 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 //  --------------------------------------------------------------------------------------------------------------------
     gradeData_: function gradeData_(gradeArray, velocityArray, timeArray, distanceArray, altitudeArray) {
 if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] );
-//        if (_.isEmpty(gradeArray) || _.isEmpty(timeArray)) {
-//        if (_.isEmpty(gradeArray) || _.isEmpty(velocityArray) || _.isEmpty(timeArray) || _.isEmpty(altitudeArray) || ( velocity_avg < velocity_avgThreshold ) ){
         if ( _.isEmpty(gradeArray) || _.isEmpty(timeArray) || ( velocity_avg < velocity_avgThreshold ) ) {
             return null;
         }
-
 
         // If home trainer
         if (window.pageView && window.pageView.activity && window.pageView.activity().get('trainer')) {
@@ -1075,15 +879,13 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 
         var upFlatDownSpeed = { up: 0, flat: 0, down: 0 };   // Currently deals with avg speed/pace
 
-
         var durationInSeconds = 0;
         var distance = 0;
         var deltaAltitude = 0;
         var currentSpeed = 0;
-        var grade = 0;    // current grade value
-        var grade_f = 0;  // filtered grade value
-        var gradeArrayFiltered = [];
-        gradeArrayFiltered[0]=0;
+        var grade = 0;    // current grade start value
+        var grade_f = 0;  // filtered grade start value
+        var gradeArrayFiltered = []; gradeArrayFiltered[0]=0;
 		gradeArray[0]=0;
 
         var gradeArrayMoving = [];
@@ -1095,19 +897,16 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
             distance = distanceArray[i] - distanceArray[i - 1];
             deltaAltitude = altitudeArray[i] - altitudeArray[i - 1];
 
-			if (distance > 0) {
+			if (distance > 0) {  // if no distance traveled, leave grade at last value
 				grade = 100 * deltaAltitude/distance;		// compute new value
 				grade_f += (grade-grade_f)/ActivityProcessor.gradeSmoothing;	// low pass filter grade data
-				//grade_f=grade;	// no filtering
 			}
 
 			if (durationInSeconds > 60) { grade = 0; grade_f = 0; }	// handle long durations (over minute) between samples - reset grade to 0
 			
 			gradeArrayFiltered[i]=grade_f;
-			gradeArray[i]=Math.round(10*grade_f)/10;			// replace gradeArray with filtered grades in percent to 1 decimal
+			gradeArray[i]=Math.round(10*grade_f)/10;	// replace gradeArray with filtered and round to 1 decimal
 			
-//			distance >0 ? grade = 100 * deltaAltitude/distance : false;	// calculate grade%
-			// from (smoothed) delta altitude vs distance; if no distance traveled, leave grade at last value
 
             //
             // Compute RAW up/down/flat altitudes/times/distances (no speed and/or grade restriction)
@@ -1129,10 +928,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
             RAWupFlatDownAltitudeInMeters.ballance += deltaAltitude;
 
 
-
             // Compute distribution for graph/table
-//            if (currentSpeed > 0) { // If moving...
-//            if ( ( currentSpeed > 0 ) || ( velocity_avg < velocity_avgThreshold ) ) { 
             if ( // if moving or if avg. speed < threshold
                !_.isEmpty(velocityArray) && ( ( currentSpeed = velocityArray[i] * 3.6 ) > ActivityProcessor.movingThresholdKph )
                 || ( velocity_avg < velocity_avgThreshold ) || (_.isEmpty(velocityArray)) )
@@ -1193,7 +989,6 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 
 
 
-
         // Compute speed while up, flat down
         upFlatDownSpeed.up = upFlatDownSpeed.up / upFlatDownInSeconds.up;
         upFlatDownSpeed.down = upFlatDownSpeed.down / upFlatDownInSeconds.down;
@@ -1234,8 +1029,6 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
                 var flatPercentD        = 100 * upFlatDownInMeters.flat / upFlatDownInMeters.total;
                 var downPercentD        = 100 * upFlatDownInMeters.down / upFlatDownInMeters.total;
 
-//                var upAvgGradeEstimate  = 100 * ( upFlatDownAltitudeInMeters.climbed + upFlatDownAltitudeInMeters.ignore ) / upFlatDownInMeters.up;
-//                var upAvgGradeEstimate  = 100 * RAWupFlatDownAltitudeInMeters.climbed / RAWupFlatDownInMeters.up;
                 var upAvgGradeEstimate  = 100 * upFlatDownAltitudeInMeters.climbed / upFlatDownInMeters.up;
                 
         if (            // DOWNHILL
@@ -1271,7 +1064,6 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 
         else if (       // A BIT HILLY
                         ( flatPercentT >= ActivityProcessor.gradeProfileAbitHilly_MinFlatPercentT )
-//                        &&      ( upAvgGradeEstimate < ActivityProcessor.gradeProfileAbitHilly_MaxAvgGradeEst )
                         &&      ( AltRange < ActivityProcessor.gradeProfileAbitHilly_MaxDeltaH )
                 )               { gradeProfile = ActivityProcessor.gradeProfileAbitHilly; }
 
@@ -1337,8 +1129,6 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         var distanceArray = activityStream.distance;
         var timeArray = activityStream.time;
         var velocityArray = activityStream.velocity_smooth;
-//        var altitudeArray = activityStream.altitude;
-//        var altitudeArray = activityStream.altitude_smooth;
 
     if (ActivityProcessor.VAMsmoothing>0) {        // smoothing by distance
         var altitudeArray = this.lowPassDataSmoothing_(activityStream.altitude_smooth, activityStream.distance , ActivityProcessor.VAMsmoothing);
@@ -1350,9 +1140,6 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 
 
 
-
-
-//        if (_.isEmpty(distanceArray) || _.isEmpty(timeArray) || _.isEmpty(velocityArray) || _.isEmpty(altitudeArray) || !( velocity_avg < velocity_avgThreshold ) ) {
         if (_.isEmpty(distanceArray) || _.isEmpty(timeArray) || _.isEmpty(velocityArray) || _.isEmpty(altitudeArray) ) {
             return null;
         }
@@ -1381,7 +1168,6 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         for (var i = 0; i < altitudeArray.length; i++) { // Loop on samples
 
             // Compute distribution for graph/table
-//            if (i > 0 && velocityArray[i] * 3.6 > ActivityProcessor.movingThresholdKph) {
             if ( ( i > 0 ) && ( ( velocityArray[i] * 3.6 > ActivityProcessor.movingThresholdKph ) || ( velocity_avg < velocity_avgThreshold ) ) ) { // if moving or if avg. speed < threshold
 
                 durationInSeconds = (timeArray[i] - timeArray[i - 1]); // Getting deltaTime in seconds (current sample and previous one)
@@ -1408,6 +1194,7 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 // consider reprograming this so that it would only count in every 1 to n samples only after positive elevation diff of those
 // samples would be over threshold (for example 10m) AND grade would be over gradeClimbingLimit
 //
+
                 // If previous altitude lower than current then => climbing
                 if (elevationDiff > 0) {
 
@@ -1417,12 +1204,10 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
                     var ascentSpeedMeterPerHour = elevationDiff / ascentDurationInSeconds * 3600; // m climbed / seconds
 
                     // only if grade > ActivityProcessor.gradeClimbingLimit
-//                    if (distance > 0 && ( 100*(elevationDiff / distance) > ActivityProcessor.gradeClimbingLimit ) ) {
                     if (distance > 0 && ( activityStream.grade_filtered[i] > ActivityProcessor.gradeClimbingLimit ) ) {
 
-                        
                         ascentOverGradeClimbingLimitDurationInSeconds += ascentDurationInSeconds;
-                        
+
                         accumulatedDistance += distanceArray[i] - distanceArray[i - 1];
                         ascentSpeedMeterPerHourSamples.push(ascentSpeedMeterPerHour);
                         ascentSpeedMeterPerHourDistance.push(accumulatedDistance);
@@ -1432,7 +1217,6 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
                 } else {
                     accumulatedElevationDescent -= elevationDiff;
                 }
-
             }
         }
 
@@ -1455,7 +1239,6 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
 
         var avgAscentSpeed = ascentSpeedMeterPerHourSum / ascentSpeedMeterPerHourSamples.length;
 
-
         // Update zone distribution percentage
         elevationZones = this.finalizeDistribComputationZones(elevationZones);
         ascentSpeedZones = this.finalizeDistribComputationZones(ascentSpeedZones);
@@ -1466,8 +1249,6 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
         return {
             'minElevation': Math.min(...StravaStreams.altitude).toFixed(0),
             'maxElevation': Math.max(...StravaStreams.altitude).toFixed(0),
-//            'minElevation': Math.min(...elevationSamples).toFixed(0),
-//            'maxElevation': Math.max(...elevationSamples).toFixed(0),
             'avgElevation': avgElevation.toFixed(0),
             'accumulatedElevationAscent': accumulatedElevationAscent,
             'accumulatedElevationDescent': accumulatedElevationDescent,
@@ -1478,10 +1259,10 @@ if (env.debugMode) console.log(' > (f: ActivityProcessor.js) >   ' + arguments.c
             'ascentSpeedZones': ascentSpeedZones, // Only while moving and grade > ActivityProcessor.gradeClimbingLimit
             'ascentTimeOverGradeClimbingLimit' : ascentOverGradeClimbingLimitDurationInSeconds,
             'ascentSpeed': {
-                'avg': _.isFinite(avgAscentSpeed) ? avgAscentSpeed : -1,
-                'lowerQuartile': percentilesAscent[0].toFixed(0),
-                'median': percentilesAscent[1].toFixed(0),
-                'upperQuartile': percentilesAscent[2].toFixed(0)
+            'avg': _.isFinite(avgAscentSpeed) ? avgAscentSpeed : -1,
+            'lowerQuartile': percentilesAscent[0].toFixed(0),
+            'median': percentilesAscent[1].toFixed(0),
+            'upperQuartile': percentilesAscent[2].toFixed(0)
             }
         };
     },
@@ -1513,12 +1294,10 @@ if (env.debugMode) console.debug(' > (f: ActivityProcessor.js) >   ' + arguments
 //            altitudeArray = this.lowPassDataSmoothing_(activityAltitudeArray, timeArray, smoothing);  // smoothing by time
             var totalElevation = 0;
             for (var i = 0; i < altitudeArray.length; i++) { // Loop on samples
-//                if (i > 0 && velocityArray[i] * 3.6 > ActivityProcessor.movingThresholdKph) {
                     var elevationDiff = altitudeArray[i] - altitudeArray[i - 1];
                     if (elevationDiff > 0) {
                         totalElevation += elevationDiff;
                     }
-//                }
             }
 
 if (env.debugMode) console.log("          ...Altitude smoothing factor:" + smoothing.toFixed(2) + "   Strava Elev.: " + stravaElevation + "   Smoothed: " + totalElevation.toFixed(2) );

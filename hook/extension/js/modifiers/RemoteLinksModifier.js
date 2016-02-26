@@ -48,11 +48,7 @@ RemoteLinksModifier.prototype = {
             ["<img width='16px' src='" + this.appResources_.raceshapeIcon + "'/> Surface",  'http://strava-tools.raceshape.com/erea/?url=',  ''],
             ["HeatMap", "<img width='16px' src='" + this.appResources_.heatmapIcon + "'/>",
             	'heatmap', 'Strava Global Heatmap'],
-//            ["<img  src='" + this.appResources_.multimapIcon + "'/> MultiMap", 'http://www.jonathanokeeffe.com/strava/map.php',
-//            	'simple_link', "Jonathan o\'Keeffe\'s Multiple Ride Mapper"],
             ["<img width='16px' src='" + this.appResources_.veloviewerIcon + "'/> VeloViewer", 'http://veloviewer.com/activities/', '?referrer=stravistiX'],
-//            ["<img width='16px' src='" + this.appResources_.AnnualSummIcon + "'/> AnnualSumm", 'http://www.jonathanokeeffe.com/strava/annualSummary.php',
-//            	'simple_link', "Jonathan o\'Keeffe\'s Annual Summary"],
             ["<img src='" + this.appResources_.gpsvisualizerIcon + "'/>", 'http://www.gpsvisualizer.com/',
             	'gpsvisualizer', this.appResources_.gpsvMapIcon, this.appResources_.gpsvProfileIcon],
             ["MapFlipper", '',
@@ -68,7 +64,6 @@ RemoteLinksModifier.prototype = {
 
 
 
-//        $.each(remoteViewActivityLinksArray, function(customMapboxStyle) {
         $.each(remoteViewActivityLinksArray, function() {
 
             htmlRemoteView += "<li>";
@@ -190,8 +185,6 @@ RemoteLinksModifier.prototype = {
 				width: 960,	height: 660, trk_width: 4, trk_stats: 1, trk_hue: 120, tickmark_interval: '1km',
 				trk_colorize: 'slope', colorize_max: 36, colorize_min: -36, colorize_gray: '0', colorize_reverse: 0, hue1: 0, hue2: 330,
 				colorize_spectrum: 'http://shrani.si/f/o/U/vn1DrfO/1/reliefmap-36-36.png', legend_steps: 25,
-//				trk_distance_threshold: 33, moving_average: 3
-//				trk_distance_threshold: 25, moving_average: 2
 				trk_distance_threshold: 20, moving_average: 5
 			});
 		})
@@ -206,8 +199,6 @@ RemoteLinksModifier.prototype = {
 			trk_altitudeMin=altit[0]; 
 			trk_altitudeMax=altit[altit.length - 1];
 			trk_altitudeRng=trk_altitudeMax-trk_altitudeMin;
-			// console.log("Min alt.: "+Math.round(trk_altitudeMin));
-			// console.log("Max alt.: "+Math.round(trk_altitudeMax));
 
 			// calculate profile picture width from track distance (few fixed scales for better comparability)
 			if (trk_distance>100000) {
@@ -223,7 +214,6 @@ RemoteLinksModifier.prototype = {
 			} else if (trk_distance>2000) {
 				var profile_width  = Math.round( trk_distance / 10000 * 5000 ); //  500px /1km from 1000 up to 2500
 			} else { var profile_width = 800};	// minimum width is 800
-//			console.log("Trk dist.: "+trk_distance+"m  profile_width:"+profile_width);
 
 			// calculate profile picture height from track altitude range (few fixed scales for better comparability of similar workouts)
 			if (trk_altitudeRng>2000) {
@@ -235,7 +225,6 @@ RemoteLinksModifier.prototype = {
 			} else if (trk_altitudeRng>100) {
 				var profile_height = Math.round( (trk_altitudeRng)/1000 * 2000 ); //  200px /100m  from 200 up to 1000
 			} else { var profile_height = 140};	// minimum height is 140
-//			console.log("Trk alt.rng: "+trk_altitudeRng+"m ["+trk_altitudeMin+"-"+trk_altitudeMax+"]  profile_height:"+profile_height);
 //			console.log( Math.round(10000*profile_width/trk_distance) + "px/10km x " + Math.round(100*profile_height/trk_altitudeRng) + "px/100m");
 			
 			
@@ -244,8 +233,6 @@ RemoteLinksModifier.prototype = {
 				width: profile_width, height: profile_height, trk_width: 3, trk_stats: 1,
 				trk_colorize: 'slope', colorize_max: 36, colorize_min: -36, colorize_gray: '0', colorize_reverse: 0, hue1: 0, hue2: 330,
 				colorize_spectrum: 'http://shrani.si/f/o/U/vn1DrfO/1/reliefmap-36-36.png', legend_steps: 25,
-//				trk_distance_threshold: 33, moving_average: 3
-//				trk_distance_threshold: 25, moving_average: 2
 				trk_distance_threshold: 20, moving_average: 5
 			});
 		})
@@ -340,8 +327,6 @@ RemoteLinksModifier.prototype = {
             ["<img width='24px' style='vertical-align:middle' src='" + this.appResources_.veloviewerIcon + "'/> <span>VeloViewer</span>", 'http://veloviewer.com/segment/', '?referrer=stravistiX']
         ];
         var html = "<div class='module' style='padding-bottom: 10px;'>";
-//        html += "<div class='drop-down-menu' style='width: 100%; background: #fc4c02; color: white;'>";
-//        html += "<div class='selection' style='" + this.htmlRemoteViewForSegmentStyle + "'><img style='vertical-align:middle' src='" + this.appResources_.remoteViewIcon + "'/> <span>Remote Segment View</span></div>";
         html += "<ul class='options' style='" + this.htmlRemoteViewStyle + "'>";
 
         $.each(remoteViewSegmentLinksArray, function() {

@@ -136,8 +136,9 @@ env
 *globals:
 RPENote
 StravaStreams
-StravaStreamsA
-globalActivityStatsMap
+GlobalActivityStatsMap
+globalActivityAnalysisData
+globalActivityStreams
 
 
 stravistiX                 this.stravistiX

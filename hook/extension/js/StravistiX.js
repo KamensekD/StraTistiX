@@ -426,30 +426,33 @@ env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee
 env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee.toString().match(/function ([^\(]+)/)[1] )
 
 //        var title = 'StraTistiX updated/installed to <strong>v' + this.appResources_.extVersion + '</strong>';
-        var title = 'StraTistiX recently updated to v2.3.1';
+        var title = 'StraTistiX recently updated to v2.3.2';
         var message = '';
-    message += "<font size=+1>"
-        message += "- NEW <strong/>graphic aRPEe Zones</strong/> (~TRIMP/hour) % and minute distribution!<br/>"
-        message += "&nbsp&nbspNice visualization of percent and minutes spent in different zones<br/>"
-        message += "- heart rate extended statistics returned to <strong/>total elapsed time</strong/>, from moving time<br/>"
-        message += "&nbsp&nbsp(after consideration and case analysis I decided it is better this way, sorry for inconvenience)<br/>"
-        message += "- <strong/>MapFlippers</strong/> working again after Strava's changes that made them unfunctional (again)<br/>"
-        message += "- removed some caching, because it introduced more problems than gains (also fixes CSV export)<br/>"
-        message += "- more extended statistics view data<br/>"
-        message += "- fine-tuned some default zones<br/>"
-        message += "- Various less important additions and fixes"
-        message += ""
-        message += "<br/>"
+    message += "<font size=+0>"
+        message += "- IMPROVED grade/VAM analysis and flat/uphill/downhill estimates<br/>"
+        message += "- Added VAM, ascent time and max negative grade to overview table<br/>"
+        message += "- FIX small bug in HR data analysis (resulted wrong HR export to CSV)<br/>"
+        message += "- FIX Stationary workouts with altitude, but no distance data<br/>"
+    message += "</font><br/>"
+
+        message += "<font size=-1><strong>Known problems/workarounds:</strong><br/>"
+        message += "- if TRIMP/aRPEe charts doesn't show right away, just refresh the page!<br/>"
+        message += "&nbsp&nbsp(race or other workouts that don't show overview page as default)<br/>"
+        message += "- exporting to CSV fails for very long workouts<br/>"
+        message += "- after CROPping activity clear local cache to get updated results<br/>"
+        message += "&nbsp&nbsp(right-click StraTistiX release notes in StraTistiX menu)<br/>"
+        message += "</font><br/>"
         
         message += "<br/></font>"
-        message += "<font size=+1><strong>From previous updates:</strong></font><br><font size=-1>";
+        message += "<font size=+0><strong>Important changes from previous updates:</strong></font><br><font size=-1>";
+        message += "- <strong/>graphic aRPEe Zones</strong/> (~TRIMP/hour) % and minute distribution!<br/>"
+        message += "- heart rate extended statistics returned to <strong/>total elapsed time</strong/>, from moving time<br/>"
+        message += "- <strong/>MapFlippers</strong/> working again after Strava's changes that made them unfunctional<br/>"
+        message += "- more extended statistics view data<br/>"
+        message += "- fine-tuned some default zones<br/>"
         message += "- Added CSV export (for easy analysis in spreadsheet software)<br/>"
         message += "- Added Ascent speed statistics (VAM)<br/>"
         message += "- Improved 'Best Splits' - click to highlight the part of activity they represent!<br/>"
-        message += "- Improved elevation data accuracy while computing extended statistics.<br/>"
-        message += "&nbsp&nbsp(Elevation data smoothed using low pass filter with gain matched to Strava's)<br/>"
-        message += "- Added cadence, power and altitude data in overview table<br/>"
-		message += "- reordered and added some new data in extended statistics<br/>"
         message += "- Weather unis preferences<br/>"
         message += "- statistics now computed on <strong>weighted percentiles</strong><br/>"
         message += "- improved grade profile word description<br>"
@@ -461,10 +464,6 @@ env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee
         message += "- Added weather at activity date/time (wind/temp/clouds/humidity)<br>"
         message += "- more analysis data (climbing time and speed, pedalling time,...)<br>"
         message += "- Searchable common settings<br>"
-        message += "- Moved leftside buttons/links under Edit/Action buttons<br>"
-        message += "- Moved some leftside links to menu, reordered menu a bit<br>"
-        message += "- Changed HR related computations from total to moving time<br>"
-        message += "- Filtering altitude for gain computations<br>"
 
 //        message += "</h4>";
 //        message += "<h4><strong>BUGFIXES:</strong></h4><h5>";
@@ -472,8 +471,8 @@ env.debugMode>0   && console.log(' > (f: StravistiX.js) >   ' + arguments.callee
 //        message += "</h5><br>";
 
         message += "<br><br><div align='center'>";
-        message += "<h4>This is <strong><a href='https://chrome.google.com/webstore/detail/stratistix-with-arpee-sco/bilbbbdgdimchenccmooakpfomfajepd'>StraTistiX</a></strong> - Dejan Kamensek's <a href='https://github.com/KamensekD/StraTistiX'>fork</a> of <a href='https://chrome.google.com/webstore/detail/stravistix-for-strava/dhiaggccakkgdfcadnklkbljcgicpckn'>StravistiX</a><br>";
-        message += '<div align><font size=-1>Original StravistiX (formerly named StravaPlus) is being developed by Thomas Champagne</font></h4></div>';
+        message += "<h4>This is <strong><a href='https://chrome.google.com/webstore/detail/stratistix-with-arpee-sco/bilbbbdgdimchenccmooakpfomfajepd'>StraTistiX</a></strong> - Dejan Kamensek's <a href='https://github.com/KamensekD/StraTistiX/wiki'>fork</a> of <a href='https://chrome.google.com/webstore/detail/stravistix-for-strava/dhiaggccakkgdfcadnklkbljcgicpckn'>StravistiX</a><br>";
+        message += '<div align><font size=-1>Original StravistiX is being developed by Thomas Champagne</font></h4></div>';
 //        message += '<h4><a target="_blank" href="' + this.appResources_.settingsLink + '#/donate">Donate Thomas Champagne to get more features</a></h4>';
 
         $.fancybox('<h2>' + title + '</h2>' + message);
